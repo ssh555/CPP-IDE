@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="1">
+     <widget class="QTabWidget" name="tabWgtEditArea">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>File1.txt</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="gBoxFileMgr">
+      <property name="minimumSize">
+       <size>
+        <width>200</width>
+        <height>530</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>文件管理器</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="actionNewFile"/>
+    <addaction name="actionOpenFile"/>
+    <addaction name="actionOpenFolder"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="actionCloseAll"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>编辑</string>
+    </property>
+    <addaction name="actionRevocate"/>
+    <addaction name="actionRestore"/>
+    <addaction name="separator"/>
+    <addaction name="actionShear"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
+    <addaction name="separator"/>
+    <addaction name="actionFind"/>
+    <addaction name="actionReplace"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menuSelect">
+    <property name="title">
+     <string>选择</string>
+    </property>
+    <addaction name="action_7"/>
+   </widget>
+   <widget class="QMenu" name="menuRun">
+    <property name="title">
+     <string>运行</string>
+    </property>
+    <addaction name="actionCompile"/>
+    <addaction name="actionRun"/>
+    <addaction name="actionCompileRun"/>
+    <addaction name="separator"/>
+    <addaction name="actionDebug"/>
+    <addaction name="action_9"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="actionHelp"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuSelect"/>
+   <addaction name="menuRun"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbarTips"/>
+  <action name="actionNewFile">
+   <property name="text">
+    <string>新建文件    CTRL+N</string>
+   </property>
+  </action>
+  <action name="actionOpenFile">
+   <property name="text">
+    <string>打开文件    CTRL+O</string>
+   </property>
+  </action>
+  <action name="actionOpenFolder">
+   <property name="text">
+    <string>打开文件夹</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>保存           CTRL+S</string>
+   </property>
+  </action>
+  <action name="actionSaveAs">
+   <property name="text">
+    <string>另存为        CTRL+SHIFT+S</string>
+   </property>
+  </action>
+  <action name="actionCloseAll">
+   <property name="text">
+    <string>关闭所有    CTRL+W</string>
+   </property>
+  </action>
+  <action name="actionRevocate">
+   <property name="text">
+    <string>撤销          CTRL+Z</string>
+   </property>
+  </action>
+  <action name="actionRestore">
+   <property name="text">
+    <string>恢复          CTRL+Y</string>
+   </property>
+  </action>
+  <action name="actionShear">
+   <property name="text">
+    <string>剪切          CTRL+X</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>复制          CTRL+C</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="text">
+    <string>粘贴          CTRL+V</string>
+   </property>
+  </action>
+  <action name="actionFind">
+   <property name="text">
+    <string>查找          CTRL+F</string>
+   </property>
+  </action>
+  <action name="actionReplace">
+   <property name="text">
+    <string>替换          CTRL+R</string>
+   </property>
+  </action>
+  <action name="action_7">
+   <property name="text">
+    <string>...</string>
+   </property>
+  </action>
+  <action name="actionCompile">
+   <property name="text">
+    <string>编译          CTRL+B</string>
+   </property>
+  </action>
+  <action name="actionRun">
+   <property name="text">
+    <string>运行          CTRL+R</string>
+   </property>
+  </action>
+  <action name="actionCompileRun">
+   <property name="text">
+    <string>编译运行   CTRL+ALT+N</string>
+   </property>
+  </action>
+  <action name="actionDebug">
+   <property name="text">
+    <string>调试</string>
+   </property>
+  </action>
+  <action name="action_9">
+   <property name="text">
+    <string>...</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>帮助文档</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
