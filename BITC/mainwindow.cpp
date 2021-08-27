@@ -9,9 +9,10 @@
 #include <qprocess.h>
 #include <qdesktopservices.h>
 #include <QFileInfo>
-
+#include <editor.h>
 #include <QDebug>
-
+#include <highlighter.h>
+#include <QList>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -32,8 +33,13 @@ MainWindow::MainWindow(QWidget *parent)
             openingFileName.clear();
             return;
         }
-
-        TextEdit *t = (TextEdit *)ui->tabWgtEditArea->currentWidget();
+        QList<Editor*> tlist=ui->tabWgtEditArea->currentWidget()->findChildren<Editor*>();
+        Editor *t = new Editor;
+        for(int i=0;i < tlist.size();++i)
+        {
+            delete t;
+            t=tlist.at(i);
+        }
         openingFileName = t->FolderName + "/" + ui->tabWgtEditArea->tabText(i);
     });
 
@@ -79,7 +85,11 @@ void MainWindow::AddFolderToGBox(QString foldername){
 
 //实现TextEdit类即可  参数为C文件名的完整路径
 void MainWindow::AddTextEditToEditArea(QString filename){
-    ui->tabWgtEditArea->addTab(new TextEdit(ui->tabWgtEditArea->currentWidget(),GetCFolderName(filename)),filename);
+    Editor *editor=new Editor(ui->tabWgtEditArea->currentWidget(),GetCFolderName(filename));
+    //Editor *editor = new Editor();
+    editor->Set_Mode(EDIT);
+    Highlighter *highlighter = new Highlighter(editor->document());
+    ui->tabWgtEditArea->addTab(editor,filename);
 }
 //-----键盘按下事件,用于快捷键
 void MainWindow::keyPressEvent(QKeyEvent  *event)

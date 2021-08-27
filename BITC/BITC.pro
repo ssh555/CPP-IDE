@@ -19,6 +19,8 @@ SOURCES += \
     FileMgr.cpp \
     ToolBox.cpp \
     ToolPage.cpp \
+    editor.cpp \
+    highlighter.cpp \
     main.cpp \
     mainwindow.cpp \
     textedit.cpp
@@ -27,8 +29,11 @@ HEADERS += \
     FileMgr.h \
     ToolBox.h \
     ToolPage.h \
+    editor.h \
+    highlighter.h \
     mainwindow.h \
-    textedit.h
+    textedit.h \
+    type.h
 
 FORMS += \
     FileMgr.ui \
