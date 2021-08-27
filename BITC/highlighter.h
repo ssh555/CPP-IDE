@@ -23,7 +23,7 @@ private:
 
     QRegExp commentStartExpression;
     QRegExp commentEndExpression;
-
+    QTextCharFormat expFunctionFormat;
     QTextCharFormat keywordFormat;
     QTextCharFormat classFormat;
     QTextCharFormat singleLineKey;

@@ -11,10 +11,11 @@ Highlighter::Highlighter(QTextDocument *parent)
     b1->setRgb(242,99,126);
     keywordFormat.setForeground(*b1);
     keywordFormat.setFontWeight(QFont::Bold);
+
     QStringList keywordPatterns;
     keywordPatterns << "\\bchar\\b" << "\\bclass\\b" << "\\bconst\\b"
                     << "\\bdouble\\b" << "\\benum\\b" << "\\bexplicit\\b"
-                    << "\\bfriend\\b" << "\\binline\\b" << "\\bint\\b"
+                    << "\\bfloat\\b" << "\\bsizeof\\b" << "\\bint\\b"
                     << "\\blong\\b" << "\\bnamespace\\b" << "\\boperator\\b"
                     << "\\bprivate\\b" << "\\bprotected\\b" << "\\bpublic\\b"
                     << "\\bshort\\b" << "\\bsignals\\b" << "\\bsigned\\b"
@@ -27,6 +28,25 @@ Highlighter::Highlighter(QTextDocument *parent)
         rule.format = keywordFormat;
         highlightingRules.append(rule);
     }
+    //额外函数关键字颜色
+    QStringList expFunctionPatterns;
+    expFunctionPatterns<<  "\\bauto\\b" << "\\bbreak\\b" << "\\bcase\\b"
+                    << "\\bcontinue\\b" << "\\bdefault\\b" << "\\bdo\\b"
+                    << "\\belse\\b" << "\\bextern\\b" << "\\bfor\\b"
+                    << "\\bgoto\\b" << "\\bif\\b" << "\\bregister\\b"
+                    <<  "\\breturn\\b" << "\\bswitch\\b" << "\\bwhile\\b";
+
+    //黑色
+    b1->setRgb(0,0,0);
+    expFunctionFormat.setForeground(*b1);
+    expFunctionFormat.setFontWeight(QFont::Bold);
+    foreach (const QString &pattern, expFunctionPatterns) {
+        rule.pattern = QRegExp(pattern);
+        rule.format = expFunctionFormat;
+        highlightingRules.append(rule);
+    }
+
+    //类颜色
     classFormat.setFontWeight(QFont::Bold);
     //玫红
     b1->setRgb(166,51,72);

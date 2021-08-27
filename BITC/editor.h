@@ -23,7 +23,6 @@ public:
     void Set_Mode(editorMode mode);//设置编辑模式
     void Line_Number_Area_Paint_Event(QPaintEvent *event);//
     int lineNumberAreaWidth();
-    int wordLevel[800000];
     QString FolderName;//保存当前页的文件的文件夹绝对路径
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;

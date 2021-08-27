@@ -140,6 +140,7 @@ void MainWindow::RunC(QString filename){
         return;
     //用系统默认的打开方式打开指定文件
     QDesktopServices::openUrl(QUrl::fromLocalFile(filename.mid(0,filename.lastIndexOf(".")) + ".exe"));
+
 }
 
 

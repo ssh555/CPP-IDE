@@ -10,24 +10,18 @@ Editor::Editor(QWidget *parent) : QPlainTextEdit(parent)
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_HighlightCurrentLine()));
 
     SLOT_UpdateLineNumberAreaWidth(0);
-    for (int i=0;i<800000;i++){
-        wordLevel[i]=0;
-    }
+
     Set_Mode(BROWSE);
 }
 Editor::Editor(QWidget *parent,QString foldername) : QPlainTextEdit(parent){
     FolderName = foldername;
-
     lineNumberArea = new LineNumberArea(this);
-
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(SLOT_UpdateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(SLOT_UpdateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_HighlightCurrentLine()));
 
     SLOT_UpdateLineNumberAreaWidth(0);
-    for (int i=0;i<800000;i++){
-        wordLevel[i]=0;
-    }
+
     Set_Mode(BROWSE);
 }
 

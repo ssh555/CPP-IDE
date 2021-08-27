@@ -22,8 +22,7 @@ SOURCES += \
     editor.cpp \
     highlighter.cpp \
     main.cpp \
-    mainwindow.cpp \
-    textedit.cpp
+    mainwindow.cpp
 
 HEADERS += \
     FileMgr.h \
@@ -32,7 +31,6 @@ HEADERS += \
     editor.h \
     highlighter.h \
     mainwindow.h \
-    textedit.h \
     type.h
 
 FORMS += \
