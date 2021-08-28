@@ -3,24 +3,28 @@
 Highlighter::Highlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
+
+}
+void Highlighter::Start_Highlight()
+{
     HighlightingRule rule;
     //颜色画笔
     QColor *b1=new QColor();
     //关键字颜色
-    //粉红马卡龙
-    b1->setRgb(242,99,126);
+    //终归是蓝色好看
+    b1->setRgb(99,3,255);
     keywordFormat.setForeground(*b1);
     keywordFormat.setFontWeight(QFont::Bold);
 
     QStringList keywordPatterns;
-    keywordPatterns << "\\bchar\\b" << "\\bclass\\b" << "\\bconst\\b"
-                    << "\\bdouble\\b" << "\\benum\\b" << "\\bexplicit\\b"
+    keywordPatterns << "\\bchar\\b"  << "\\bconst\\b"
+                    << "\\bdouble\\b" << "\\benum\\b" <<"\\bdefine\\b"
                     << "\\bfloat\\b" << "\\bsizeof\\b" << "\\bint\\b"
-                    << "\\blong\\b" << "\\bnamespace\\b" << "\\boperator\\b"
-                    << "\\bprivate\\b" << "\\bprotected\\b" << "\\bpublic\\b"
-                    << "\\bshort\\b" << "\\bsignals\\b" << "\\bsigned\\b"
-                    << "\\bslots\\b" << "\\bstatic\\b" << "\\bstruct\\b"
-                    << "\\btemplate\\b" << "\\btypedef\\b" << "\\btypename\\b"
+                    << "\\blong\\b"  <<"\\bextern\\b"<<"\\bregister\\b"
+
+                    << "\\bshort\\b"  << "\\bsigned\\b"
+                     << "\\bstatic\\b" << "\\bstruct\\b"
+                    << "\\btypedef\\b"
                     << "\\bunion\\b" << "\\bunsigned\\b" << "\\bvirtual\\b"
                     << "\\bvoid\\b" << "\\bvolatile\\b";
     foreach (const QString &pattern, keywordPatterns) {
@@ -32,12 +36,12 @@ Highlighter::Highlighter(QTextDocument *parent)
     QStringList expFunctionPatterns;
     expFunctionPatterns<<  "\\bauto\\b" << "\\bbreak\\b" << "\\bcase\\b"
                     << "\\bcontinue\\b" << "\\bdefault\\b" << "\\bdo\\b"
-                    << "\\belse\\b" << "\\bextern\\b" << "\\bfor\\b"
-                    << "\\bgoto\\b" << "\\bif\\b" << "\\bregister\\b"
+                    << "\\belse\\b"  << "\\bfor\\b"<<"[#]include"
+                    << "\\bgoto\\b" << "\\bif\\b"
                     <<  "\\breturn\\b" << "\\bswitch\\b" << "\\bwhile\\b";
 
-    //黑色
-    b1->setRgb(0,0,0);
+    //粉的
+    b1->setRgb(242,119,234);
     expFunctionFormat.setForeground(*b1);
     expFunctionFormat.setFontWeight(QFont::Bold);
     foreach (const QString &pattern, expFunctionPatterns) {
@@ -47,6 +51,16 @@ Highlighter::Highlighter(QTextDocument *parent)
     }
 
     //类颜色
+    QTextCharFormat classselfFormat;
+    classselfFormat.setFontWeight(QFont::Bold);
+    //玫红
+    b1->setRgb(166,51,72);
+    classFormat.setForeground(Qt::darkMagenta);
+    rule.pattern = QRegExp("\\bclass\\b");
+    rule.format = classFormat;
+    highlightingRules.append(rule);
+
+
     classFormat.setFontWeight(QFont::Bold);
     //玫红
     b1->setRgb(166,51,72);
@@ -84,7 +98,6 @@ Highlighter::Highlighter(QTextDocument *parent)
     commentStartExpression = QRegExp("/\\*");
     commentEndExpression = QRegExp("\\*/");
 }
-
 void Highlighter::highlightBlock(const QString &text)
 {
     foreach (const HighlightingRule &rule, highlightingRules) {

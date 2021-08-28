@@ -20,6 +20,7 @@ class Editor : public QPlainTextEdit
 public:
     Editor(QWidget *parent = 0);
     Editor(QWidget *parent,QString foldername);
+    void Init();//初始化
     void Set_Mode(editorMode mode);//设置编辑模式
     void Line_Number_Area_Paint_Event(QPaintEvent *event);//
     int lineNumberAreaWidth();

@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "textedit.h"
 
 #include <toolbox.h>
 #include "FileMgr.h"
@@ -86,9 +85,12 @@ void MainWindow::AddFolderToGBox(QString foldername){
 //实现TextEdit类即可  参数为C文件名的完整路径
 void MainWindow::AddTextEditToEditArea(QString filename){
     Editor *editor=new Editor(ui->tabWgtEditArea->currentWidget(),GetCFolderName(filename));
+
+
     //Editor *editor = new Editor();
     editor->Set_Mode(EDIT);
     Highlighter *highlighter = new Highlighter(editor->document());
+    highlighter->Start_Highlight();
     ui->tabWgtEditArea->addTab(editor,filename);
 }
 //-----键盘按下事件,用于快捷键

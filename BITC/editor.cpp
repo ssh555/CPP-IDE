@@ -3,26 +3,24 @@
 #include<QPlainTextEdit>
 Editor::Editor(QWidget *parent) : QPlainTextEdit(parent)
 {
+    this->Init();
+}
+void Editor::Init()
+{
     lineNumberArea = new LineNumberArea(this);
-
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(SLOT_UpdateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(SLOT_UpdateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_HighlightCurrentLine()));
-
+    //改了个可爱的字体
+    this->setFont(QFont("Consolas",12));
     SLOT_UpdateLineNumberAreaWidth(0);
-
+    int fontWidth = QFontMetrics(this->currentCharFormat().font()).averageCharWidth();
+    this->setTabStopWidth( 3 * fontWidth );
     Set_Mode(BROWSE);
 }
 Editor::Editor(QWidget *parent,QString foldername) : QPlainTextEdit(parent){
     FolderName = foldername;
-    lineNumberArea = new LineNumberArea(this);
-    connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(SLOT_UpdateLineNumberAreaWidth(int)));
-    connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(SLOT_UpdateLineNumberArea(QRect,int)));
-    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_HighlightCurrentLine()));
-
-    SLOT_UpdateLineNumberAreaWidth(0);
-
-    Set_Mode(BROWSE);
+    this->Init();
 }
 
 void Editor::Refresh_Text()
