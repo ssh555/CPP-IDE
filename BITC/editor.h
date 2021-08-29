@@ -25,6 +25,7 @@ public:
     void Line_Number_Area_Paint_Event(QPaintEvent *event);//
     int lineNumberAreaWidth();
     QString FolderName;//保存当前页的文件的文件夹绝对路径
+    bool isChanged;
 protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     void Refresh_Text();

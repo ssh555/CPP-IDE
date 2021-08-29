@@ -46,10 +46,23 @@ private:
     //实现菜单栏的功能
     void Func_MenuBar();
 
+    //在指定路径创建文件
+    bool CreateFile(QString filename);
+
     /*信号*/
 signals:
     //编译运行信号
     void SIGNAL_CompileRun();
+    //编译信号
+    void SIGNAL_Compile();
+    //运行信号
+    void SIGNAL_Run();
+    //新建文件信号
+    void SIGNAL_CreateNewFile();
+    //打开文件信号
+    void SIGNAL_OpenFile();
+    //保存文件信号
+    void SIGNAL_SaveFile();
 
 };
 #endif // MAINWINDOW_H

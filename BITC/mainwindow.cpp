@@ -12,6 +12,11 @@
 #include <QDebug>
 #include <highlighter.h>
 #include <QList>
+#include <QFileDialog>
+#include <QDir>
+#include <QMessageBox>
+#include <QWidget>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -32,13 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
             openingFileName.clear();
             return;
         }
-        QList<Editor*> tlist=ui->tabWgtEditArea->currentWidget()->findChildren<Editor*>();
-        Editor *t = new Editor;
-        for(int i=0;i < tlist.size();++i)
-        {
-            delete t;
-            t=tlist.at(i);
-        }
+        Editor *t = (Editor*)ui->tabWgtEditArea->currentWidget();
         openingFileName = t->FolderName + "/" + ui->tabWgtEditArea->tabText(i);
     });
 
@@ -47,9 +46,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     /*测试代码*/
     //qDebug() << ui->gBoxFileMgr->width() << "    " << ui->gBoxFileMgr->height();
-    tBoxFolderMgr->addWidget(QStringLiteral("Qt"), new FileMgr);
-    tBoxFolderMgr->addWidget(QStringLiteral("Qt"), new FileMgr);
-    AddTextEditToEditArea("File2.txt");
+    //    tBoxFolderMgr->addWidget(QStringLiteral("Qt"), new FileMgr);
+    //    tBoxFolderMgr->addWidget(QStringLiteral("Qt"), new FileMgr);
+    //    AddTextEditToEditArea("File2.txt");
     //CompileC("C:/Users/20994/Desktop/test/test.c++");
     /*测试代码*/
 
@@ -69,7 +68,7 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 //获取C文件绝对路径的文件名
 QString MainWindow::GetCFileName(QString filename){
-    return filename.mid(filename.lastIndexOf("/"));
+    return filename.mid(filename.lastIndexOf("/")+1);
 }
 //获取C文件绝对路径的文件夹名 不包括最后的/
 QString MainWindow::GetCFolderName(QString filename){
@@ -84,22 +83,51 @@ void MainWindow::AddFolderToGBox(QString foldername){
 
 //实现TextEdit类即可  参数为C文件名的完整路径
 void MainWindow::AddTextEditToEditArea(QString filename){
-    Editor *editor=new Editor(ui->tabWgtEditArea->currentWidget(),GetCFolderName(filename));
-
+    Editor *editor = new Editor;
+    editor->FolderName = GetCFolderName(filename);
+    editor->isChanged = false;
+    connect(editor,&QPlainTextEdit::textChanged,[=](){
+        //改变内容但没有保存则标题处标明
+        if(!editor->isChanged){
+            ui->tabWgtEditArea->currentWidget()->setWindowTitle("aaa");
+            ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()) + "(未保存)");
+            editor->isChanged = true;
+        }
+    });
 
     //Editor *editor = new Editor();
     editor->Set_Mode(EDIT);
     Highlighter *highlighter = new Highlighter(editor->document());
     highlighter->Start_Highlight();
-    ui->tabWgtEditArea->addTab(editor,filename);
+    int i = ui->tabWgtEditArea->addTab(editor,GetCFileName(filename));
+    ui->tabWgtEditArea->setCurrentIndex(i);
+
 }
 //-----键盘按下事件,用于快捷键
-void MainWindow::keyPressEvent(QKeyEvent  *event)
-{
-    //CTRL + ALT +N
-    if(event->modifiers() == (Qt::ControlModifier | Qt::AltModifier) && event ->key() == Qt::Key_N)
-    {
+void MainWindow::keyPressEvent(QKeyEvent  *event){
+    //编译并运行 CTRL + ALT +N
+    if(event->modifiers() == (Qt::ControlModifier | Qt::AltModifier) && event ->key() == Qt::Key_N){
         emit SIGNAL_CompileRun();
+    }
+    //新建文件 CTRL + N
+    if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_N){
+        emit SIGNAL_CreateNewFile();
+    }
+    //打开文件 CTRL + O
+    if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_O){
+        emit SIGNAL_OpenFile();
+    }
+    //保存文件 CTRL + S
+    if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_S){
+        emit SIGNAL_SaveFile();
+    }
+    //编译文件 CTRL + B
+    if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_B){
+        emit SIGNAL_Compile();
+    }
+    //运行文件 CTRL + R
+    if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_R){
+        emit SIGNAL_Run();
     }
 
 }
@@ -112,12 +140,89 @@ void MainWindow::Func_MenuBar(){
     });
     connect(this,&MainWindow::SIGNAL_CompileRun,this,[=](){
         //qDebug() << "bbb";
-//        if(openingFileName.isEmpty())
-//            return;
-                CompileC(openingFileName);
-                RunC(openingFileName);
+        if(openingFileName.isEmpty())
+            return;
+        CompileC(openingFileName);
+        RunC(openingFileName);
     });
 
+    //新建文件
+    connect(ui->actionNewFile,&QAction::triggered,this,[=](){
+        emit SIGNAL_CreateNewFile();
+    });
+    connect(this,&MainWindow::SIGNAL_CreateNewFile,this,[=](){
+        QString filename = QFileDialog::getSaveFileName(this,"新建C++文件 记得加入后缀名");
+        //无后缀
+        if(!filename.isEmpty() && (filename.size() - filename.lastIndexOf(".")) > 5){
+            filename += ".c++";
+        }
+        if(CreateFile(filename))
+            AddTextEditToEditArea(filename);
+        else
+            QMessageBox::warning(this,"警告","文件已存在");
+    });
+
+    //打开文件
+    connect(ui->actionOpenFile,&QAction::triggered,this,[=](){
+        emit SIGNAL_OpenFile();
+    });
+    connect(this,&MainWindow::SIGNAL_OpenFile,this,[=](){
+        QString filename = QFileDialog::getOpenFileName(this,"新建C++文件 记得加入后缀名",".",tr("C(*.c *.c++ *.cpp)"));
+        if(filename.isEmpty())
+            return ;
+        AddTextEditToEditArea(filename);
+        QFile file(filename);
+        file.open(QIODevice::ReadOnly);
+        QString str = QString(file.readAll());
+        file.close();
+        Editor *t = (Editor*)ui->tabWgtEditArea->currentWidget();
+        t->setPlainText(str);
+        t->isChanged = false;
+        ui->tabWgtEditArea->currentWidget()->setWindowTitle("aaa");
+        ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
+    });
+
+    //保存文件
+    connect(ui->actionSave,&QAction::triggered,this,[=](){
+        emit SIGNAL_SaveFile();
+    });
+    connect(this,&MainWindow::SIGNAL_SaveFile,this,[=](){
+        if(openingFileName.isEmpty()){
+            return ;
+        }
+        Editor *t = (Editor*)ui->tabWgtEditArea->currentWidget();
+        QString filename = openingFileName;
+        QFile file(filename);
+        //        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        //            return ;
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
+        file.write(t->toPlainText().toUtf8().data());
+        //qDebug() << t->toPlainText();
+        file.close();
+        t->isChanged = false;
+        ui->tabWgtEditArea->currentWidget()->setWindowTitle("aaa");
+        ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
+    });
+
+    //编译文件
+    connect(ui->actionCompileRun,&QAction::triggered,this,[=](){
+        emit SIGNAL_Compile();
+    });
+    connect(this,&MainWindow::SIGNAL_Compile,this,[=](){
+        if(openingFileName.isEmpty())
+            return;
+        CompileC(openingFileName);
+    });
+    //运行文件
+    connect(ui->actionRun,&QAction::triggered,this,[=](){
+        emit SIGNAL_Run();
+    });
+    connect(this,&MainWindow::SIGNAL_Run,this,[=](){
+        if(openingFileName.isEmpty())
+            return;
+
+        RunC(openingFileName);
+    });
 }
 //-----编译C文件  参数为文件的完整绝对路径
 void MainWindow::CompileC(QString filename){
@@ -138,12 +243,24 @@ void MainWindow::CompileC(QString filename){
 //运行C文件  参数为文件的完整绝对路径
 void MainWindow::RunC(QString filename){
     //文件不存在
-    if(!QFileInfo(filename).exists())
+    filename = filename.mid(0,filename.lastIndexOf(".")) + ".exe";
+    if(!QFileInfo(filename).exists()){
+        QMessageBox::warning(this,"警告","程序未编译");
         return;
+    }
+
     //用系统默认的打开方式打开指定文件
-    QDesktopServices::openUrl(QUrl::fromLocalFile(filename.mid(0,filename.lastIndexOf(".")) + ".exe"));
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filename));
 
 }
-
+//不存在则创建
+bool MainWindow::CreateFile(QString filename){
+    QFile file(filename);
+    if(file.exists())
+        return false;
+    file.open(QIODevice::WriteOnly|QIODevice::Text);
+    file.close();
+    return true;
+}
 
 
