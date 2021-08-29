@@ -63,6 +63,10 @@ signals:
     void SIGNAL_OpenFile();
     //保存文件信号
     void SIGNAL_SaveFile();
+    //另存文件信号
+    void SIGNAL_SaveAsFile();
+    //关闭所有文件信号
+    void SIGNAL_CloseAll();
 
 };
 #endif // MAINWINDOW_H

@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     //qDebug() << ui->tabWgtEditArea->currentIndex();
     //编辑页的关闭事件
     connect(ui->tabWgtEditArea,&QTabWidget::tabCloseRequested,[=](int i){
-        ui->tabWgtEditArea->removeTab(i);
+        ui->tabWgtEditArea->removeTab(i);   //应该把相应的editor也删了，会内存泄漏
     });
     //始终将当前操作文件名指向当前文件
     connect(ui->tabWgtEditArea,&QTabWidget::currentChanged,[=](int i){
@@ -129,6 +129,14 @@ void MainWindow::keyPressEvent(QKeyEvent  *event){
     if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_R){
         emit SIGNAL_Run();
     }
+    //编译并运行 CTRL + SHIFT + S
+    if(event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && event ->key() == Qt::Key_S){
+        emit SIGNAL_SaveAsFile();
+    }
+    //关闭所有文件 CTRL + W
+    if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_W){
+        emit SIGNAL_CloseAll();
+    }
 
 }
 //-----实现菜单栏的功能
@@ -152,6 +160,9 @@ void MainWindow::Func_MenuBar(){
     });
     connect(this,&MainWindow::SIGNAL_CreateNewFile,this,[=](){
         QString filename = QFileDialog::getSaveFileName(this,"新建C++文件 记得加入后缀名");
+        //取消
+        if(filename=="")
+            return;
         //无后缀
         if(!filename.isEmpty() && (filename.size() - filename.lastIndexOf(".")) > 5){
             filename += ".c++";
@@ -167,7 +178,7 @@ void MainWindow::Func_MenuBar(){
         emit SIGNAL_OpenFile();
     });
     connect(this,&MainWindow::SIGNAL_OpenFile,this,[=](){
-        QString filename = QFileDialog::getOpenFileName(this,"新建C++文件 记得加入后缀名",".",tr("C(*.c *.c++ *.cpp)"));
+        QString filename = QFileDialog::getOpenFileName(this,"打开文件",".",tr("C(*.c *.c++ *.cpp)"));
         if(filename.isEmpty())
             return ;
         AddTextEditToEditArea(filename);
@@ -202,6 +213,34 @@ void MainWindow::Func_MenuBar(){
         t->isChanged = false;
         ui->tabWgtEditArea->currentWidget()->setWindowTitle("aaa");
         ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
+    });
+
+    //另存文件
+    connect(ui->actionSaveAs,&QAction::triggered,this,[=](){
+        emit SIGNAL_SaveAsFile();
+    });
+    connect(this,&MainWindow::SIGNAL_SaveAsFile,this,[=](){
+        Editor *t = (Editor*)ui->tabWgtEditArea->currentWidget();
+        QString filename = QFileDialog::getSaveFileName(this,"另存文件",".","CppFile(*.cpp);;CFile(*.c)");
+        QFile file(filename);
+        //        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        //            return ;
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
+        file.write(t->toPlainText().toUtf8().data());
+        //qDebug() << t->toPlainText();
+        file.close();
+    });
+
+    //关闭所有文件
+    connect(ui->actionCloseAll, &QAction::triggered, this, [=](){
+        emit SIGNAL_CloseAll();
+    });
+    connect(this, &MainWindow::SIGNAL_CloseAll, this, [=](){
+        int count = ui->tabWgtEditArea->count();
+        while(count>0){
+            emit ui->tabWgtEditArea->tabCloseRequested(0);
+            count--;
+        }
     });
 
     //编译文件

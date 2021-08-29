@@ -1,0 +1,15 @@
+FileMgr.o
+ToolBox.o
+ToolPage.o
+editor.o
+highlighter.o
+main.o
+mainwindow.o
+qrc_img.o
+qrc_qss.o
+moc_FileMgr.o
+moc_ToolBox.o
+moc_ToolPage.o
+moc_editor.o
+moc_highlighter.o
+moc_mainwindow.o
