@@ -16,6 +16,7 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QWidget>
+#include <QDockWidget>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -23,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     tBoxFolderMgr = new ToolBox(ui->gBoxFileMgr);
+    ui->gBoxFileMgr->setWidget(tBoxFolderMgr);
+
     //清空编辑页
     for(int i = 0;ui->tabWgtEditArea->count(); ++i)
         ui->tabWgtEditArea->removeTab(i);
@@ -46,8 +49,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     /*测试代码*/
     //qDebug() << ui->gBoxFileMgr->width() << "    " << ui->gBoxFileMgr->height();
-    //    tBoxFolderMgr->addWidget(QStringLiteral("Qt"), new FileMgr);
-    //    tBoxFolderMgr->addWidget(QStringLiteral("Qt"), new FileMgr);
+        tBoxFolderMgr->addWidget(QStringLiteral("Qt"), new FileMgr);
+        tBoxFolderMgr->addWidget(QStringLiteral("Qt"), new FileMgr);
     //    AddTextEditToEditArea("File2.txt");
     //CompileC("C:/Users/20994/Desktop/test/test.c++");
     /*测试代码*/
@@ -59,12 +62,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::resizeEvent(QResizeEvent* event)
-{
-    QMainWindow::resizeEvent(event);
-    // Your code here
-    tBoxFolderMgr->Size_Changed();
-}
+//void MainWindow::resizeEvent(QResizeEvent* event)
+//{
+//    QMainWindow::resizeEvent(event);
+//    // Your code here
+//    tBoxFolderMgr->Size_Changed();
+//}
 
 //获取C文件绝对路径的文件名
 QString MainWindow::GetCFileName(QString filename){
@@ -220,6 +223,8 @@ void MainWindow::Func_MenuBar(){
         emit SIGNAL_SaveAsFile();
     });
     connect(this,&MainWindow::SIGNAL_SaveAsFile,this,[=](){
+        if(openingFileName.isEmpty())
+            return ;
         Editor *t = (Editor*)ui->tabWgtEditArea->currentWidget();
         QString filename = QFileDialog::getSaveFileName(this,"另存文件",".","CppFile(*.cpp);;CFile(*.c)");
         QFile file(filename);

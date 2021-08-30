@@ -26,7 +26,7 @@ private:
     QString openingFileName;
 
     //当窗口大小改变时，其他控件等也跟着改变大小，用来适应窗口大小
-    void resizeEvent(QResizeEvent* event);
+    //void resizeEvent(QResizeEvent* event);
     //往gBoxFileMgr添加文件夹，参数为文件名，内部需要重新实现
     void AddFolderToGBox(QString foldername);
     //往EditArea添加TextEdit

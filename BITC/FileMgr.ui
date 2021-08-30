@@ -14,24 +14,69 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
-    <widget class="QPushButton" name="btnFile1">
+    <widget class="QLabel" name="label">
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
      <property name="text">
       <string>File1.txt</string>
      </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="btnFile2">
-     <property name="text">
-      <string>File2.txt</string>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+     <property name="margin">
+      <number>1</number>
+     </property>
+     <property name="indent">
+      <number>16</number>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="btnFile3">
+    <widget class="QLabel" name="label_2">
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="text">
+      <string>File2.txt</string>
+     </property>
+     <property name="margin">
+      <number>1</number>
+     </property>
+     <property name="indent">
+      <number>16</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_3">
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
      <property name="text">
       <string>File3.txt</string>
+     </property>
+     <property name="margin">
+      <number>1</number>
+     </property>
+     <property name="indent">
+      <number>16</number>
      </property>
     </widget>
    </item>

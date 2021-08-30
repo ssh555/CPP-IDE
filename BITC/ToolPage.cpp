@@ -18,14 +18,6 @@ ToolPage::ToolPage(QWidget *parent) :
 
     ui->widgetContent->setAttribute(Qt::WA_StyledBackground);
 
-    m_pLabel = new QLabel(this);
-    m_pLabel->setFixedSize(20, 20);
-    m_pLabel->setPixmap(QPixmap(":/img/down-arrow.png").scaled(m_pLabel->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-    QHBoxLayout *layout = new QHBoxLayout(ui->pushButtonFold);
-    layout->setContentsMargins(0, 0, 5, 0);
-    layout->addStretch(1);
-    layout->addWidget(m_pLabel);
-
     QFile file(":/qss/toolpage.qss");
     if (file.open(QIODevice::ReadOnly)) {
         setStyleSheet(file.readAll());
@@ -43,6 +35,7 @@ ToolPage::~ToolPage()
 void ToolPage::addWidget(const QString &title, QWidget *widget)
 {
     ui->pushButtonFold->setText(title);
+    collapse();
     ui->verticalLayoutContent->addWidget(widget);
 }
 
@@ -50,16 +43,14 @@ void ToolPage::expand()
 {
     ui->widgetContent->show();
     m_bIsExpanded = true;
-
-    m_pLabel->setPixmap(QPixmap(":/img/down-arrow.png").scaled(m_pLabel->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    ui->pushButtonFold->setIcon(QIcon(":/img/down-arrow.png"));
 }
 
 void ToolPage::collapse()
 {
     ui->widgetContent->hide();
     m_bIsExpanded = false;
-
-    m_pLabel->setPixmap(QPixmap(":/img/left-arrow.png").scaled(m_pLabel->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    ui->pushButtonFold->setIcon(QIcon(":/img/right-arrow.png"));
 }
 
 void ToolPage::onPushButtonFoldClicked()

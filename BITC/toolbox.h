@@ -18,7 +18,7 @@ public:
 
     void addWidget(const QString &title, QWidget *widget);
 
-    void Size_Changed();
+    //void Size_Changed();
 
 private:
     Ui::ToolBox *ui;

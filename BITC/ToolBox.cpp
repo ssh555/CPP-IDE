@@ -3,6 +3,7 @@
 #include "ToolPage.h"
 
 #include <QVBoxLayout>
+#include <QDockWidget>
 
 #include <qdebug.h>
 
@@ -16,7 +17,7 @@ ToolBox::ToolBox(QWidget *parent) :
     myParent = parent;
 
     //qDebug() << parent->width() << "    " << parent->height();
-    this->setGeometry(0,10,parent->width(),parent->height()-10);
+    //this->setGeometry(0,10,parent->width(),parent->height()-10);
 
     //    this->setMaximumSize(200,600);
     //    this->setMinimumSize(200,500);
@@ -46,10 +47,11 @@ void ToolBox::addWidget(const QString &title, QWidget *widget)
     page->addWidget(title, widget);
 
     m_pContentVBoxLayout->addWidget(page);
+
 }
 
-void ToolBox::Size_Changed(){
-    this->setGeometry(0,10,myParent->width(),myParent->height()-10);
-}
+//void ToolBox::Size_Changed(){
+//    this->setGeometry(0,10,myParent->width(),myParent->height()-10);
+//}
 
 
