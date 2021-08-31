@@ -4,7 +4,8 @@
 #include <QMainWindow>
 #include "toolbox.h"
 #include <FileMgr.h>
-
+#include <QCompleter>
+#include "editor.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -16,10 +17,12 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
+    QCompleter *completer = nullptr;
+    Editor *completingTextEdit;
 
 private:
     Ui::MainWindow *ui;
+    QAbstractItemModel *modelFromFile(const QString& fileName);
     //ToolBox,实现显示文件夹的类，不用管
     ToolBox *tBoxFolderMgr;
     //当前编辑器正在操作的文件绝对路径 用GetCFileName获得文件名  用GetFolderName获得文件夹路径

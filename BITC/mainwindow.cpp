@@ -17,7 +17,7 @@
 #include <QMessageBox>
 #include <QWidget>
 #include <QDockWidget>
-
+#include <QStringListModel>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -86,9 +86,10 @@ void MainWindow::AddFolderToGBox(QString foldername){
 
 //实现TextEdit类即可  参数为C文件名的完整路径
 void MainWindow::AddTextEditToEditArea(QString filename){
-    Editor *editor = new Editor;
+    Editor *editor = new Editor();
     editor->FolderName = GetCFolderName(filename);
     editor->isChanged = false;
+
     connect(editor,&QPlainTextEdit::textChanged,[=](){
         //改变内容但没有保存则标题处标明
         if(!editor->isChanged){
@@ -97,7 +98,13 @@ void MainWindow::AddTextEditToEditArea(QString filename){
             editor->isChanged = true;
         }
     });
+    completer = new QCompleter(this);
 
+    completer->setModel(modelFromFile(":/resources/wordlist.txt"));
+    completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    completer->setWrapAround(false);
+    editor->setCompleter(completer);
     //Editor *editor = new Editor();
     editor->Set_Mode(EDIT);
     Highlighter *highlighter = new Highlighter(editor->document());
@@ -107,6 +114,28 @@ void MainWindow::AddTextEditToEditArea(QString filename){
 
 }
 //-----键盘按下事件,用于快捷键
+QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName)
+{
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly))
+        return new QStringListModel(completer);
+
+#ifndef QT_NO_CURSOR
+    QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+#endif
+    QStringList words;
+
+    while (!file.atEnd()) {
+        QByteArray line = file.readLine();
+        if (!line.isEmpty())
+            words << QString::fromUtf8(line.trimmed());
+    }
+
+#ifndef QT_NO_CURSOR
+    QGuiApplication::restoreOverrideCursor();
+#endif
+    return new QStringListModel(words, completer);
+}
 void MainWindow::keyPressEvent(QKeyEvent  *event){
     //编译并运行 CTRL + ALT +N
     if(event->modifiers() == (Qt::ControlModifier | Qt::AltModifier) && event ->key() == Qt::Key_N){
