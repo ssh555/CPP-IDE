@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     tBoxFolderMgr = new ToolBox(ui->gBoxFileMgr);
     ui->gBoxFileMgr->setWidget(tBoxFolderMgr);
+    openedFileNames = new QStringList;
 
     //清空编辑页
     for(int i = 0;ui->tabWgtEditArea->count(); ++i)
@@ -61,6 +62,7 @@ MainWindow::~MainWindow()
         m_pInstance = NULL;
     }
     delete ui;
+    delete openedFileNames;
 }
 
 //void MainWindow::resizeEvent(QResizeEvent* event)
@@ -91,6 +93,9 @@ void MainWindow::AddFolderToGBox(QString foldername){
 
 //实现TextEdit类即可  参数为C文件名的完整路径
 void MainWindow::AddTextEditToEditArea(QString filename){
+    if(openedFileNames->contains(filename))
+        return;
+    openedFileNames->append(filename);
     Editor *editor = new Editor;
     editor->FolderName = GetCFolderName(filename);
     editor->isChanged = false;
@@ -109,6 +114,16 @@ void MainWindow::AddTextEditToEditArea(QString filename){
     highlighter->Start_Highlight();
     int i = ui->tabWgtEditArea->addTab(editor,GetCFileName(filename));
     ui->tabWgtEditArea->setCurrentIndex(i);
+    QFile file(filename);
+    file.open(QIODevice::ReadOnly);
+    QString str = QString(file.readAll());
+    file.close();
+    Editor *t = (Editor*)ui->tabWgtEditArea->currentWidget();
+    t->setPlainText(str);
+    t->isChanged = false;
+    ui->tabWgtEditArea->currentWidget()->setWindowTitle("aaa");
+    ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
+    //AddFolderToGBox(GetCFolderName(openingFileName));
 
 }
 
@@ -196,16 +211,7 @@ void MainWindow::Func_MenuBar(){
         if(filename.isEmpty())
             return ;
         AddTextEditToEditArea(filename);
-        QFile file(filename);
-        file.open(QIODevice::ReadOnly);
-        QString str = QString(file.readAll());
-        file.close();
-        Editor *t = (Editor*)ui->tabWgtEditArea->currentWidget();
-        t->setPlainText(str);
-        t->isChanged = false;
-        ui->tabWgtEditArea->currentWidget()->setWindowTitle("aaa");
-        ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
-        //AddFolderToGBox(GetCFolderName(openingFileName));
+
     });
 
     //打开文件夹

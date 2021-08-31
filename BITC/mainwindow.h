@@ -15,7 +15,8 @@ class MainWindow : public QMainWindow
 
 public:
 
-
+    //往EditArea添加TextEdit
+    void AddTextEditToEditArea(QString filename);
     static MainWindow* Instance()
     {
         if (m_pInstance == NULL)
@@ -38,13 +39,14 @@ private:
     ToolBox *tBoxFolderMgr;
     //当前编辑器正在操作的文件绝对路径 用GetCFileName获得文件名  用GetFolderName获得文件夹路径
     QString openingFileName;
+    //记录已打开的文件
+    QStringList *openedFileNames;
 
     //当窗口大小改变时，其他控件等也跟着改变大小，用来适应窗口大小
     //void resizeEvent(QResizeEvent* event);
     //往gBoxFileMgr添加文件夹，参数为文件名，内部需要重新实现
     void AddFolderToGBox(QString foldername);
-    //往EditArea添加TextEdit
-    void AddTextEditToEditArea(QString filename);
+
     //键盘按下响应事件，添加快捷键
     void keyPressEvent(QKeyEvent  *event);
     //编译C文件
