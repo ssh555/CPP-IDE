@@ -10,6 +10,11 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+enum TabTemp{
+    Temporary = true,
+    Permanent = false,
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -17,7 +22,8 @@ class MainWindow : public QMainWindow
 public:
 
     //往EditArea添加TextEdit
-    void AddTextEditToEditArea(QString filename);
+    //第二个参数为true表示当前窗口为临时窗口，临时打开文件共用一个窗口
+    void AddTextEditToEditArea(QString filename,bool isTemp);
 
     static MainWindow* Instance()
     {
@@ -35,6 +41,8 @@ private:
     ~MainWindow();
     QCompleter *completer = nullptr;
     Editor *completingTextEdit;
+    //临时窗口，只有一个
+    QWidget *TempWidget;
 
     static MainWindow* m_pInstance;
 
@@ -46,6 +54,8 @@ private:
     QString openingFileName;
     //记录已打开的文件
     QStringList *openedFileNames;
+    //正在读入或写入文件内容时不会触发textchanged
+    bool isReadingOrWriting = false;
 
     //当窗口大小改变时，其他控件等也跟着改变大小，用来适应窗口大小
     //void resizeEvent(QResizeEvent* event);
@@ -67,8 +77,17 @@ private:
     //实现菜单栏的功能
     void Func_MenuBar();
 
+    //在editarea创建textedit
+    QWidget* CreateEditText(QString filename);
+
     //在指定路径创建文件
     bool CreateFile(QString filename);
+
+    //获取TAB页对应的文件路径
+    QString GetTABFilePath(QWidget *TabPage,QString fileName);
+
+    //临时TAB页转非临时TAB页
+    void TempTabToPermTab();
 
     /*信号*/
 signals:

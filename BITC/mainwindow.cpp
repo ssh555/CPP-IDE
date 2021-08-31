@@ -18,6 +18,9 @@
 #include <QWidget>
 #include <QDockWidget>
 #include <QStringListModel>
+#include <QAbstractButton>
+#include <QFont>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -26,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     tBoxFolderMgr = new ToolBox(ui->gBoxFileMgr);
     ui->gBoxFileMgr->setWidget(tBoxFolderMgr);
     openedFileNames = new QStringList;
+    TempWidget = NULL;
 
     //清空编辑页
     for(int i = 0;ui->tabWgtEditArea->count(); ++i)
@@ -33,7 +37,23 @@ MainWindow::MainWindow(QWidget *parent)
     //qDebug() << ui->tabWgtEditArea->currentIndex();
     //编辑页的关闭事件
     connect(ui->tabWgtEditArea,&QTabWidget::tabCloseRequested,[=](int i){
-        ui->tabWgtEditArea->removeTab(i);   //应该把相应的editor也删了，会内存泄漏
+        //文件未保存
+        if(ui->tabWgtEditArea->tabText(i).lastIndexOf("(未保存)") != -1){
+            QMessageBox messageBox(QMessageBox::Question,"是否保存文件","未保存");
+            QPushButton *btnYes = messageBox.addButton(("是"), QMessageBox::YesRole);
+            messageBox.addButton(("否"), QMessageBox::NoRole);
+            messageBox.exec();
+            //保存
+            if ((QPushButton*)messageBox.clickedButton() == btnYes){
+                emit SIGNAL_SaveFile();
+            }
+        }
+        openedFileNames->removeAll(GetTABFilePath(ui->tabWgtEditArea->widget(i),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(ui->tabWgtEditArea->widget(i)))));
+        //如果为临时窗口
+        if(TempWidget == ui->tabWgtEditArea->widget(i)){
+            TempWidget = NULL;
+        }
+        ui->tabWgtEditArea->removeTab(i);
     });
     //始终将当前操作文件名指向当前文件
     connect(ui->tabWgtEditArea,&QTabWidget::currentChanged,[=](int i){
@@ -42,14 +62,13 @@ MainWindow::MainWindow(QWidget *parent)
             return;
         }
         Editor *t = (Editor*)ui->tabWgtEditArea->currentWidget();
-        openingFileName = t->FolderName + "/" + ui->tabWgtEditArea->tabText(i);
+        openingFileName = t->FolderName + "/" + ui->tabWgtEditArea->tabText(i).replace("(未保存)","");
     });
 
     Func_MenuBar();
 
 
     /*测试代码*/
-    //AddFolderToGBox(GetCFolderName(openingFileName));
     /*测试代码*/
 
 }
@@ -72,13 +91,18 @@ MainWindow::~MainWindow()
 //    tBoxFolderMgr->Size_Changed();
 //}
 
-//获取C文件绝对路径的文件名
+//获取C文件绝对路径的文件名.
 QString MainWindow::GetCFileName(QString filename){
     return filename.mid(filename.lastIndexOf("/")+1);
 }
 //获取C文件绝对路径的文件夹名 不包括最后的/
 QString MainWindow::GetCFolderName(QString filename){
     return filename.mid(0,filename.lastIndexOf("/"));
+}
+//获取TAB页对应的文件路径
+QString MainWindow::GetTABFilePath(QWidget *TabPage,QString fileName){
+    Editor *t = (Editor*) TabPage;
+    return  t->FolderName + "/" + fileName;
 }
 
 //-----未实现代码，需要在文件夹下展现文件,参数为文件夹完整路径
@@ -92,44 +116,60 @@ void MainWindow::AddFolderToGBox(QString foldername){
 }
 
 //实现TextEdit类即可  参数为C文件名的完整路径
-void MainWindow::AddTextEditToEditArea(QString filename){
-    if(openedFileNames->contains(filename))
-        return;
-    openedFileNames->append(filename);
-    Editor *editor = new Editor();
-    editor->FolderName = GetCFolderName(filename);
-    editor->isChanged = false;
-
-    connect(editor,&QPlainTextEdit::textChanged,[=](){
-        //改变内容但没有保存则标题处标明
-        if(!editor->isChanged){
-            ui->tabWgtEditArea->currentWidget()->setWindowTitle("aaa");
-            ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()) + "(未保存)");
-            editor->isChanged = true;
+void MainWindow::AddTextEditToEditArea(QString filename,bool isTemp){
+    //打开 临时窗口
+    if(isTemp == TabTemp::Temporary){
+        if(openedFileNames->contains(filename)){
+            ui->tabWgtEditArea->setCurrentIndex(openedFileNames->indexOf(filename));
+            return;
         }
-    });
-    completer = new QCompleter(this);
+        if(TempWidget == NULL){
+            TempWidget = CreateEditText(filename);
+            Editor *t = (Editor*)TempWidget;
+            connect(t,&QPlainTextEdit::textChanged,TempWidget,[=](){
+                if(ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(TempWidget)).contains("(未保存)")){
+                    TempTabToPermTab();
+                    //qDebug() << ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(TempWidget));
+                }
+            });
+            return;
+        }
+        //保存当前文件,移出当前文件
+        //emit SIGNAL_SaveFile();
+        openedFileNames->removeAll(GetTABFilePath(TempWidget,ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(TempWidget))));
+        //添加选择文件
+        openedFileNames->append(filename);
+        ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->indexOf(TempWidget),QFileInfo(filename).fileName());
+        //读入文件内容
+        QFile file(filename);
+        file.open(QIODevice::ReadOnly);
+        QString str = QString(file.readAll());
+        file.close();
+        //更改标题
+        Editor *t = (Editor*)TempWidget;
+        isReadingOrWriting = true;
+        t->setPlainText(str);
+        isReadingOrWriting = false;
+        t->isChanged = false;
+        ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
+        return;
+    }
 
-    completer->setModel(modelFromFile(":/resources/wordlist.txt"));
-    completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
-    completer->setCaseSensitivity(Qt::CaseInsensitive);
-    completer->setWrapAround(false);
-    editor->setCompleter(completer);
-    //Editor *editor = new Editor();
-    editor->Set_Mode(EDIT);
-    Highlighter *highlighter = new Highlighter(editor->document());
-    highlighter->Start_Highlight();
-    int i = ui->tabWgtEditArea->addTab(editor,GetCFileName(filename));
-    ui->tabWgtEditArea->setCurrentIndex(i);
-    QFile file(filename);
-    file.open(QIODevice::ReadOnly);
-    QString str = QString(file.readAll());
-    file.close();
-    Editor *t = (Editor*)ui->tabWgtEditArea->currentWidget();
-    t->setPlainText(str);
-    t->isChanged = false;
-    ui->tabWgtEditArea->currentWidget()->setWindowTitle("aaa");
-    ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
+
+    //打开 非临时窗口
+    //若打开的文件为临时窗口文件，则改变临时窗口为非临时窗口
+    if(TempWidget != NULL){
+        if(openedFileNames->contains(filename)){
+            ui->tabWgtEditArea->setCurrentIndex(openedFileNames->indexOf(filename));
+            //如果当前文件和临时文件是同一个窗口，则临时文件窗口清空
+            if(TempWidget == ui->tabWgtEditArea->currentWidget())
+                TempWidget = NULL;
+            return;
+        }
+    }
+    //若不是，则新建窗口
+    CreateEditText(filename);
+
     //AddFolderToGBox(GetCFolderName(openingFileName));
 
 }
@@ -226,7 +266,7 @@ void MainWindow::Func_MenuBar(){
             filename += ".c++";
         }
         if(CreateFile(filename))
-            AddTextEditToEditArea(filename);
+            AddTextEditToEditArea(filename,TabTemp::Permanent);//非临时窗口
         else
             QMessageBox::warning(this,"警告","文件已存在");
     });
@@ -239,7 +279,7 @@ void MainWindow::Func_MenuBar(){
         QString filename = QFileDialog::getOpenFileName(this,"打开文件",".",tr("C(*.c *.c++ *.cpp)"));
         if(filename.isEmpty())
             return ;
-        AddTextEditToEditArea(filename);
+        AddTextEditToEditArea(filename,TabTemp::Permanent);//非临时窗口
     });
 
     //打开文件夹
@@ -261,8 +301,12 @@ void MainWindow::Func_MenuBar(){
         if(openingFileName.isEmpty()){
             return ;
         }
+        //当前页为临时窗口，则变非临时
+        if(ui->tabWgtEditArea->currentWidget() == TempWidget)
+            TempTabToPermTab();
         Editor *t = (Editor*)ui->tabWgtEditArea->currentWidget();
         QString filename = openingFileName;
+        //qDebug() << openingFileName;
         QFile file(filename);
         //        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         //            return ;
@@ -271,7 +315,6 @@ void MainWindow::Func_MenuBar(){
         //qDebug() << t->toPlainText();
         file.close();
         t->isChanged = false;
-        ui->tabWgtEditArea->currentWidget()->setWindowTitle("aaa");
         ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
     });
 
@@ -360,6 +403,59 @@ void MainWindow::RunC(QString filename){
 
 }
 
+//在editarea创建textedit
+QWidget* MainWindow::CreateEditText(QString filename){
+    if(openedFileNames->contains(filename)){
+        ui->tabWgtEditArea->setCurrentIndex(openedFileNames->indexOf(filename));
+        return TempWidget;
+    }
+    //新建页
+    openedFileNames->append(filename);
+    Editor *editor = new Editor();
+    editor->FolderName = GetCFolderName(filename);
+    editor->isChanged = false;
+
+
+    //设置 代码提示
+    completer = new QCompleter(this);
+    completer->setModel(modelFromFile(":/resources/wordlist.txt"));
+    completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    completer->setWrapAround(false);
+    editor->setCompleter(completer);
+    //Editor *editor = new Editor();
+    //设置高亮
+    editor->Set_Mode(EDIT);
+    Highlighter *highlighter = new Highlighter(editor->document());
+    highlighter->Start_Highlight();
+    //将新建页设为当前显示页
+    int i = ui->tabWgtEditArea->addTab(editor,GetCFileName(filename));
+    ui->tabWgtEditArea->setCurrentIndex(i);
+    //读入文件内容
+    QFile file(filename);
+    file.open(QIODevice::ReadOnly);
+    QString str = QString(file.readAll());
+    file.close();
+    //更改标题
+    Editor *t = (Editor*)ui->tabWgtEditArea->currentWidget();
+    isReadingOrWriting = true;
+    t->setPlainText(str);
+    isReadingOrWriting = false;
+    t->isChanged = false;
+    //ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
+    //设置 是否保存对应标题的显示
+    connect(editor,&QPlainTextEdit::textChanged,[=](){
+        if(isReadingOrWriting)
+            return ;
+        //改变内容但没有保存则标题处标明
+        if(!editor->isChanged){
+            ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()) + "(未保存)");
+            editor->isChanged = true;
+        }
+    });
+    return  ui->tabWgtEditArea->currentWidget();
+}
+
 //不存在则创建
 bool MainWindow::CreateFile(QString filename){
     QFile file(filename);
@@ -368,6 +464,15 @@ bool MainWindow::CreateFile(QString filename){
     file.open(QIODevice::WriteOnly|QIODevice::Text);
     file.close();
     return true;
+}
+
+//临时TAB页转非临时TAB页
+void MainWindow::TempTabToPermTab(){
+    if(TempWidget != NULL){
+        QString filePath = GetTABFilePath(TempWidget,ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(TempWidget)));
+        ui->tabWgtEditArea->setCurrentIndex(openedFileNames->indexOf(filePath));
+        TempWidget = NULL;
+    }
 }
 
 MainWindow* MainWindow::m_pInstance = NULL;
