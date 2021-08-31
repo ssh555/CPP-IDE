@@ -1,15 +1,10 @@
-#include "toolbox.h"
-#include "ui_ToolBox.h"
+#include "toolboxchild.h"
+#include "ui_toolboxchild.h"
 #include "ToolPage.h"
 
-#include <QVBoxLayout>
-#include <QDockWidget>
-
-#include <qdebug.h>
-
-ToolBox::ToolBox(QWidget *parent) :
+ToolBoxChild::ToolBoxChild(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ToolBox),
+    ui(new Ui::ToolBoxChild),
     m_pContentVBoxLayout(nullptr)
 {
     ui->setupUi(this);
@@ -32,16 +27,16 @@ ToolBox::ToolBox(QWidget *parent) :
     vBoxLayout->setContentsMargins(0, 0, 0, 0);
     vBoxLayout->addLayout(m_pContentVBoxLayout);
     vBoxLayout->addStretch(1);
-
-    ui->scrollArea->setWidget(widget);
+    ui->verticalLayout->addWidget(widget);
+    //ui->scrollArea->setWidget(widget);
 }
 
-ToolBox::~ToolBox()
+ToolBoxChild::~ToolBoxChild()
 {
     delete ui;
 }
 
-void ToolBox::addWidget(const QString &title, QWidget *widget)
+void ToolBoxChild::addWidget(const QString &title, QWidget *widget)
 {
     ToolPage *page = new ToolPage(this);
     page->addWidget(title, widget);
@@ -49,9 +44,3 @@ void ToolBox::addWidget(const QString &title, QWidget *widget)
     m_pContentVBoxLayout->addWidget(page);
 
 }
-
-//void ToolBox::Size_Changed(){
-//    this->setGeometry(0,10,myParent->width(),myParent->height()-10);
-//}
-
-

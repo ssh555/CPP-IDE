@@ -15,12 +15,27 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+
+
+    static MainWindow* Instance()
+    {
+        if (m_pInstance == NULL)
+        {
+            m_pInstance = new MainWindow();
+        }
+        return m_pInstance;
+    }
+
+
+private:
     MainWindow(QWidget *parent = nullptr);
+    //MainWindow& operator==(const MainWindow&){}
     ~MainWindow();
     QCompleter *completer = nullptr;
     Editor *completingTextEdit;
 
-private:
+    static MainWindow* m_pInstance;
+
     Ui::MainWindow *ui;
     QAbstractItemModel *modelFromFile(const QString& fileName);
     //ToolBox,实现显示文件夹的类，不用管
@@ -64,6 +79,8 @@ signals:
     void SIGNAL_CreateNewFile();
     //打开文件信号
     void SIGNAL_OpenFile();
+    //打开文件夹信号
+    void SIGNAL_OpenFolder();
     //保存文件信号
     void SIGNAL_SaveFile();
     //另存文件信号

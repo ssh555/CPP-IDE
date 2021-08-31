@@ -20,24 +20,29 @@ SOURCES += \
     ToolBox.cpp \
     ToolPage.cpp \
     editor.cpp \
+    filelabel.cpp \
     highlighter.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    toolboxchild.cpp
 
 HEADERS += \
     FileMgr.h \
     ToolBox.h \
     ToolPage.h \
     editor.h \
+    filelabel.h \
     highlighter.h \
     mainwindow.h \
+    toolboxchild.h \
     type.h
 
 FORMS += \
     FileMgr.ui \
     ToolBox.ui \
     ToolPage.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    toolboxchild.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

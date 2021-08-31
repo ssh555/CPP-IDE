@@ -123,7 +123,7 @@
    </property>
    <property name="maximumSize">
     <size>
-     <width>250</width>
+     <width>500</width>
      <height>524287</height>
     </size>
    </property>
@@ -171,7 +171,7 @@
   </action>
   <action name="actionOpenFolder">
    <property name="text">
-    <string>打开文件夹</string>
+    <string>打开文件夹 CTRL+ALT+O</string>
    </property>
   </action>
   <action name="actionSave">
