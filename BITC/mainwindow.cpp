@@ -48,17 +48,18 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     /*测试代码*/
-    //qDebug() << ui->gBoxFileMgr->width() << "    " << ui->gBoxFileMgr->height();
-        tBoxFolderMgr->addWidget(QStringLiteral("Qt"), new FileMgr);
-        tBoxFolderMgr->addWidget(QStringLiteral("Qt"), new FileMgr);
-    //    AddTextEditToEditArea("File2.txt");
-    //CompileC("C:/Users/20994/Desktop/test/test.c++");
+    //AddFolderToGBox(GetCFolderName(openingFileName));
     /*测试代码*/
 
 }
 
 MainWindow::~MainWindow()
 {
+    if (m_pInstance != NULL)
+    {
+        delete m_pInstance;
+        m_pInstance = NULL;
+    }
     delete ui;
 }
 
@@ -77,11 +78,15 @@ QString MainWindow::GetCFileName(QString filename){
 QString MainWindow::GetCFolderName(QString filename){
     return filename.mid(0,filename.lastIndexOf("/"));
 }
-//-----未实现代码，需要在文件夹下展现文件
+
+//-----未实现代码，需要在文件夹下展现文件,参数为文件夹完整路径
+//参数1 标题    参数2 要显示的QWidget
 void MainWindow::AddFolderToGBox(QString foldername){
-    //参数1 标题    参数2 要显示的QWidget
-    //FileMgr不用管，用来测试的类，也可以封装一下FileMgr，然后用FileMgr
-    tBoxFolderMgr->addWidget(QStringLiteral("Qt"), new FileMgr);//用例
+    //QFileInfo  isfile()  isdir()  判断路径是文件夹还是文件
+    FileMgr *fileMgr = new FileMgr(this);
+    fileMgr->AddFolderLabel(foldername);
+    tBoxFolderMgr->addWidget(QFileInfo(foldername).fileName(), fileMgr);
+
 }
 
 //实现TextEdit类即可  参数为C文件名的完整路径
@@ -106,6 +111,7 @@ void MainWindow::AddTextEditToEditArea(QString filename){
     ui->tabWgtEditArea->setCurrentIndex(i);
 
 }
+
 //-----键盘按下事件,用于快捷键
 void MainWindow::keyPressEvent(QKeyEvent  *event){
     //编译并运行 CTRL + ALT +N
@@ -119,6 +125,10 @@ void MainWindow::keyPressEvent(QKeyEvent  *event){
     //打开文件 CTRL + O
     if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_O){
         emit SIGNAL_OpenFile();
+    }
+    //打开文件夹
+    if(event->modifiers() == (Qt::ControlModifier | Qt::AltModifier) && event ->key() == Qt::Key_O){
+        emit SIGNAL_OpenFolder();
     }
     //保存文件 CTRL + S
     if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_S){
@@ -142,6 +152,7 @@ void MainWindow::keyPressEvent(QKeyEvent  *event){
     }
 
 }
+
 //-----实现菜单栏的功能
 void MainWindow::Func_MenuBar(){
 
@@ -194,6 +205,18 @@ void MainWindow::Func_MenuBar(){
         t->isChanged = false;
         ui->tabWgtEditArea->currentWidget()->setWindowTitle("aaa");
         ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
+        //AddFolderToGBox(GetCFolderName(openingFileName));
+    });
+
+    //打开文件夹
+    connect(ui->actionOpenFolder,&QAction::triggered,this,[=](){
+        emit SIGNAL_OpenFolder();
+    });
+    connect(this,&MainWindow::SIGNAL_OpenFolder,this,[=](){
+        QString foldername = QFileDialog::getExistingDirectory(this,"选择需要打开的文件夹",".");
+        if(foldername.isEmpty())
+            return ;
+        AddFolderToGBox(foldername);
     });
 
     //保存文件
@@ -268,6 +291,7 @@ void MainWindow::Func_MenuBar(){
         RunC(openingFileName);
     });
 }
+
 //-----编译C文件  参数为文件的完整绝对路径
 void MainWindow::CompileC(QString filename){
     //文件不存在
@@ -283,7 +307,11 @@ void MainWindow::CompileC(QString filename){
     p->start("cmd.exe", QStringList()<<"/c"<<str);
     p->waitForStarted();
     p->waitForFinished();
+    if(!QFileInfo(filename.mid(0,filename.lastIndexOf(".")) + ".exe").exists()){
+        QMessageBox::critical(this,"编译错误","请检查是否安装了MINGW");
+    }
 }
+
 //运行C文件  参数为文件的完整绝对路径
 void MainWindow::RunC(QString filename){
     //文件不存在
@@ -297,6 +325,7 @@ void MainWindow::RunC(QString filename){
     QDesktopServices::openUrl(QUrl::fromLocalFile(filename));
 
 }
+
 //不存在则创建
 bool MainWindow::CreateFile(QString filename){
     QFile file(filename);
@@ -306,5 +335,7 @@ bool MainWindow::CreateFile(QString filename){
     file.close();
     return true;
 }
+
+MainWindow* MainWindow::m_pInstance = NULL;
 
 
