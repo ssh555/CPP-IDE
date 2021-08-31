@@ -1,5 +1,5 @@
 #include "highlighter.h"
-
+#include <QRegularExpression>
 Highlighter::Highlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
@@ -21,7 +21,6 @@ void Highlighter::Start_Highlight()
                     << "\\bdouble\\b" << "\\benum\\b" <<"\\bdefine\\b"
                     << "\\bfloat\\b" << "\\bsizeof\\b" << "\\bint\\b"
                     << "\\blong\\b"  <<"\\bextern\\b"<<"\\bregister\\b"
-
                     << "\\bshort\\b"  << "\\bsigned\\b"
                      << "\\bstatic\\b" << "\\bstruct\\b"
                     << "\\btypedef\\b"
@@ -94,6 +93,14 @@ void Highlighter::Start_Highlight()
     rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
     rule.format = functionFormat;
     highlightingRules.append(rule);
+//    //数字
+
+//    rule.pattern=QRegExp(R"((?<=\b|\s|^)(?i)(?:(?:(?:(?:(?:\d+(?:'\d+)*)?\.(?:\d+(?:'\d+)*)(?:e[+-]?(?:\d+(?:'\d+)*))?)|(?:(?:\d+(?:'\d+)*)\.(?:e[+-]?(?:\d+(?:'\d+)*))?)|(?:(?:\d+(?:'\d+)*)(?:e[+-]?(?:\d+(?:'\d+)*)))|(?:0x(?:[0-9a-f]+(?:'[0-9a-f]+)*)?\.(?:[0-9a-f]+(?:'[0-9a-f]+)*)(?:p[+-]?(?:\d+(?:'\d+)*)))|(?:0x(?:[0-9a-f]+(?:'[0-9a-f]+)*)\.?(?:p[+-]?(?:\d+(?:'\d+)*))))[lf]?)|(?:(?:(?:[1-9]\d*(?:'\d+)*)|(?:0[0-7]*(?:'[0-7]+)*)|(?:0x[0-9a-f]+(?:'[0-9a-f]+)*)|(?:0b[01]+(?:'[01]+)*))(?:u?l{0,2}|l{0,2}u?)))(?=\b|\s|$))");
+//    classselfFormat.setFontWeight(QFont::Bold);
+//    b1->setRgb(75,194,242);
+//    functionFormat.setForeground(*b1);
+//    rule.format=classselfFormat;
+//    highlightingRules.append(rule);
 
     commentStartExpression = QRegExp("/\\*");
     commentEndExpression = QRegExp("\\*/");

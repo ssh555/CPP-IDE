@@ -24,8 +24,6 @@ private:
     QString filePath;//对应的文件完整路径
 
 
-
-
 signals:
 
 };

@@ -4,7 +4,8 @@
 #include <QMainWindow>
 #include "toolbox.h"
 #include <FileMgr.h>
-
+#include <QCompleter>
+#include "editor.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -17,6 +18,7 @@ public:
 
     //往EditArea添加TextEdit
     void AddTextEditToEditArea(QString filename);
+
     static MainWindow* Instance()
     {
         if (m_pInstance == NULL)
@@ -31,10 +33,13 @@ private:
     MainWindow(QWidget *parent = nullptr);
     //MainWindow& operator==(const MainWindow&){}
     ~MainWindow();
+    QCompleter *completer = nullptr;
+    Editor *completingTextEdit;
 
     static MainWindow* m_pInstance;
 
     Ui::MainWindow *ui;
+    QAbstractItemModel *modelFromFile(const QString& fileName);
     //ToolBox,实现显示文件夹的类，不用管
     ToolBox *tBoxFolderMgr;
     //当前编辑器正在操作的文件绝对路径 用GetCFileName获得文件名  用GetFolderName获得文件夹路径

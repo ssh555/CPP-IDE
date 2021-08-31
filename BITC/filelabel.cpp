@@ -2,15 +2,14 @@
 
 #include <QLabel>
 #include <QFileInfo>
-
 #include <QDebug>
-#include <QEvent>
 #include <mainwindow.h>
 
 FileLabel::FileLabel(QWidget *parent) : QLabel(parent)
 {
     Init();
 }
+
 FileLabel::FileLabel(QString filename, QWidget *parent) : QLabel(QFileInfo(filename).fileName(),parent)
 {
     filePath = filename;
@@ -39,7 +38,7 @@ void  FileLabel::leaveEvent(QEvent *){
     this->setStyleSheet("background:rgba(255,255,255,0)");
 }
 
-//鼠标单击打开临时TAB页面100
+//鼠标单击打开临时TAB页面
 void FileLabel::mousePressEvent(QMouseEvent *){
     MainWindow::Instance()->AddTextEditToEditArea(filePath);
 }
