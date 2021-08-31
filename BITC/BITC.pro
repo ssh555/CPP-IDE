@@ -24,7 +24,8 @@ SOURCES += \
     highlighter.cpp \
     main.cpp \
     mainwindow.cpp \
-    toolboxchild.cpp
+    toolboxchild.cpp \
+    gcccheck.cpp
 
 HEADERS += \
     FileMgr.h \
@@ -35,6 +36,7 @@ HEADERS += \
     highlighter.h \
     mainwindow.h \
     toolboxchild.h \
+    gcccheck.h \
     type.h
 
 FORMS += \
