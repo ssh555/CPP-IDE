@@ -40,10 +40,10 @@ void  FileLabel::leaveEvent(QEvent *){
 
 //鼠标单击打开临时TAB页面
 void FileLabel::mousePressEvent(QMouseEvent *){
-    MainWindow::Instance()->AddTextEditToEditArea(filePath);
+    MainWindow::Instance()->AddTextEditToEditArea(filePath,TabTemp::Temporary);
 }
 
-//鼠标单击打开页面
+//鼠标双击打开页面
 void FileLabel::mouseDoubleClickEvent(QMouseEvent *){
-    qDebug() << "bbb";
+    MainWindow::Instance()->AddTextEditToEditArea(filePath,TabTemp::Permanent);
 }

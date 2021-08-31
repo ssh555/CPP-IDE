@@ -32,6 +32,9 @@
     </property>
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWgtEditArea">
+      <property name="styleSheet">
+       <string notr="true">font:</string>
+      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -39,6 +42,11 @@
        <bool>true</bool>
       </property>
       <widget class="QWidget" name="tab_2">
+       <property name="font">
+        <font>
+         <italic>false</italic>
+        </font>
+       </property>
        <attribute name="title">
         <string>File1.txt</string>
        </attribute>

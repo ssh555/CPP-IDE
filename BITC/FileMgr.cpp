@@ -36,8 +36,8 @@ void FileMgr::AddFolderLabel(QString foldername){
         QString str = foldername + "/" + allFilesNames.at(i);
         if(QFileInfo(str).isDir()){
             FileMgr *fileMgr = new FileMgr(this);
-            fileMgr->AddFolderLabel(str);
             ui->verticalLayout->addWidget(fileMgr);
+            fileMgr->AddFolderLabel(str);
             tBoxFolderChild->addWidget(QFileInfo(str).fileName(), fileMgr);
             //AddFileLabel(str);
         }
