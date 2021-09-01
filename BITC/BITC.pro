@@ -19,6 +19,7 @@ SOURCES += \
     FileMgr.cpp \
     ToolBox.cpp \
     ToolPage.cpp \
+    config.cpp \
     editor.cpp \
     filelabel.cpp \
     highlighter.cpp \
@@ -31,6 +32,7 @@ HEADERS += \
     FileMgr.h \
     ToolBox.h \
     ToolPage.h \
+    config.h \
     editor.h \
     filelabel.h \
     highlighter.h \
