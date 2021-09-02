@@ -30,6 +30,7 @@ int Config::init()
         setting->setValue("multiLineCommentColor",setting->value("colorgroup1/multiLineCommentColor"));
         setting->setValue("quotationColor",setting->value("colorgroup1/quotationColor"));
         setting->setValue("functionColor",setting->value("colorgroup1/functionColor"));
+        setting->setValue("findFormatColor",setting->value("colorgroup1/findFormatColor"));//查询替换颜色
         setting->sync();
         return 1;
     }//读取成功

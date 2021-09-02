@@ -2,6 +2,7 @@
 #include <QtWidgets>
 #include<QPlainTextEdit>
 #include<QDebug>
+#include "config.h"
 Editor::Editor(QWidget *parent) : QPlainTextEdit(parent)
 {
     this->Init();
@@ -25,7 +26,7 @@ void Editor::Init()
         << "\\bfloat\\b" << "\\bsizeof\\b" << "\\bint\\b"
         << "\\blong\\b"  <<"\\bextern\\b"<<"\\bregister\\b"
         << "\\bshort\\b"  << "\\bsigned\\b"
-         << "\\bstatic\\b" << "\\bstruct\\b"
+        << "\\bstatic\\b" << "\\bstruct\\b"
         << "\\btypedef\\b"
         << "\\bunion\\b" << "\\bunsigned\\b" << "\\bvirtual\\b"
         << "\\bvoid\\b" << "\\bvolatile\\b"<<  "\\bauto\\b" << "\\bbreak\\b" << "\\bcase\\b"
@@ -36,20 +37,197 @@ void Editor::Init()
 
 
 }
-void Editor::SLOT_FindKeywords(QString keyword)//寻找关键字
+void Editor::SLOT_ReplaceWhole(QString findword,QString replaceword)
+{
+    QTextCursor cursor = textCursor();
+
+    cursor.setPosition(0, QTextCursor::MoveAnchor);
+    setTextCursor(cursor);
+
+    while (SLOT_ReplaceKeywords(findword, replaceword));
+}
+bool Editor::SLOT_ReplaceKeywords(QString findword,QString replaceword)//替换下一个
+{
+    QTextCursor cursor = textCursor();
+
+    if (!cursor.hasSelection())
+        return SLOT_FindKeywords(findword);
+
+    int pos = textCursor().position() - textCursor().selectedText().length();
+
+    cursor.beginEditBlock();
+    cursor.insertText(replaceword);
+    cursor.endEditBlock();
+
+
+    return true;
+}
+bool Editor::SLOT_ReplacePrivious(QString findword,QString replaceword)//替换前一个
+{
+    QTextCursor cursor = textCursor();
+
+    if (!cursor.hasSelection())
+        return SLOT_FindPrivious(findword);
+
+    int pos = textCursor().position() - textCursor().selectedText().length();
+
+    cursor.beginEditBlock();
+    cursor.insertText(replaceword);
+    cursor.endEditBlock();
+
+    cursor.setPosition(pos, QTextCursor::MoveAnchor);
+    setTextCursor(cursor);
+    return true;
+}
+bool Editor::SLOT_FindWhole(QString keyword)//寻找关键字
 {
 
-    qDebug()<<"Finding :"<<keyword<<" "<<this->find(keyword);
+    bool found = false;
+    QTextDocument *document = this->document();
+    // undo previous change (if any)
+    document->undo();
+
+    if (keyword.isEmpty()) {
+        QMessageBox::information(this, tr("输入为空"),
+                                 tr("输入不能为空 "
+                                    "请输点东西吧"));
+    } else {
+        QTextCursor highlightCursor(document);
+        QTextCursor cursor(document);
+
+        cursor.beginEditBlock();
+
+
+        QTextCharFormat plainFormat(highlightCursor.charFormat());
+        colorFormat = plainFormat;
+        colorFormat.setForeground(Qt::red);
+        colorFormat.setBackground(Qt::yellow);
+        while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
+            highlightCursor = document->find(keyword, highlightCursor);
+
+            if (!highlightCursor.isNull()) {
+                found = true;
+                qDebug()<<keyword.size();
+                highlightCursor.movePosition(QTextCursor::NoMove,
+                                             QTextCursor::KeepAnchor,keyword.size());
+                highlightCursor.mergeCharFormat(colorFormat);
+            }
+        }
+
+        cursor.endEditBlock();
+
+        if (found == false) {
+            QMessageBox::information(this, tr("Word Not Found"),
+                                     tr("Sorry, the word cannot be found."));
+        }
+        FindAllState=true;
+    }
+}
+void Editor::SLOT_SearchEnd()
+{
+    //查询结束,把之前换的颜色换回去
+    if(FindAllState==true){
+            QTextDocument *document = this->document();
+            // undo previous change (if any)
+            document->undo();
+    }
+
+}
+void Editor::FoldUnfoldAll(bool folding)//折叠代码
+{
+    QTextBlock block = document()->firstBlock();
+
+    do {
+        int state = block.userState();
+
+        if (!block.isVisible() || state & Error || state & Nested ||
+            (state & Folded && folding) || (!(state & Folded) && !folding))
+            continue;
+
+        FoldUnfold(block);
+    } while ((block = block.next()).isValid());
+
+    ensureCursorVisible();
+
+}
+void Editor::FoldUnfold(QTextBlock &block)
+{
+    int state = block.userState();
+
+    if (state & Error || state & End || !(state & Begin) || // (state & End) для однострочного блока ()
+        document()->lastBlock() == block)
+        return;
+
+    bool unfolding = state & Folded;
+
+    if (unfolding)
+        block.setUserState(block.userState() & ~Folded);
+    else
+        block.setUserState(block.userState() | Folded);
+
+    int previousBlockState = block.previous().userState();
+    int endBraceDepth = previousBlockState & Error ? 0 : previousBlockState >> StateShift;
+
+    int braceDepth;
+    int skipDepth = 0;
+
+    while ((block = block.next()).isValid()) {
+        int state = block.userState();
+        braceDepth = state >> StateShift;
+
+        if (unfolding)
+            if (state & Begin && !skipDepth && state & Folded) {
+                skipDepth = block.previous().userState() >> StateShift;
+            } else if (skipDepth) {
+                if (braceDepth == skipDepth)
+                    skipDepth = 0;
+
+                continue;
+            }
+
+        block.setVisible(unfolding);
+
+        if (braceDepth <= endBraceDepth)
+            break;
+    }
+}
+bool Editor::SLOT_FindPrivious(QString keyword)//寻找之前的
+{
+
+//    qDebug()<<"Finding :"<<keyword<<" "<<this->find(keyword,QTextDocument::FindBackward);
+    QTextCursor cursor = textCursor();
+
+    cursor = document()->find(keyword, cursor,QTextDocument::FindBackward);
+    if(cursor.isNull()){
+        return false;
+    }
+//    if (!cursor.block().isVisible())
+//        FoldUnfoldAll(false);
+    setTextCursor(cursor);
+    return true;
+
+}
+bool Editor::SLOT_FindKeywords(QString keyword)//寻找关键字
+{
+    QTextCursor cursor = textCursor();
+    cursor = document()->find(keyword, cursor);
+    if(cursor.isNull()){
+        return false;
+    }
+//    if (!cursor.block().isVisible())
+//        FoldUnfoldAll(false);
+    setTextCursor(cursor);
+    return true;
 }
 void Editor::setCompleter(QCompleter *completer)
 {
-//    if (c!=nullptr)
-//        c->disconnect(this);
+    //    if (c!=nullptr)
+    //        c->disconnect(this);
 
     c = completer;
 
-//    if (!c)
-//        return;
+    //    if (!c)
+    //        return;
 
     c->setWidget(this);
     c->setCompletionMode(QCompleter::PopupCompletion);
@@ -57,16 +235,12 @@ void Editor::setCompleter(QCompleter *completer)
     QObject::connect(c, QOverload<const QString &>::of(&QCompleter::activated),
                      this, &Editor::insertCompletion);
 }
-//! [2]
 
-//! [3]
 QCompleter *Editor::completer() const
 {
     return c;
 }
-//! [3]
 
-//! [4]
 void Editor::insertCompletion(const QString &completion)
 {
     if (c->widget() != this)
@@ -78,52 +252,46 @@ void Editor::insertCompletion(const QString &completion)
     tc.insertText(completion.right(extra));
     setTextCursor(tc);
 }
-//! [4]
 
-//! [5]
 QString Editor::textUnderCursor() const
 {
     QTextCursor tc = textCursor();
     tc.select(QTextCursor::WordUnderCursor);
     return tc.selectedText();
 }
-//! [5]
 
-//! [6]
 void Editor::focusInEvent(QFocusEvent *e)
 {
     if (c)
         c->setWidget(this);
     QPlainTextEdit::focusInEvent(e);
 }
-//! [6]
 
-//! [7]
 void Editor::keyPressEvent(QKeyEvent *e)
 {
     if (c && c->popup()->isVisible()) {
         // The following keys are forwarded by the completer to the widget
-       switch (e->key()) {
-       case Qt::Key_Enter:
-       case Qt::Key_Return:
-       case Qt::Key_Escape:
-       case Qt::Key_Tab:
-       case Qt::Key_Backtab:
+        switch (e->key()) {
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        case Qt::Key_Escape:
+        case Qt::Key_Tab:
+        case Qt::Key_Backtab:
             e->ignore();
             return; // let the completer do default behavior
-       default:
-           break;
-       }
+        default:
+            break;
+        }
     }
 
     const bool isShortcut = (e->modifiers().testFlag(Qt::ControlModifier) && e->key() == Qt::Key_E); // CTRL+E
     if (!c || !isShortcut) // do not process the shortcut when we have a completer
         QPlainTextEdit::keyPressEvent(e);
-//! [7]
+    //! [7]
 
-//! [8]
+    //! [8]
     const bool ctrlOrShift = e->modifiers().testFlag(Qt::ControlModifier) ||
-                             e->modifiers().testFlag(Qt::ShiftModifier);
+            e->modifiers().testFlag(Qt::ShiftModifier);
     if (!c || (ctrlOrShift && e->text().isEmpty()))
         return;
 
@@ -132,7 +300,7 @@ void Editor::keyPressEvent(QKeyEvent *e)
     QString completionPrefix = textUnderCursor();
 
     if (!isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 3
-                      || eow.contains(e->text().right(1)))) {
+                        || eow.contains(e->text().right(1)))) {
         c->popup()->hide();
         return;
     }
@@ -300,12 +468,12 @@ void Editor::Set_Mode(editorMode mode)
     {
         this->setReadOnly(true);
         this->setStyleSheet("background:#f2f2f3;");
-         SLOT_HighlightCurrentLine();
+        SLOT_HighlightCurrentLine();
     }
     else if(mode == EDIT)
     {
         this->setReadOnly(false);
         this->setStyleSheet("background:#ffffff;");
-         SLOT_HighlightCurrentLine();
+        SLOT_HighlightCurrentLine();
     }
 }

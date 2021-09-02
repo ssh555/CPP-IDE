@@ -432,7 +432,13 @@ QWidget* MainWindow::CreateEditText(QString filename){
     Editor *editor = new Editor();
     //设置工作中editor
     workingEditor=editor;
-    connect(searchWindow,&SearchWindow::BtnFindNextClicked,editor,&Editor::SLOT_FindKeywords);
+    connect(searchWindow,&SearchWindow::SIGNAL_FindNext,editor,&Editor::SLOT_FindKeywords);
+    connect(searchWindow,&SearchWindow::SIGNAL_FindWhole,editor,&Editor::SLOT_FindWhole);
+    connect(searchWindow,&SearchWindow::SIGNAL_FindPrivious,editor,&Editor::SLOT_FindPrivious);
+    connect(searchWindow,&SearchWindow::SIGNAL_ReplaceNext,editor,&Editor::SLOT_ReplaceKeywords);
+    connect(searchWindow,&SearchWindow::SIGNAL_ReplaceWhole,editor,&Editor::SLOT_ReplaceWhole);
+    connect(searchWindow,&SearchWindow::SIGNAL_ReplacePrivious,editor,&Editor::SLOT_ReplacePrivious);
+    connect(searchWindow,&SearchWindow::SIGNAL_Exit,editor,&Editor::SLOT_SearchEnd);
     editor->FolderName = GetCFolderName(filename);
     editor->isChanged = false;
 

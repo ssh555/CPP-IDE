@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>710</width>
-    <height>319</height>
+    <width>639</width>
+    <height>172</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,8 +29,8 @@
   <widget class="QPushButton" name="btnFind">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>60</y>
+     <x>110</x>
+     <y>0</y>
      <width>91</width>
      <height>41</height>
     </rect>
@@ -39,47 +39,24 @@
     <string>查找</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>180</y>
-     <width>68</width>
-     <height>15</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>查找内容:</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEdit">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>170</y>
-     <width>461</width>
-     <height>41</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QPushButton" name="btnFindNext">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>250</y>
+     <x>380</x>
+     <y>130</y>
      <width>93</width>
      <height>28</height>
     </rect>
    </property>
    <property name="text">
-    <string>查找下一处</string>
+    <string>下一个</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btnCancel">
    <property name="geometry">
     <rect>
-     <x>540</x>
-     <y>250</y>
+     <x>530</x>
+     <y>130</y>
      <width>93</width>
      <height>28</height>
     </rect>
@@ -91,8 +68,8 @@
   <widget class="QPushButton" name="btnExit">
    <property name="geometry">
     <rect>
-     <x>680</x>
-     <y>0</y>
+     <x>600</x>
+     <y>10</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -100,6 +77,71 @@
    <property name="text">
     <string>X</string>
    </property>
+  </widget>
+  <widget class="QPushButton" name="btnFindWhole">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>130</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>查找全文</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnFindPrivious">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>130</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>上一个</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnReplace">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>0</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>替换</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>40</y>
+     <width>541</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>查找内容:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

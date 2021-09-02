@@ -3,6 +3,10 @@
 
 #include <QWidget>
 #include "editor.h"
+#include <QLineEdit>
+#include <QLabel>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 namespace Ui {
 class SearchWindow;
 }
@@ -12,7 +16,10 @@ class SearchWindow : public QWidget
     Q_OBJECT
 
 public:
+
     void setEditor(Editor *editor_far);
+    QLineEdit *ReplaceLineEdit=NULL;
+    QLabel *replaceLabel=NULL;
     Editor *editor;
     explicit SearchWindow(QWidget *parent = nullptr);
     ~SearchWindow();
@@ -27,8 +34,16 @@ public:
     //鼠标原始位置
     void keyPressEvent(QKeyEvent *event) override;//回车查询
     QPoint posMouseOrigin;
+    QHBoxLayout *replacelayoutH=NULL;
+    QVBoxLayout *replacelayoutV=NULL;
 signals:
-    void BtnFindNextClicked(QString findtext);
+    void SIGNAL_FindNext(QString findtext);
+    void SIGNAL_FindPrivious(QString findtext);
+    void SIGNAL_FindWhole(QString findtext);
+    void SIGNAL_ReplaceNext(QString findtext,QString replacetext);
+    void SIGNAL_ReplacePrivious(QString findtext,QString replacetext);
+    void SIGNAL_ReplaceWhole(QString findtext,QString replacetext);
+    void SIGNAL_Exit();
 private slots:
     void on_btnFindNext_clicked();
 
@@ -36,7 +51,15 @@ private slots:
 
     void on_btnExit_clicked();
 
+    void on_btnFindWhole_clicked();
+
+    void on_btnFindPrivious_clicked();
+
+    void on_btnReplace_clicked();
+
+    void on_btnFind_clicked();
 private:
+    int mode=0;//0--find,1--replace
     Ui::SearchWindow *ui;
 };
 
