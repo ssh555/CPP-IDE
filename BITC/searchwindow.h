@@ -20,8 +20,8 @@ public:
     //移动窗口
     void mousePressEvent(QMouseEvent *ev)override;
     void mouseMoveEvent(QMouseEvent *ev)override;
-
-
+    //带参展示
+    void showWithText(QString text);
 
     //释放窗口
     //鼠标原始位置

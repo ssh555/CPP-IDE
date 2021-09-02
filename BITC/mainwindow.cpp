@@ -258,12 +258,16 @@ void MainWindow::Func_MenuBar(){
     //查询
     searchWindow=new SearchWindow();
     connect(ui->actionFind,&QAction::triggered,this,[=](){
-
-       emit SIGNAL_Search();
+        emit SIGNAL_Search();
         //槽函数得在editor创建后连接,在eidtor那边
     });
     connect(this,&MainWindow::SIGNAL_Search,this,[=](){
-        searchWindow->show();
+        if(!workingEditor->textCursor().selectedText().isEmpty())
+        {
+            searchWindow->showWithText(workingEditor->textCursor().selectedText());
+        }else searchWindow->show();
+
+
     });
     //新建文件
     connect(ui->actionNewFile,&QAction::triggered,this,[=](){
@@ -426,9 +430,8 @@ QWidget* MainWindow::CreateEditText(QString filename){
     openedFileNames->append(filename);
     //设置工作中editor,用于搜索等功能获取
     Editor *editor = new Editor();
-
-    //设置搜索框中访问的Editor
-    //searchWindow->setEditor(functionEditor);
+    //设置工作中editor
+    workingEditor=editor;
     connect(searchWindow,&SearchWindow::BtnFindNextClicked,editor,&Editor::SLOT_FindKeywords);
     editor->FolderName = GetCFolderName(filename);
     editor->isChanged = false;

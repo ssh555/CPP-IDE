@@ -52,6 +52,11 @@ void SearchWindow::keyPressEvent(QKeyEvent *event)
         emit BtnFindNextClicked(searchtext);
     }
 }
+void SearchWindow::showWithText(QString text)
+{
+    this->ui->lineEdit->setText(text);
+    this->show();
+}
 //获得鼠标移动的操作
 void SearchWindow::mouseMoveEvent(QMouseEvent *ev)
 {
