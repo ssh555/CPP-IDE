@@ -6,6 +6,7 @@
 #include <FileMgr.h>
 #include <QCompleter>
 #include "editor.h"
+#include "searchwindow.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -21,7 +22,7 @@ class MainWindow : public QMainWindow
 
 public:
 
-    //往EditArea添加TextEdit
+
     //第二个参数为true表示当前窗口为临时窗口，临时打开文件共用一个窗口
     void AddTextEditToEditArea(QString filename,bool isTemp);
 
@@ -43,7 +44,7 @@ private:
     Editor *completingTextEdit;
     //临时窗口，只有一个
     QWidget *TempWidget;
-
+    SearchWindow *searchWindow;
     static MainWindow* m_pInstance;
 
     Ui::MainWindow *ui;
@@ -109,6 +110,7 @@ signals:
     void SIGNAL_SaveAsFile();
     //关闭所有文件信号
     void SIGNAL_CloseAll();
-
+    //查询访问信号
+    void SIGNAL_Search();
 };
 #endif // MAINWINDOW_H

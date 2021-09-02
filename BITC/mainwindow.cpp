@@ -20,7 +20,7 @@
 #include <QStringListModel>
 #include <QAbstractButton>
 #include <QFont>
-
+#include "searchwindow.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -234,6 +234,10 @@ void MainWindow::keyPressEvent(QKeyEvent  *event){
     if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_W){
         emit SIGNAL_CloseAll();
     }
+    //查找 CTRL + F
+    if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_F){
+        emit SIGNAL_Search();
+    }
 
 }
 
@@ -251,7 +255,16 @@ void MainWindow::Func_MenuBar(){
         CompileC(openingFileName);
         RunC(openingFileName);
     });
+    //查询
+    searchWindow=new SearchWindow();
+    connect(ui->actionFind,&QAction::triggered,this,[=](){
 
+       emit SIGNAL_Search();
+        //槽函数得在editor创建后连接,在eidtor那边
+    });
+    connect(this,&MainWindow::SIGNAL_Search,this,[=](){
+        searchWindow->show();
+    });
     //新建文件
     connect(ui->actionNewFile,&QAction::triggered,this,[=](){
         emit SIGNAL_CreateNewFile();
@@ -411,7 +424,12 @@ QWidget* MainWindow::CreateEditText(QString filename){
     }
     //新建页
     openedFileNames->append(filename);
+    //设置工作中editor,用于搜索等功能获取
     Editor *editor = new Editor();
+
+    //设置搜索框中访问的Editor
+    //searchWindow->setEditor(functionEditor);
+    connect(searchWindow,&SearchWindow::BtnFindNextClicked,editor,&Editor::SLOT_FindKeywords);
     editor->FolderName = GetCFolderName(filename);
     editor->isChanged = false;
 
@@ -423,7 +441,7 @@ QWidget* MainWindow::CreateEditText(QString filename){
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setWrapAround(false);
     editor->setCompleter(completer);
-    //Editor *editor = new Editor();
+
     //设置高亮
     editor->Set_Mode(EDIT);
     Highlighter *highlighter = new Highlighter(editor->document());

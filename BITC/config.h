@@ -15,7 +15,7 @@ public:
     void reread(int);
     int init();//初始化，成功返回1，失败返回0
     void printChild();//打印所有setting
-    static Config * GetInstance()
+    static Config * GetInstance()//获得COnfig实例
     {
         if (config_Instance == NULL)
         {

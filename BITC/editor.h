@@ -26,7 +26,6 @@ public:
     Editor(QWidget *parent,QString foldername);
     void toggleComment();
     void performCompletion();
-
     void Init();//初始化
     void Set_Mode(editorMode mode);//设置编辑模式
     void Line_Number_Area_Paint_Event(QPaintEvent *event);//
@@ -39,7 +38,8 @@ protected:
     void Refresh_Text();
     void keyPressEvent(QKeyEvent *e) override;
     void focusInEvent(QFocusEvent *e) override;
-
+public slots:
+    void SLOT_FindKeywords(QString keyword);
 private slots:
 
     void insertCompletion(const QString &completion);

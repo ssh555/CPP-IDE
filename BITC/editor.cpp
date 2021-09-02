@@ -36,6 +36,11 @@ void Editor::Init()
 
 
 }
+void Editor::SLOT_FindKeywords(QString keyword)//寻找关键字
+{
+
+    qDebug()<<"Finding :"<<keyword<<" "<<this->find(keyword);
+}
 void Editor::setCompleter(QCompleter *completer)
 {
 //    if (c!=nullptr)
