@@ -93,14 +93,17 @@ MainWindow::~MainWindow()
 
 //获取C文件绝对路径的文件名.
 QString MainWindow::GetCFileName(QString filename){
+    filename = filename.replace("(未保存)","");
     return filename.mid(filename.lastIndexOf("/")+1);
 }
 //获取C文件绝对路径的文件夹名 不包括最后的/
 QString MainWindow::GetCFolderName(QString filename){
+    filename = filename.replace("(未保存)","");
     return filename.mid(0,filename.lastIndexOf("/"));
 }
 //获取TAB页对应的文件路径
 QString MainWindow::GetTABFilePath(QWidget *TabPage,QString fileName){
+    fileName = fileName.replace("(未保存)","");
     Editor *t = (Editor*) TabPage;
     return  t->FolderName + "/" + fileName;
 }
