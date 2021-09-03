@@ -20,6 +20,7 @@
 #include <QStringListModel>
 #include <QAbstractButton>
 #include <QFont>
+#include <QGridLayout>
 #include "searchwindow.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -256,16 +257,28 @@ void MainWindow::Func_MenuBar(){
         RunC(openingFileName);
     });
     //查询
-    searchWindow=new SearchWindow();
+
     connect(ui->actionFind,&QAction::triggered,this,[=](){
         emit SIGNAL_Search();
         //槽函数得在editor创建后连接,在eidtor那边
     });
     connect(this,&MainWindow::SIGNAL_Search,this,[=](){
-        if(!workingEditor->textCursor().selectedText().isEmpty())
+        if(workingEditor==NULL){
+            return;
+        }else
         {
-            searchWindow->showWithText(workingEditor->textCursor().selectedText());
-        }else searchWindow->show();
+            //新建搜索框,并初始化各槽函数
+            searchWindow=new SearchWindow();
+            searchWindow->setMinimumSize(682,152);
+            searchWindow->move(20,0);
+            //设置editor,连接槽函数
+            searchWindow->setEditor(workingEditor);
+            if(!workingEditor->textCursor().selectedText().isEmpty())
+            {
+                searchWindow->showWithText(workingEditor->textCursor().selectedText());
+            }else searchWindow->show();
+        }
+
 
 
     });
@@ -361,6 +374,7 @@ void MainWindow::Func_MenuBar(){
         int count = ui->tabWgtEditArea->count();
         while(count>0){
             emit ui->tabWgtEditArea->tabCloseRequested(0);
+            this->workingEditor=NULL;//把工作中editor置位空,防止ctrl+f出现查询框
             count--;
         }
     });
@@ -428,17 +442,21 @@ QWidget* MainWindow::CreateEditText(QString filename){
     }
     //新建页
     openedFileNames->append(filename);
+
     //设置工作中editor,用于搜索等功能获取
     Editor *editor = new Editor();
+//    //创建QGridLayout,用于放置editor及相关组件
+
+//    editorLayout=new QGridLayout(ui->tabWgtEditArea);
+
+//    editorLayout->addWidget(editor,0,0);
+//    editorLayout->setRowStretch(0, 8);//设置行列比例系数
+//    editorLayout->setRowStretch(1, 1);
+//    editorLayout->setSpacing(10);//设置间距
+
     //设置工作中editor
     workingEditor=editor;
-    connect(searchWindow,&SearchWindow::SIGNAL_FindNext,editor,&Editor::SLOT_FindKeywords);
-    connect(searchWindow,&SearchWindow::SIGNAL_FindWhole,editor,&Editor::SLOT_FindWhole);
-    connect(searchWindow,&SearchWindow::SIGNAL_FindPrivious,editor,&Editor::SLOT_FindPrivious);
-    connect(searchWindow,&SearchWindow::SIGNAL_ReplaceNext,editor,&Editor::SLOT_ReplaceKeywords);
-    connect(searchWindow,&SearchWindow::SIGNAL_ReplaceWhole,editor,&Editor::SLOT_ReplaceWhole);
-    connect(searchWindow,&SearchWindow::SIGNAL_ReplacePrivious,editor,&Editor::SLOT_ReplacePrivious);
-    connect(searchWindow,&SearchWindow::SIGNAL_Exit,editor,&Editor::SLOT_SearchEnd);
+
     editor->FolderName = GetCFolderName(filename);
     editor->isChanged = false;
 

@@ -42,6 +42,8 @@ private:
     ~MainWindow();
     QCompleter *completer = nullptr;
     Editor *completingTextEdit;
+    //QGridLayout,用于放置editor及相关组件(搜索框)
+    QGridLayout *editorLayout;
     //临时窗口，只有一个
     QWidget *TempWidget;
     SearchWindow *searchWindow;

@@ -6,143 +6,149 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>639</width>
-    <height>172</height>
+    <width>682</width>
+    <height>152</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>101</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>查找和替换</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnFind">
-   <property name="geometry">
-    <rect>
-     <x>110</x>
-     <y>0</y>
-     <width>91</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>查找</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnFindNext">
-   <property name="geometry">
-    <rect>
-     <x>380</x>
-     <y>130</y>
-     <width>93</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>下一个</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnCancel">
-   <property name="geometry">
-    <rect>
-     <x>530</x>
-     <y>130</y>
-     <width>93</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>取消</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnExit">
-   <property name="geometry">
-    <rect>
-     <x>600</x>
-     <y>10</y>
-     <width>31</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>X</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnFindWhole">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>130</y>
-     <width>93</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>查找全文</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnFindPrivious">
-   <property name="geometry">
-    <rect>
-     <x>110</x>
-     <y>130</y>
-     <width>93</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>上一个</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnReplace">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>0</y>
-     <width>91</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>替换</string>
-   </property>
-  </widget>
-  <widget class="QWidget" name="verticalLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>40</y>
-     <width>541</width>
-     <height>80</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>查找内容:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="lineEdit"/>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="1" rowspan="2">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QPushButton" name="btnFindPrivious">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+                        font: bold 13px;
+                        }
+ QPushButton:focus{ // 聚焦样式
+background-color:rgb(255, 128, 64);
+
+font:bold 13px;
+                        text-align: left;
+                        }</string>
+       </property>
+       <property name="text">
+        <string>上一个</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnFindWhole">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+                        font: bold 13px;
+                        }
+ QPushButton:focus{ // 聚焦样式
+background-color:rgb(255, 128, 64);
+
+font:bold 13px;
+                        text-align: left;
+                        }</string>
+       </property>
+       <property name="text">
+        <string>查找全文</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnFindNext">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+                        font: bold 13px;
+                        }
+ QPushButton:focus{ // 聚焦样式
+background-color:rgb(255, 128, 64);
+
+font:bold 13px;
+                        text-align: left;
+                        }</string>
+       </property>
+       <property name="text">
+        <string>下一个</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="btnFind">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+                        font: bold 13px;
+                        }
+ QPushButton:focus{ // 聚焦样式
+background-color:rgb(255, 128, 64);
+
+font:bold 13px;
+                        text-align: left;
+                        }</string>
+       </property>
+       <property name="text">
+        <string>查找</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnReplace">
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+                        font: bold 13px;
+                        }
+ QPushButton:focus{ // 聚焦样式
+background-color:rgb(255, 128, 64);
+
+font:bold 13px;
+                        text-align: left;
+                        }</string>
+       </property>
+       <property name="text">
+        <string>替换</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1">
+    <widget class="QPushButton" name="btnCancel">
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+                        font: bold 13px;
+                        }
+ QPushButton:focus{ // 聚焦样式
+background-color:rgb(255, 128, 64);
+
+font:bold 13px;
+                        text-align: left;
+                        }</string>
+     </property>
+     <property name="text">
+      <string>取消</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" rowspan="2">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>查找内容:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

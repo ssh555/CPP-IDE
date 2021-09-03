@@ -9,7 +9,9 @@ SearchWindow::SearchWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     //移动到该去的地方
-    this->move(600,600);
+    this->move(200,0);
+
+//    this->setStyleSheet("border: 20px lightGray;");
     //让窗口其他部件消失
     setWindowFlags(Qt::FramelessWindowHint);
     //连接槽函数
@@ -17,10 +19,12 @@ SearchWindow::SearchWindow(QWidget *parent) :
     connect(ui->btnFindPrivious,&QPushButton::clicked,this,&SearchWindow::on_btnFindPrivious_clicked);
     connect(ui->btnReplace,&QPushButton::clicked,this,&SearchWindow::on_btnReplace_clicked);
     connect(ui->btnFind,&QPushButton::clicked,this,&SearchWindow::on_btnFind_clicked);
+
 }
 SearchWindow::~SearchWindow()
 {
     delete ui;
+    this->destroy();
 }
 void SearchWindow::on_btnFind_clicked()
 {
@@ -58,11 +62,17 @@ void SearchWindow::on_btnReplace_clicked()
         this->mode=1;//replace mode
     }
 }
-void SearchWindow::setEditor(Editor *editor_far)//设置editor(暂时没用)
+void SearchWindow::setEditor(Editor *editor_far)//设置editor,连接槽函数
 {
     this->editor=editor_far;
     //connect(this,&SearchWindow::on_btnFindNext_clicked,this,&SearchWindow::BtnFindNextClicked);//this->editor,&Editor::SLOT_FindKeywords
-
+    connect(this,&SearchWindow::SIGNAL_FindNext,editor_far,&Editor::SLOT_FindKeywords);
+    connect(this,&SearchWindow::SIGNAL_FindWhole,editor_far,&Editor::SLOT_FindWhole);
+    connect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::SLOT_FindPrivious);
+    connect(this,&SearchWindow::SIGNAL_ReplaceNext,editor_far,&Editor::SLOT_ReplaceKeywords);
+    connect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
+    connect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);
+    connect(this,&SearchWindow::SIGNAL_Exit,editor_far,&Editor::SLOT_SearchEnd);
 }
 void SearchWindow::on_btnFindWhole_clicked()//找所有的
 {
