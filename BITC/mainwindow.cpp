@@ -23,6 +23,8 @@
 #include <QGridLayout>
 #include "searchwindow.h"
 
+#include <QThread>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -126,6 +128,8 @@ QString MainWindow::GetTABFilePath(QWidget *TabPage,QString fileName){
 //参数1 标题    参数2 要显示的QWidget
 void MainWindow::AddFolderToGBox(QString foldername){
     //QFileInfo  isfile()  isdir()  判断路径是文件夹还是文件
+    if(FileMgr::openedFolders->contains(foldername))
+        return;
     FileMgr *fileMgr = new FileMgr(this);
     fileMgr->AddFolderLabel(foldername);
     tBoxFolderMgr->addWidget(QFileInfo(foldername).fileName(), fileMgr);
@@ -422,7 +426,7 @@ void MainWindow::Func_MenuBar(){
     });
 
     //编译文件
-    connect(ui->actionCompileRun,&QAction::triggered,this,[=](){
+    connect(ui->actionCompile,&QAction::triggered,this,[=](){
         emit SIGNAL_Compile();
     });
     connect(this,&MainWindow::SIGNAL_Compile,this,[=](){
@@ -501,9 +505,9 @@ void MainWindow::Func_MenuBar(){
 void MainWindow::CompileC(QString filename){
     //文件不存在
     if(!QFileInfo(filename).exists()){
-        //提示是否保存  如果保存则继续编译
         return;
     }
+
 
     //用指针形式
     QProcess *p = new QProcess;
@@ -512,9 +516,14 @@ void MainWindow::CompileC(QString filename){
     p->start("cmd.exe", QStringList()<<"/c"<<str);
     p->waitForStarted();
     p->waitForFinished();
+    //qDebug() << "——————————————————";
+    //qDebug() << QString::fromLocal8Bit(p->readAllStandardOutput());
     if(!QFileInfo(filename.mid(0,filename.lastIndexOf(".")) + ".exe").exists()){
         QMessageBox::critical(this,"编译错误","请检查是否安装了MINGW");
+        return;
     }
+
+
 }
 
 //运行C文件  参数为文件的完整绝对路径

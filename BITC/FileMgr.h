@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "toolboxchild.h"
+#include <QFileSystemWatcher>
 
 namespace Ui {
 class FileMgr;
@@ -20,15 +21,23 @@ public:
     void AddFileLabel(QString filename);
     //添加文件夹
     void AddFolderLabel(QString foldername);
-    //添加文件夹下的文件夹
+
+    //存储已打开的文件夹
+    static QStringList *openedFolders;
 
 private:
     Ui::FileMgr *ui;
 
     ToolBoxChild *tBoxFolderChild;
 
-    //存储已打开的文件夹
-    static QStringList *openedFolders;
+    //保存当前FileMgr所打开的文件
+    QString folderName;
+
+    QFileSystemWatcher * watch;
+
+    //更新文件夹
+    void UpdateFolder();
+
 };
 
 #endif // FILEMGR_H
