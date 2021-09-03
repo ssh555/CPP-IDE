@@ -131,6 +131,8 @@ signals:
     void SIGNAL_Paste();
     //查询访问信号
     void SIGNAL_Search();
+    //替换信号
+    void SIGNAL_Replace();
     //保存打开的文件信号
     void SIGNAL_SaveOpenedFiles();
 };

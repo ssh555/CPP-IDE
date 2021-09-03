@@ -317,6 +317,14 @@ void MainWindow::keyPressEvent(QKeyEvent  *event){
     if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_F){
         emit SIGNAL_Search();
     }
+    //替换 CTRL + SHIFT + F
+    if(event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && event ->key() == Qt::Key_F){
+        emit SIGNAL_Replace();
+    }
+//    for(int i =0;i<ui->tabWgtEditArea->count();i++){
+//        Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
+
+//    }
 
 }
 
@@ -335,9 +343,43 @@ void MainWindow::Func_MenuBar(){
         RunC(openingFileName);
     });
     //代码风格
+    //存在bug--疯狂的未保存
     connect(ui->actioncodeStyle,&QAction::triggered,this,[=](){
-        workingEditor->ChangeCodeStyle();
+
         QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+        int CodeStyleNum=setting->value("codeStyle").toString().toUInt();
+        setting->setValue("codeStyle",(CodeStyleNum+1)%3);
+            for(int i =0;i<ui->tabWgtEditArea->count();i++){
+                Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
+                e->ChangeCodeStyle();
+            }
+
+    });
+    //替换
+    connect(ui->actionReplace,&QAction::triggered,this,[=](){
+        emit SIGNAL_Replace();
+        //槽函数得在editor创建后连接,在eidtor那边
+    });
+    connect(this,&MainWindow::SIGNAL_Replace,this,[=](){
+        if(workingEditor==NULL){
+            return;
+        }else
+        {
+            workingEditor->isChanged=false;
+            //新建搜索框,并初始化各槽函数
+            searchWindow=new SearchWindow();
+            searchWindow->setMinimumSize(682,152);
+            searchWindow->move(20,0);
+            //设置editor,连接槽函数
+            searchWindow->setEditor(workingEditor);
+            if(!workingEditor->textCursor().selectedText().isEmpty())
+            {
+                searchWindow->showWithText(workingEditor->textCursor().selectedText());
+            }else searchWindow->show();
+            workingEditor->isChanged=true;
+            searchWindow->on_btnReplace_clicked();
+        }
+
 
 
     });

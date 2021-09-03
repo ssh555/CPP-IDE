@@ -6,6 +6,7 @@ Highlighter::Highlighter(QTextDocument *parent)
 {
 
 }
+
 void Highlighter::Start_Highlight()
 {
     HighlightingRule rule;
@@ -150,3 +151,4 @@ void Highlighter::highlightBlock(const QString &text)
         startIndex = commentStartExpression.indexIn(text, startIndex + commentLength);
     }
 }
+
