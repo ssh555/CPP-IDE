@@ -25,6 +25,9 @@ public:
     //存储已打开的文件夹
     static QStringList *openedFolders;
 
+    //更新文件夹
+    void UpdateFolder();
+
 private:
     Ui::FileMgr *ui;
 
@@ -35,8 +38,6 @@ private:
 
     QFileSystemWatcher * watch;
 
-    //更新文件夹
-    void UpdateFolder();
 
 };
 

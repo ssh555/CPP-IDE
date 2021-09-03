@@ -247,7 +247,7 @@ void MainWindow::keyPressEvent(QKeyEvent  *event){
     if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_R){
         emit SIGNAL_Run();
     }
-    //编译并运行 CTRL + SHIFT + S
+    //另存为 CTRL + SHIFT + S
     if(event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && event ->key() == Qt::Key_S){
         emit SIGNAL_SaveAsFile();
     }

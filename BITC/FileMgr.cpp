@@ -50,28 +50,30 @@ void FileMgr::AddFolderLabel(QString foldername){
             AddFileLabel(str);
         }
     }
+
     watch = new QFileSystemWatcher(this);
     connect(watch, &QFileSystemWatcher::directoryChanged, [=](){
-        //清空布局内的所有元素
-        QLayoutItem *child;
-        while ((child = ui->verticalLayout->takeAt(0)) != 0)
-        {
-            //setParent为NULL，防止删除之后界面不消失
-            if(child->widget())
-            {
-                child->widget()->setParent(NULL);
-            }
-            delete child;
-        }
+
         UpdateFolder();
     });
     watch->addPath(folderName);
 }
 
 void FileMgr::UpdateFolder(){
-    if(!openedFolders->contains(folderName))
-        return;
-    openedFolders->append(folderName);
+    qDebug() << folderName;
+    //清空布局内的所有元素
+    QLayoutItem *child;
+    while ((child = ui->verticalLayout->takeAt(0)) != 0)
+    {
+        //setParent为NULL，防止删除之后界面不消失
+        //ui->verticalLayout->removeItem(child);
+        child->widget()->deleteLater();
+        //ui->verticalLayout->removeWidget(child->widget());
+        delete child;
+    }
+    delete tBoxFolderChild;
+    tBoxFolderChild = new ToolBoxChild(this);
+    ui->verticalLayout->addWidget(tBoxFolderChild);
     QDir dir(folderName);
     QStringList allFilesNames = dir.entryList();
     for(int i = 2; i < allFilesNames.size(); ++i){
