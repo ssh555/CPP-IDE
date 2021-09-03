@@ -109,6 +109,16 @@ signals:
     void SIGNAL_SaveAsFile();
     //关闭所有文件信号
     void SIGNAL_CloseAll();
+    //撤销信号
+    void SIGNAL_Revocate();
+    //恢复信号
+    void SIGNAL_Restore();
+    //剪切信号
+    void SIGNAL_Shear();
+    //复制信号
+    void SIGNAL_Copy();
+    //粘贴信号
+    void SIGNAL_Paste();
 
 };
 #endif // MAINWINDOW_H
