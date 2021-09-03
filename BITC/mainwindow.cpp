@@ -397,6 +397,8 @@ void MainWindow::Func_MenuBar(){
     });
     connect(this,&MainWindow::SIGNAL_Revocate,this,[=](){
         Editor *t = (Editor *)ui->tabWgtEditArea->currentWidget();
+        if(t == NULL)
+            return ;
         t->undo();
     });
 
@@ -406,6 +408,8 @@ void MainWindow::Func_MenuBar(){
     });
     connect(this,&MainWindow::SIGNAL_Restore,this,[=](){
         Editor *t = (Editor *)ui->tabWgtEditArea->currentWidget();
+        if(t == NULL)
+            return ;
         t->redo();
     });
 
@@ -415,6 +419,8 @@ void MainWindow::Func_MenuBar(){
     });
     connect(this,&MainWindow::SIGNAL_Shear,this,[=](){
         Editor *t = (Editor *)ui->tabWgtEditArea->currentWidget();
+        if(t == NULL)
+            return ;
         t->cut();
     });
 
@@ -424,6 +430,8 @@ void MainWindow::Func_MenuBar(){
     });
     connect(this,&MainWindow::SIGNAL_Copy,this,[=](){
         Editor *t = (Editor *)ui->tabWgtEditArea->currentWidget();
+        if(t == NULL)
+            return ;
         t->copy();
     });
 
@@ -433,6 +441,8 @@ void MainWindow::Func_MenuBar(){
     });
     connect(this,&MainWindow::SIGNAL_Paste,this,[=](){
         Editor *t = (Editor *)ui->tabWgtEditArea->currentWidget();
+        if(t == NULL)
+            return ;
         t->paste();
     });
 }
