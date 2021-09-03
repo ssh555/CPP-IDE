@@ -237,6 +237,26 @@ void MainWindow::keyPressEvent(QKeyEvent  *event){
     if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_W){
         emit SIGNAL_CloseAll();
     }
+    //撤销 CTRL + Z
+    if(event->modifiers() == Qt::ControlModifier  && event ->key() == Qt::Key_Z){
+        emit SIGNAL_Revocate();
+    }
+    //恢复 CTRL + Y
+    if(event->modifiers() == Qt::ControlModifier  && event ->key() == Qt::Key_Y){
+        emit SIGNAL_Restore();
+    }
+    //剪切 CTRL + X
+    if(event->modifiers() == Qt::ControlModifier  && event ->key() == Qt::Key_X){
+        emit SIGNAL_Shear();
+    }
+    //复制 CTRL + C
+    if(event->modifiers() == Qt::ControlModifier  && event ->key() == Qt::Key_C){
+        emit SIGNAL_Copy();
+    }
+    //粘贴 CTRL + V
+    if(event->modifiers() == Qt::ControlModifier  && event ->key() == Qt::Key_V){
+        emit SIGNAL_Paste();
+    }
 
 }
 
@@ -369,6 +389,51 @@ void MainWindow::Func_MenuBar(){
             return;
 
         RunC(openingFileName);
+    });
+
+    //撤销
+    connect(ui->actionRevocate,&QAction::triggered,this,[=](){
+        emit SIGNAL_Revocate();
+    });
+    connect(this,&MainWindow::SIGNAL_Revocate,this,[=](){
+        Editor *t = (Editor *)ui->tabWgtEditArea->currentWidget();
+        t->undo();
+    });
+
+    //恢复
+    connect(ui->actionRestore,&QAction::triggered,this,[=](){
+        emit SIGNAL_Restore();
+    });
+    connect(this,&MainWindow::SIGNAL_Restore,this,[=](){
+        Editor *t = (Editor *)ui->tabWgtEditArea->currentWidget();
+        t->redo();
+    });
+
+    //剪切
+    connect(ui->actionShear,&QAction::triggered,this,[=](){
+        emit SIGNAL_Shear();
+    });
+    connect(this,&MainWindow::SIGNAL_Shear,this,[=](){
+        Editor *t = (Editor *)ui->tabWgtEditArea->currentWidget();
+        t->cut();
+    });
+
+    //复制
+    connect(ui->actionCopy,&QAction::triggered,this,[=](){
+        emit SIGNAL_Copy();
+    });
+    connect(this,&MainWindow::SIGNAL_Copy,this,[=](){
+        Editor *t = (Editor *)ui->tabWgtEditArea->currentWidget();
+        t->copy();
+    });
+
+    //粘贴
+    connect(ui->actionPaste,&QAction::triggered,this,[=](){
+        emit SIGNAL_Paste();
+    });
+    connect(this,&MainWindow::SIGNAL_Paste,this,[=](){
+        Editor *t = (Editor *)ui->tabWgtEditArea->currentWidget();
+        t->paste();
     });
 }
 
