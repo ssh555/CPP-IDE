@@ -19,7 +19,7 @@ void Editor::Init()
     this->setFont(QFont("Consolas",12));
     SLOT_UpdateLineNumberAreaWidth(0);
     int fontWidth = QFontMetrics(this->currentCharFormat().font()).averageCharWidth();
-    this->setTabStopWidth( 3 * fontWidth );
+    this->setTabStopDistance( 3 * fontWidth );
     Set_Mode(BROWSE);
     //设置高亮
     highlighter = new Highlighter(this->document());
@@ -49,7 +49,7 @@ bool Editor::SLOT_ReplaceKeywords(QString findword,QString replaceword)//替换�
     if (!cursor.hasSelection())
         return SLOT_FindKeywords(findword);
 
-    int pos = textCursor().position() - textCursor().selectedText().length();
+    //int pos = textCursor().position() - textCursor().selectedText().length();
 
     cursor.beginEditBlock();
     cursor.insertText(replaceword);
@@ -75,7 +75,7 @@ bool Editor::SLOT_ReplacePrivious(QString findword,QString replaceword)//替换�
     setTextCursor(cursor);
     return true;
 }
-bool Editor::SLOT_FindWhole(QString keyword)//寻找关键字
+void Editor::SLOT_FindWhole(QString keyword)//寻找关键字
 {
 
     bool found = false;
@@ -171,7 +171,7 @@ void Editor::FoldUnfold(QTextBlock &block)
         int state = block.userState();
         braceDepth = state >> StateShift;
 
-        if (unfolding)
+        if (unfolding){
             if (state & Begin && !skipDepth && state & Folded) {
                 skipDepth = block.previous().userState() >> StateShift;
             } else if (skipDepth) {
@@ -180,6 +180,7 @@ void Editor::FoldUnfold(QTextBlock &block)
 
                 continue;
             }
+        }
 
         block.setVisible(unfolding);
 
@@ -363,7 +364,7 @@ int Editor::lineNumberAreaWidth()
         ++digits;
     }
 
-    int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+    int space = 3 + fontMetrics().averageCharWidth() * digits;
 
     return space;
 }

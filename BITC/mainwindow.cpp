@@ -33,15 +33,18 @@ MainWindow::MainWindow(QWidget *parent)
     openedFileNames = new QStringList;
     TempWidget = NULL;
 
+
     //清空编辑页
     for(int i = 0;ui->tabWgtEditArea->count(); ++i)
         ui->tabWgtEditArea->removeTab(i);
     //qDebug() << ui->tabWgtEditArea->currentIndex();
     //编辑页的关闭事件
     connect(ui->tabWgtEditArea,&QTabWidget::tabCloseRequested,[=](int i){
+        QString str =ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(ui->tabWgtEditArea->widget(i))).replace("(未保存)","");
         //文件未保存
         if(ui->tabWgtEditArea->tabText(i).lastIndexOf("(未保存)") != -1){
-            QMessageBox messageBox(QMessageBox::Question,"是否保存文件","未保存");
+
+            QMessageBox messageBox(QMessageBox::Question,"是否保存文件",str + " 文件未保存");
             QPushButton *btnYes = messageBox.addButton(("是"), QMessageBox::YesRole);
             messageBox.addButton(("否"), QMessageBox::NoRole);
             messageBox.exec();
@@ -50,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
                 emit SIGNAL_SaveFile();
             }
         }
-        openedFileNames->removeAll(GetTABFilePath(ui->tabWgtEditArea->widget(i),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(ui->tabWgtEditArea->widget(i)))));
+        openedFileNames->removeAll(GetTABFilePath(ui->tabWgtEditArea->widget(i),str));
         //如果为临时窗口
         if(TempWidget == ui->tabWgtEditArea->widget(i)){
             TempWidget = NULL;
@@ -84,6 +87,15 @@ MainWindow::~MainWindow()
     }
     delete ui;
     delete openedFileNames;
+}
+
+//窗口关闭时调用
+void MainWindow::closeEvent(QCloseEvent *){
+    //如果有未保存文件则询问是否保存
+    int num = ui->tabWgtEditArea->count();
+    for(int i = 0;i < num; ++i){
+        emit ui->tabWgtEditArea->tabCloseRequested(0);
+    }
 }
 
 //void MainWindow::resizeEvent(QResizeEvent* event)
@@ -530,14 +542,14 @@ QWidget* MainWindow::CreateEditText(QString filename){
 
     //设置工作中editor,用于搜索等功能获取
     Editor *editor = new Editor();
-//    //创建QGridLayout,用于放置editor及相关组件
+    //    //创建QGridLayout,用于放置editor及相关组件
 
-//    editorLayout=new QGridLayout(ui->tabWgtEditArea);
+    //    editorLayout=new QGridLayout(ui->tabWgtEditArea);
 
-//    editorLayout->addWidget(editor,0,0);
-//    editorLayout->setRowStretch(0, 8);//设置行列比例系数
-//    editorLayout->setRowStretch(1, 1);
-//    editorLayout->setSpacing(10);//设置间距
+    //    editorLayout->addWidget(editor,0,0);
+    //    editorLayout->setRowStretch(0, 8);//设置行列比例系数
+    //    editorLayout->setRowStretch(1, 1);
+    //    editorLayout->setSpacing(10);//设置间距
 
     //设置工作中editor
     workingEditor=editor;

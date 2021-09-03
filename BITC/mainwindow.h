@@ -7,6 +7,9 @@
 #include <QCompleter>
 #include "editor.h"
 #include "searchwindow.h"
+
+#include <QCloseEvent>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -35,6 +38,8 @@ public:
         return m_pInstance;
     }
 
+protected:
+    void closeEvent(QCloseEvent *) override;
 
 private:
     MainWindow(QWidget *parent = nullptr);

@@ -61,7 +61,7 @@ protected:
     void focusInEvent(QFocusEvent *e) override;
 public slots:
     bool SLOT_FindKeywords(QString keyword);
-    bool SLOT_FindWhole(QString keyword);
+    void SLOT_FindWhole(QString keyword);
     bool SLOT_FindPrivious(QString keyword);
     bool SLOT_ReplaceKeywords(QString keyword,QString replaceword);
     void SLOT_ReplaceWhole(QString keyword,QString replaceword);
