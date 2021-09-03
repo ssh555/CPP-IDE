@@ -6,6 +6,7 @@
 #include <FileMgr.h>
 #include <QCompleter>
 #include "editor.h"
+#include "searchwindow.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -21,7 +22,7 @@ class MainWindow : public QMainWindow
 
 public:
 
-    //往EditArea添加TextEdit
+
     //第二个参数为true表示当前窗口为临时窗口，临时打开文件共用一个窗口
     void AddTextEditToEditArea(QString filename,bool isTemp);
 
@@ -41,13 +42,17 @@ private:
     ~MainWindow();
     QCompleter *completer = nullptr;
     Editor *completingTextEdit;
+    //QGridLayout,用于放置editor及相关组件(搜索框)
+    QGridLayout *editorLayout;
     //临时窗口，只有一个
     QWidget *TempWidget;
-
+    SearchWindow *searchWindow;
     static MainWindow* m_pInstance;
 
     Ui::MainWindow *ui;
     QAbstractItemModel *modelFromFile(const QString& fileName);
+    //当前操作中的Editor
+    Editor *workingEditor=NULL;
     //ToolBox,实现显示文件夹的类，不用管
     ToolBox *tBoxFolderMgr;
     //当前编辑器正在操作的文件绝对路径 用GetCFileName获得文件名  用GetFolderName获得文件夹路径
@@ -119,6 +124,7 @@ signals:
     void SIGNAL_Copy();
     //粘贴信号
     void SIGNAL_Paste();
-
+    //查询访问信号
+    void SIGNAL_Search();
 };
 #endif // MAINWINDOW_H

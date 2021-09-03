@@ -1,0 +1,12 @@
+isalnum
+isalpha
+iscntrl
+isdigit
+isgraph
+islower
+isprint
+isspace
+isupper
+isxdigit
+tolower
+toupper

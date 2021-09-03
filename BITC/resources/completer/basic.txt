@@ -6,7 +6,7 @@ const
 continue
 default
 define
-do
+do 
 double
 else
 enum
@@ -14,7 +14,7 @@ extern
 float
 for
 goto
-if
+if 
 int
 long
 register
@@ -32,4 +32,4 @@ virtual
 void
 volatile
 while
-include
+[#]include

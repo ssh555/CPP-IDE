@@ -1,0 +1,15 @@
+memchr
+memcmp
+memcpy
+memmove
+memset
+stcat
+strchr
+strcmp
+strcpy
+strlen
+strncat
+strncmp
+strnset
+strset
+strstr

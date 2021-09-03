@@ -19,11 +19,13 @@ SOURCES += \
     FileMgr.cpp \
     ToolBox.cpp \
     ToolPage.cpp \
+    config.cpp \
     editor.cpp \
     filelabel.cpp \
     highlighter.cpp \
     main.cpp \
     mainwindow.cpp \
+    searchwindow.cpp \
     toolboxchild.cpp \
     gcccheck.cpp
 
@@ -31,10 +33,12 @@ HEADERS += \
     FileMgr.h \
     ToolBox.h \
     ToolPage.h \
+    config.h \
     editor.h \
     filelabel.h \
     highlighter.h \
     mainwindow.h \
+    searchwindow.h \
     toolboxchild.h \
     gcccheck.h \
     type.h
@@ -44,6 +48,7 @@ FORMS += \
     ToolBox.ui \
     ToolPage.ui \
     mainwindow.ui \
+    searchwindow.ui \
     toolboxchild.ui
 
 # Default rules for deployment.

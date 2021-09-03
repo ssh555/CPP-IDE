@@ -1,5 +1,6 @@
 #include "highlighter.h"
 #include <QRegularExpression>
+#include "config.h"
 Highlighter::Highlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
@@ -8,14 +9,17 @@ Highlighter::Highlighter(QTextDocument *parent)
 void Highlighter::Start_Highlight()
 {
     HighlightingRule rule;
+    QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+
     //颜色画笔
-    QColor *b1=new QColor();
+    QColor *b1=new QColor(setting->value("keywordColor").toString());
+    //qDebug()<<setting->value("colorgroup1/keywordColor").toString();
     //关键字颜色
     //终归是蓝色好看
-    b1->setRgb(99,3,255);
+
     keywordFormat.setForeground(*b1);
     keywordFormat.setFontWeight(QFont::Bold);
-
+//    qDebug()<<"keywordFormat"<<setting->value("keywordColor").toString();
     QStringList keywordPatterns;
     keywordPatterns << "\\bchar\\b"  << "\\bconst\\b"
                     << "\\bdouble\\b" << "\\benum\\b" <<"\\bdefine\\b"
@@ -40,7 +44,7 @@ void Highlighter::Start_Highlight()
                     <<  "\\breturn\\b" << "\\bswitch\\b" << "\\bwhile\\b";
 
     //粉的
-    b1->setRgb(242,119,234);
+    b1=new QColor(setting->value("expFunctioncolor").toString());
     expFunctionFormat.setForeground(*b1);
     expFunctionFormat.setFontWeight(QFont::Bold);
     foreach (const QString &pattern, expFunctionPatterns) {
@@ -53,7 +57,7 @@ void Highlighter::Start_Highlight()
     QTextCharFormat classselfFormat;
     classselfFormat.setFontWeight(QFont::Bold);
     //玫红
-    b1->setRgb(166,51,72);
+    b1=new QColor(setting->value("classselfColor").toString());
     classFormat.setForeground(Qt::darkMagenta);
     rule.pattern = QRegExp("\\bclass\\b");
     rule.format = classFormat;
@@ -62,7 +66,8 @@ void Highlighter::Start_Highlight()
 
     classFormat.setFontWeight(QFont::Bold);
     //玫红
-    b1->setRgb(166,51,72);
+
+    b1=new QColor(setting->value("classColor").toString());
     classFormat.setForeground(Qt::darkMagenta);
     rule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");
     rule.format = classFormat;
@@ -70,17 +75,17 @@ void Highlighter::Start_Highlight()
     //单行注释颜色
 
     //棕色
-    b1->setRgb(153,191,177);
+    b1=new QColor(setting->value("singleLineCommentColor").toString());
     singleLineCommentFormat.setForeground(*b1);
     rule.pattern = QRegExp("//[^\n]*");
     rule.format = singleLineCommentFormat;
     highlightingRules.append(rule);
     //多行注释颜色
     //浅棕色
-    b1->setRgb(222,156,126);
+    b1=new QColor(setting->value("multiLineCommentColor").toString());
     multiLineCommentFormat.setForeground(*b1);
-
-    quotationFormat.setForeground(Qt::darkGreen);
+    b1=new QColor(setting->value("quotationColor").toString());
+    quotationFormat.setForeground(*b1);
     rule.pattern = QRegExp("\".*\"");
     rule.format = quotationFormat;
     highlightingRules.append(rule);
@@ -88,7 +93,7 @@ void Highlighter::Start_Highlight()
     functionFormat.setFontItalic(true);
     //函数颜色
     //蓝色!
-    b1->setRgb(75,194,242);
+    b1=new QColor(setting->value("functionColor").toString());
     functionFormat.setForeground(*b1);
     rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
     rule.format = functionFormat;

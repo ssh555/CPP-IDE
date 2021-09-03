@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>681</width>
-    <height>514</height>
+    <width>674</width>
+    <height>505</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -60,8 +60,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>681</width>
-     <height>26</height>
+     <width>674</width>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -116,11 +116,18 @@
     </property>
     <addaction name="actionHelp"/>
    </widget>
+   <widget class="QMenu" name="menuSetting">
+    <property name="title">
+     <string>设置</string>
+    </property>
+    <addaction name="actioncodeStyle"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuSelect"/>
    <addaction name="menuRun"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuSetting"/>
   </widget>
   <widget class="QDockWidget" name="gBoxFileMgr">
    <property name="minimumSize">
@@ -265,6 +272,11 @@
   <action name="actionHelp">
    <property name="text">
     <string>帮助文档</string>
+   </property>
+  </action>
+  <action name="actioncodeStyle">
+   <property name="text">
+    <string>代码风格</string>
    </property>
   </action>
  </widget>

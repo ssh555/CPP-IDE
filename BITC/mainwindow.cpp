@@ -20,6 +20,8 @@
 #include <QStringListModel>
 #include <QAbstractButton>
 #include <QFont>
+#include <QGridLayout>
+#include "searchwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -254,8 +256,11 @@ void MainWindow::keyPressEvent(QKeyEvent  *event){
         emit SIGNAL_Copy();
     }
     //粘贴 CTRL + V
-    if(event->modifiers() == Qt::ControlModifier  && event ->key() == Qt::Key_V){
+    if(event->modifiers() == Qt::ControlModifier  && event ->key() == Qt::Key_V)
         emit SIGNAL_Paste();
+    //查找 CTRL + F
+    if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_F){
+        emit SIGNAL_Search();
     }
 
 }
@@ -274,7 +279,39 @@ void MainWindow::Func_MenuBar(){
         CompileC(openingFileName);
         RunC(openingFileName);
     });
+    //代码风格
+    connect(ui->actioncodeStyle,&QAction::triggered,this,[=](){
+        workingEditor->ChangeCodeStyle();
+    });
+    //查询
 
+    connect(ui->actionFind,&QAction::triggered,this,[=](){
+        emit SIGNAL_Search();
+        //槽函数得在editor创建后连接,在eidtor那边
+    });
+    connect(this,&MainWindow::SIGNAL_Search,this,[=](){
+        if(workingEditor==NULL){
+            return;
+        }else
+        {
+            workingEditor->isChanged=false;
+            //新建搜索框,并初始化各槽函数
+            searchWindow=new SearchWindow();
+            searchWindow->setMinimumSize(682,152);
+            searchWindow->move(20,0);
+            //设置editor,连接槽函数
+            searchWindow->setEditor(workingEditor);
+            if(!workingEditor->textCursor().selectedText().isEmpty())
+            {
+                searchWindow->showWithText(workingEditor->textCursor().selectedText());
+            }else searchWindow->show();
+            workingEditor->isChanged=true;
+
+        }
+
+
+
+    });
     //新建文件
     connect(ui->actionNewFile,&QAction::triggered,this,[=](){
         emit SIGNAL_CreateNewFile();
@@ -367,6 +404,7 @@ void MainWindow::Func_MenuBar(){
         int count = ui->tabWgtEditArea->count();
         while(count>0){
             emit ui->tabWgtEditArea->tabCloseRequested(0);
+            this->workingEditor=NULL;//把工作中editor置位空,防止ctrl+f出现查询框
             count--;
         }
     });
@@ -489,7 +527,21 @@ QWidget* MainWindow::CreateEditText(QString filename){
     }
     //新建页
     openedFileNames->append(filename);
+
+    //设置工作中editor,用于搜索等功能获取
     Editor *editor = new Editor();
+//    //创建QGridLayout,用于放置editor及相关组件
+
+//    editorLayout=new QGridLayout(ui->tabWgtEditArea);
+
+//    editorLayout->addWidget(editor,0,0);
+//    editorLayout->setRowStretch(0, 8);//设置行列比例系数
+//    editorLayout->setRowStretch(1, 1);
+//    editorLayout->setSpacing(10);//设置间距
+
+    //设置工作中editor
+    workingEditor=editor;
+
     editor->FolderName = GetCFolderName(filename);
     editor->isChanged = false;
 
@@ -501,11 +553,10 @@ QWidget* MainWindow::CreateEditText(QString filename){
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setWrapAround(false);
     editor->setCompleter(completer);
-    //Editor *editor = new Editor();
-    //设置高亮
+
+
     editor->Set_Mode(EDIT);
-    Highlighter *highlighter = new Highlighter(editor->document());
-    highlighter->Start_Highlight();
+
     //将新建页设为当前显示页
     int i = ui->tabWgtEditArea->addTab(editor,GetCFileName(filename));
     ui->tabWgtEditArea->setCurrentIndex(i);
