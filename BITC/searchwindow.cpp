@@ -73,6 +73,8 @@ void SearchWindow::setEditor(Editor *editor_far)//设置editor,连接槽函数
     connect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
     connect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);
     connect(this,&SearchWindow::SIGNAL_Exit,editor_far,&Editor::SLOT_SearchEnd);
+    //connect(ui->btnFind,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
+    connect(ui->btnReplace,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
 }
 void SearchWindow::on_btnFindWhole_clicked()//找所有的
 {
