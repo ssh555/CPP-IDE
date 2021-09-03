@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QSettings>
 #include <toolbox.h>
 #include "FileMgr.h"
 #include <QTabWidget>
@@ -55,12 +55,33 @@ MainWindow::MainWindow(QWidget *parent)
                 emit SIGNAL_SaveFile();
             }
         }
+        //保存打开的文件名
+
+
         openedFileNames->removeAll(GetTABFilePath(ui->tabWgtEditArea->widget(i),str));
         //如果为临时窗口
         if(TempWidget == ui->tabWgtEditArea->widget(i)){
             TempWidget = NULL;
         }
         ui->tabWgtEditArea->removeTab(i);
+    });
+    connect(this,&MainWindow::SIGNAL_SaveOpenedFiles,this,[=](){
+        QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+
+        setting->beginGroup("savedFileName");
+
+        QStringList settingList=setting->childKeys();
+        if(!settingList.isEmpty()){//把之前存的东西删掉
+            for(int i=0;i<settingList.length();i++){
+                setting->remove(settingList.at(i));
+            }
+        }
+        QString *variableStr=new QString();//存那堆现在打开的文件路径
+        for(int i=0;i<openedFileNames->length();i++){
+            variableStr->setNum(i);
+            setting->setValue(*variableStr,openedFileNames->at(i));
+        }
+        setting->endGroup();
     });
     //始终将当前操作文件名指向当前文件
     connect(ui->tabWgtEditArea,&QTabWidget::currentChanged,[=](int i){
@@ -76,17 +97,34 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     /*测试代码*/
+    QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    setting->beginGroup("savedFileName");
+    QStringList settingList=setting->childKeys();
+    if(!settingList.isEmpty()){//不为空，就打开之前打开的文件
+        for (int i =0; i<settingList.length();i++){
+            QString filename = setting->value(settingList.at(i)).toString();
+
+            if(filename.isEmpty())
+                return ;
+            AddTextEditToEditArea(filename,TabTemp::Permanent);//非临时窗口
+        }
+    }
+
+
+    setting->endGroup();
     /*测试代码*/
 
 }
 
 MainWindow::~MainWindow()
 {
+
     if (m_pInstance != NULL)
     {
         delete m_pInstance;
         m_pInstance = NULL;
     }
+
     delete ui;
     delete openedFileNames;
 }
@@ -94,6 +132,7 @@ MainWindow::~MainWindow()
 //窗口关闭时调用
 void MainWindow::closeEvent(QCloseEvent *){
     //如果有未保存文件则询问是否保存
+    emit(SIGNAL_SaveOpenedFiles());
     int num = ui->tabWgtEditArea->count();
     for(int i = 0;i < num; ++i){
         emit ui->tabWgtEditArea->tabCloseRequested(0);
@@ -298,6 +337,9 @@ void MainWindow::Func_MenuBar(){
     //代码风格
     connect(ui->actioncodeStyle,&QAction::triggered,this,[=](){
         workingEditor->ChangeCodeStyle();
+        QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+
+
     });
     //查询
 
@@ -353,6 +395,7 @@ void MainWindow::Func_MenuBar(){
     });
     connect(this,&MainWindow::SIGNAL_OpenFile,this,[=](){
         QString filename = QFileDialog::getOpenFileName(this,"打开文件",".",tr("C(*.c *.c++ *.cpp)"));
+
         if(filename.isEmpty())
             return ;
         AddTextEditToEditArea(filename,TabTemp::Permanent);//非临时窗口
