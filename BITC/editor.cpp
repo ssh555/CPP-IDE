@@ -3,6 +3,8 @@
 #include<QPlainTextEdit>
 #include<QDebug>
 #include "config.h"
+#include "highlighter.h"
+#include "config.h"
 Editor::Editor(QWidget *parent) : QPlainTextEdit(parent)
 {
     this->Init();
@@ -19,24 +21,18 @@ void Editor::Init()
     int fontWidth = QFontMetrics(this->currentCharFormat().font()).averageCharWidth();
     this->setTabStopWidth( 3 * fontWidth );
     Set_Mode(BROWSE);
-
-    QStringList list;
-    list<< "\\bchar\\b"  << "\\bconst\\b"
-        << "\\bdouble\\b" << "\\benum\\b" <<"\\bdefine\\b"
-        << "\\bfloat\\b" << "\\bsizeof\\b" << "\\bint\\b"
-        << "\\blong\\b"  <<"\\bextern\\b"<<"\\bregister\\b"
-        << "\\bshort\\b"  << "\\bsigned\\b"
-        << "\\bstatic\\b" << "\\bstruct\\b"
-        << "\\btypedef\\b"
-        << "\\bunion\\b" << "\\bunsigned\\b" << "\\bvirtual\\b"
-        << "\\bvoid\\b" << "\\bvolatile\\b"<<  "\\bauto\\b" << "\\bbreak\\b" << "\\bcase\\b"
-        << "\\bcontinue\\b" << "\\bdefault\\b" << "\\bdo\\b"
-        << "\\belse\\b"  << "\\bfor\\b"<<"[#]include"
-        << "\\bgoto\\b" << "\\bif\\b"
-        <<  "\\breturn\\b" << "\\bswitch\\b" << "\\bwhile\\b";
+    //设置高亮
+    highlighter = new Highlighter(this->document());
+    highlighter->Start_Highlight();
 
 
 }
+void Editor::ChangeCodeStyle(){
+    Config::GetInstance()->ChangeCodeStyle();
+    highlighter = new Highlighter(this->document());
+    highlighter->Start_Highlight();
+}
+
 void Editor::SLOT_ReplaceWhole(QString findword,QString replaceword)
 {
     QTextCursor cursor = textCursor();

@@ -10,6 +10,7 @@
 #include <type.h>
 #include <QSyntaxHighlighter>
 #include <QCompleter>
+#include "highlighter.h"
 //Editor类
 //继承QPlainTextEdit
 class LineNumberArea;
@@ -20,6 +21,8 @@ class Editor : public QPlainTextEdit
 
 public:
     QTextCharFormat colorFormat;//查询颜色
+    void ChangeCodeStyle();
+    Highlighter *highlighter;//高亮器
     QCompleter *c = nullptr;
     void setCompleter(QCompleter *c);
     QCompleter *completer() const;
@@ -48,8 +51,8 @@ public:
     };
     const static int StateShift = 8;//切换模式
     bool FindAllState=false;//用来观测有没有进行全局查看
-signals:
-
+public :signals:
+    void SIGNAL_ChangeCodeStyle();
 protected:
     void FoldUnfold(QTextBlock &block);
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;

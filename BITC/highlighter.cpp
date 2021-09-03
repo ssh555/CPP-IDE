@@ -9,7 +9,8 @@ Highlighter::Highlighter(QTextDocument *parent)
 void Highlighter::Start_Highlight()
 {
     HighlightingRule rule;
-    QSettings *setting=Config::GetInstance()->setting;
+    QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+
     //颜色画笔
     QColor *b1=new QColor(setting->value("keywordColor").toString());
     //qDebug()<<setting->value("colorgroup1/keywordColor").toString();
@@ -18,7 +19,7 @@ void Highlighter::Start_Highlight()
 
     keywordFormat.setForeground(*b1);
     keywordFormat.setFontWeight(QFont::Bold);
-
+//    qDebug()<<"keywordFormat"<<setting->value("keywordColor").toString();
     QStringList keywordPatterns;
     keywordPatterns << "\\bchar\\b"  << "\\bconst\\b"
                     << "\\bdouble\\b" << "\\benum\\b" <<"\\bdefine\\b"

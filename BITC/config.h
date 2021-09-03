@@ -10,7 +10,7 @@ class Config
 {
 public:
     QSettings *setting;
-
+    QSettings *readSetting;
 
     void reread(int);
     int init();//初始化，成功返回1，失败返回0
@@ -23,7 +23,9 @@ public:
         }
         return config_Instance;
     }
+    void ChangeCodeStyle();
 public slots:
+
     void reconfig(int receiver) { emit reread(receiver);}
 private:
     static Config * config_Instance;

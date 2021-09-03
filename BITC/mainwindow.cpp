@@ -256,6 +256,10 @@ void MainWindow::Func_MenuBar(){
         CompileC(openingFileName);
         RunC(openingFileName);
     });
+    //代码风格
+    connect(ui->actioncodeStyle,&QAction::triggered,this,[=](){
+        workingEditor->ChangeCodeStyle();
+    });
     //查询
 
     connect(ui->actionFind,&QAction::triggered,this,[=](){
@@ -469,10 +473,9 @@ QWidget* MainWindow::CreateEditText(QString filename){
     completer->setWrapAround(false);
     editor->setCompleter(completer);
 
-    //设置高亮
+
     editor->Set_Mode(EDIT);
-    Highlighter *highlighter = new Highlighter(editor->document());
-    highlighter->Start_Highlight();
+
     //将新建页设为当前显示页
     int i = ui->tabWgtEditArea->addTab(editor,GetCFileName(filename));
     ui->tabWgtEditArea->setCurrentIndex(i);
