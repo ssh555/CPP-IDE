@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
     //清空编辑页
     for(int i = 0;ui->tabWgtEditArea->count(); ++i)
         ui->tabWgtEditArea->removeTab(i);
-    //qDebug() << ui->tabWgtEditArea->currentIndex();
+
     //编辑页的关闭事件
     connect(ui->tabWgtEditArea,&QTabWidget::tabCloseRequested,[=](int i){
         QString str =ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(ui->tabWgtEditArea->widget(i))).replace("(未保存)","");
@@ -321,6 +321,10 @@ void MainWindow::keyPressEvent(QKeyEvent  *event){
     if(event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && event ->key() == Qt::Key_F){
         emit SIGNAL_Replace();
     }
+    //测试 CTRL + T
+    if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_T){
+        emit SIGNAL_FoldCurrent();
+    }
 //    for(int i =0;i<ui->tabWgtEditArea->count();i++){
 //        Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
 
@@ -336,16 +340,14 @@ void MainWindow::Func_MenuBar(){
         emit SIGNAL_CompileRun();
     });
     connect(this,&MainWindow::SIGNAL_CompileRun,this,[=](){
-        //qDebug() << "bbb";
         if(openingFileName.isEmpty())
             return;
         CompileC(openingFileName);
         RunC(openingFileName);
     });
     //代码风格
-    //存在bug--疯狂的未保存
     connect(ui->actioncodeStyle,&QAction::triggered,this,[=](){
-
+        workingEditor->isChanged=false;
         QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
         int CodeStyleNum=setting->value("codeStyle").toString().toUInt();
         setting->setValue("codeStyle",(CodeStyleNum+1)%3);
@@ -353,6 +355,8 @@ void MainWindow::Func_MenuBar(){
                 Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
                 e->ChangeCodeStyle();
             }
+        emit(SIGNAL_FoldCurrent());
+        workingEditor->isChanged=true;
 
     });
     //替换
@@ -365,7 +369,11 @@ void MainWindow::Func_MenuBar(){
             return;
         }else
         {
-            workingEditor->isChanged=false;
+            for(int i =0;i<ui->tabWgtEditArea->count();i++){
+                Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
+                e->isChanged=false;
+            }
+
             //新建搜索框,并初始化各槽函数
             searchWindow=new SearchWindow();
             searchWindow->setMinimumSize(682,152);
@@ -378,6 +386,10 @@ void MainWindow::Func_MenuBar(){
             }else searchWindow->show();
             workingEditor->isChanged=true;
             searchWindow->on_btnReplace_clicked();
+            for(int i =0;i<ui->tabWgtEditArea->count();i++){
+                Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
+                e->isChanged=true;
+            }
         }
 
 
@@ -636,6 +648,10 @@ QWidget* MainWindow::CreateEditText(QString filename){
 
     //设置工作中editor,用于搜索等功能获取
     Editor *editor = new Editor();
+    connect(this,&MainWindow::SIGNAL_FoldCurrent,editor,&Editor::FoldCurrent);
+//    connect(editor->document(),&QTextDocument::contentsChanged,this,[=](){
+//        qDebug()<<"changed";
+//    });
     //    //创建QGridLayout,用于放置editor及相关组件
 
     //    editorLayout=new QGridLayout(ui->tabWgtEditArea);

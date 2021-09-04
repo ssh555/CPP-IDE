@@ -135,5 +135,7 @@ signals:
     void SIGNAL_Replace();
     //保存打开的文件信号
     void SIGNAL_SaveOpenedFiles();
+    //折叠当前代码信号
+    void SIGNAL_FoldCurrent();
 };
 #endif // MAINWINDOW_H
