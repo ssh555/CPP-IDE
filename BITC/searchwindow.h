@@ -36,6 +36,7 @@ public:
     QPoint posMouseOrigin;
     QHBoxLayout *replacelayoutH=NULL;
     QVBoxLayout *replacelayoutV=NULL;
+    void on_btnReplace_clicked();
 signals:
     void SIGNAL_FindNext(QString findtext);
     void SIGNAL_FindPrivious(QString findtext);
@@ -55,7 +56,7 @@ private slots:
 
     void on_btnFindPrivious_clicked();
 
-    void on_btnReplace_clicked();
+
 
     void on_btnFind_clicked();
 private:

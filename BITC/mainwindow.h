@@ -73,7 +73,7 @@ private:
     void AddFolderToGBox(QString foldername);
 
     //键盘按下响应事件，添加快捷键
-    void keyPressEvent(QKeyEvent  *event);
+    void keyPressEvent(QKeyEvent  *event) override;
     //编译C文件
     static void CompileC(QString filename);
     //运行C文件
@@ -131,12 +131,13 @@ signals:
     void SIGNAL_Paste();
     //查询访问信号
     void SIGNAL_Search();
+    //替换信号
+    void SIGNAL_Replace();
+    //保存打开的文件信号
+    void SIGNAL_SaveOpenedFiles();
+    //折叠当前代码信号
+    void SIGNAL_FoldCurrent();
 };
 #endif // MAINWINDOW_H
 
-    //粘贴信号
-    void SIGNAL_Paste();
-    //查询访问信号
-    void SIGNAL_Search();
-};
-#endif // MAINWINDOW_H
+
