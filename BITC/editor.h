@@ -63,6 +63,10 @@ protected:
     void Refresh_Text();
     void keyPressEvent(QKeyEvent *e) override;
     void focusInEvent(QFocusEvent *e) override;
+    //添加部分
+    void autoIndent(bool temp);
+    void addBraceRight();
+    //添加结束
 public slots:
     bool SLOT_FindKeywords(QString keyword);
     bool SLOT_FindWhole(QString keyword);

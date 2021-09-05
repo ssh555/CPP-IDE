@@ -73,11 +73,11 @@ private:
     void AddFolderToGBox(QString foldername);
 
     //键盘按下响应事件，添加快捷键
-    void keyPressEvent(QKeyEvent  *event);
+    void keyPressEvent(QKeyEvent  *event) override;
     //编译C文件
-    void CompileC(QString filename);
+    static void CompileC(QString filename);
     //运行C文件
-    void RunC(QString filename);
+    static void RunC(QString filename);
     //获取C文件绝对路径的文件名
     QString GetCFileName(QString filename);
     //获取C文件绝对路径的文件夹路径 不包括最后的/
@@ -139,3 +139,5 @@ signals:
     void SIGNAL_FoldCurrent();
 };
 #endif // MAINWINDOW_H
+
+

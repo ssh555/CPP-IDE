@@ -268,6 +268,41 @@ void Editor::keyPressEvent(QKeyEvent *e)
         QPlainTextEdit::keyPressEvent(e);
     //! [7]
 
+    //添加部分
+    QTextCursor completionText;
+    completionText=textCursor();
+    completionText.select(QTextCursor::LineUnderCursor);
+    if(!(e->modifiers().testFlag(Qt::ControlModifier) && e->key() == Qt::Key_Z)&&!(e->modifiers().testFlag(Qt::ControlModifier) && e->key() == Qt::Key_Y))
+    {
+        if(e->text().right(1)=="{")
+        {
+            addBraceRight();
+        }
+        else if(e->text().right(1)=="(")
+        {
+            insertCompletion(")");
+        }
+        else if(e->text().right(1)=="[")
+        {
+            insertCompletion("]");
+        }
+        else if(e->text().right(1)=="\r")
+        {
+            autoIndent(true);
+        }
+        else if(completionText.selectedText()==NULL)
+        {
+            if(e->text().right(1)=="\b")
+            {
+            }
+            else
+            {
+                autoIndent(true);
+            }
+        }
+    }
+    //添加结束
+
     //! [8]
     const bool ctrlOrShift = e->modifiers().testFlag(Qt::ControlModifier) ||
             e->modifiers().testFlag(Qt::ShiftModifier);
@@ -280,6 +315,12 @@ void Editor::keyPressEvent(QKeyEvent *e)
 
     if (!isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 3
                         || eow.contains(e->text().right(1)))) {
+        c->popup()->hide();
+        return;
+    }
+
+    if(hasModifier || e->text().isEmpty()|| completionPrefix.length() < 3)
+    {
         c->popup()->hide();
         return;
     }
@@ -527,3 +568,42 @@ void Editor::Set_Mode(editorMode mode)
         SLOT_HighlightCurrentLine();
     }
 }
+
+//添加部分
+void Editor::autoIndent(bool temp)
+{
+    this->moveCursor(QTextCursor::Up);
+    QTextCursor cursor=textCursor();
+    cursor.select(QTextCursor::LineUnderCursor);
+    QString previousRowText=cursor.selectedText();
+    this->moveCursor(QTextCursor::Down);
+    this->moveCursor(QTextCursor::StartOfLine);
+    bool includeBraceLeft=previousRowText.contains("{");
+    int spaceNumber=0;
+    foreach(QChar qc,previousRowText)
+    {
+        if(qc==" ")
+        {
+            spaceNumber++;
+        }
+        else break;
+    }
+    if(includeBraceLeft)
+    {
+        if(temp) spaceNumber+=4;
+    }
+    for(int i=0;i<spaceNumber;i++)
+    {
+        this->insertPlainText(" ");
+    }
+}
+
+void Editor::addBraceRight()
+{
+    this->insertPlainText("\n");
+    autoIndent(false);
+    this->insertPlainText("}");
+    this->moveCursor(QTextCursor::Up);
+    this->moveCursor(QTextCursor::EndOfLine);
+}
+//添加结束

@@ -24,7 +24,7 @@
 #include "searchwindow.h"
 
 #include <QThread>
-
+#include <QtConcurrent>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -281,7 +281,7 @@ void MainWindow::keyPressEvent(QKeyEvent  *event){
     if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_R){
         emit SIGNAL_Run();
     }
-    //编译并运行 CTRL + SHIFT + S
+    //另存为 CTRL + SHIFT + S
     if(event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && event ->key() == Qt::Key_S){
         emit SIGNAL_SaveAsFile();
     }
@@ -337,8 +337,10 @@ void MainWindow::Func_MenuBar(){
     connect(this,&MainWindow::SIGNAL_CompileRun,this,[=](){
         if(openingFileName.isEmpty())
             return;
-        CompileC(openingFileName);
-        RunC(openingFileName);
+        QFuture<void> ftr1 = QtConcurrent::run(CompileC,openingFileName);
+        ftr1.waitForFinished();
+        QFuture<void> ftr2 = QtConcurrent::run(RunC,openingFileName);
+        ftr2.waitForFinished();
     });
     //代码风格
     connect(ui->actioncodeStyle,&QAction::triggered,this,[=](){
@@ -525,7 +527,8 @@ void MainWindow::Func_MenuBar(){
     connect(this,&MainWindow::SIGNAL_Compile,this,[=](){
         if(openingFileName.isEmpty())
             return;
-        CompileC(openingFileName);
+        QFuture<void> ftr1 = QtConcurrent::run(CompileC,openingFileName);
+        ftr1.waitForFinished();
     });
     //运行文件
     connect(ui->actionRun,&QAction::triggered,this,[=](){
@@ -534,8 +537,8 @@ void MainWindow::Func_MenuBar(){
     connect(this,&MainWindow::SIGNAL_Run,this,[=](){
         if(openingFileName.isEmpty())
             return;
-
-        RunC(openingFileName);
+        QFuture<void> ftr2 = QtConcurrent::run(RunC,openingFileName);
+        ftr2.waitForFinished();
     });
 
     //撤销
@@ -612,7 +615,7 @@ void MainWindow::CompileC(QString filename){
     //qDebug() << "——————————————————";
     //qDebug() << QString::fromLocal8Bit(p->readAllStandardOutput());
     if(!QFileInfo(filename.mid(0,filename.lastIndexOf(".")) + ".exe").exists()){
-        QMessageBox::critical(this,"编译错误","请检查是否安装了MINGW");
+        QMessageBox::critical(nullptr,"编译错误","请检查是否安装了MINGW");
         return;
     }
 
@@ -624,7 +627,7 @@ void MainWindow::RunC(QString filename){
     //文件不存在
     filename = filename.mid(0,filename.lastIndexOf(".")) + ".exe";
     if(!QFileInfo(filename).exists()){
-        QMessageBox::warning(this,"警告","程序未编译");
+        QMessageBox::warning(nullptr,"警告","程序未编译");
         return;
     }
 
