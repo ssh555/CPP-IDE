@@ -22,6 +22,7 @@ class Editor : public QPlainTextEdit
 public:
     QTextCharFormat colorFormat;//查询颜色
     void ChangeCodeStyle();
+    void FoldCurrent();
     Highlighter *highlighter;//高亮器
     QCompleter *c = nullptr;
     void setCompleter(QCompleter *c);
@@ -36,12 +37,14 @@ public:
     int lineNumberAreaWidth();
     QString FolderName;//保存当前页的文件的文件夹绝对路径
     bool isChanged;
+    void mouseDoubleClickEvent(QMouseEvent *e) override;
     //字符组状态
     enum BlockState {
         End         = 1,     // 00000001
         Begin       = 2,     // 00000010
         String      = 4,     // 00000100
         Comment     = 8,     // 00001000
+        Debug       = 8,     // 00001000
         Nested      = 16,    // 00010000
         Folded      = 32,    // 00100000
         Error       = 64,    // 01000000
@@ -53,12 +56,18 @@ public:
     bool FindAllState=false;//用来观测有没有进行全局查看
 public :signals:
     void SIGNAL_ChangeCodeStyle();
+
+
+
 protected:
     void FoldUnfold(QTextBlock &block);
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     void Refresh_Text();
     void keyPressEvent(QKeyEvent *e) override;
     void focusInEvent(QFocusEvent *e) override;
+    void autoIndent(bool temp);
+    void addBraceRight();
+
 public slots:
     bool SLOT_FindKeywords(QString keyword);
     void SLOT_FindWhole(QString keyword);
@@ -68,6 +77,9 @@ public slots:
     bool SLOT_ReplacePrivious(QString keyword,QString replaceword);
     void SLOT_SearchEnd();//搜索结束
     void FoldUnfoldAll(bool folding);//用于代码折叠
+
+    void SLOT_ChangeLineNum(int num);
+
 private slots:
 
     void insertCompletion(const QString &completion);

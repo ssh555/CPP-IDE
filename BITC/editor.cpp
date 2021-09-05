@@ -27,11 +27,6 @@ void Editor::Init()
 
 
 }
-void Editor::ChangeCodeStyle(){
-    Config::GetInstance()->ChangeCodeStyle();
-    highlighter = new Highlighter(this->document());
-    highlighter->Start_Highlight();
-}
 
 void Editor::SLOT_ReplaceWhole(QString findword,QString replaceword)
 {
@@ -132,34 +127,59 @@ void Editor::SLOT_SearchEnd()
 void Editor::FoldUnfoldAll(bool folding)//折叠代码
 {
     QTextBlock block = document()->firstBlock();
-
+    int blockcount=0;
     do {
         int state = block.userState();
+        blockcount++;
+        //qDebug()<<"blockcount<<!(state & Begin)<<(document()->lastBlock() == block)<<(state & Folded)"
+                   //<<blockcount<<!(state & Begin)<<(document()->lastBlock() == block)<<(state & Folded);
 
+        //如果该block可见、错误、嵌套、已经折叠且folding为true、未折叠且folding为false，就跳过这个block
         if (!block.isVisible() || state & Error || state & Nested ||
             (state & Folded && folding) || (!(state & Folded) && !folding))
             continue;
-
+        //反过来就不可见且正确并且未嵌套，同时折叠情况和folding有且仅有一个为true
+        //进行FoldUnfold
         FoldUnfold(block);
     } while ((block = block.next()).isValid());
 
     ensureCursorVisible();
 
 }
+
+
+void Editor::ChangeCodeStyle(){
+    Config::GetInstance()->ChangeCodeStyle();
+    highlighter = new Highlighter(this->document());
+    highlighter->Start_Highlight();
+
+    /*test*/
+    QTextBlock currentBlock = document()->begin();
+    currentBlock.setUserState(Begin);
+    FoldUnfoldAll(true);
+
+}
+
 void Editor::FoldUnfold(QTextBlock &block)
 {
     int state = block.userState();
-
-    if (state & Error || state & End || !(state & Begin) || // (state & End) для однострочного блока ()
+    //如果该代码块错误或已经到结尾或document的最后一个代码块为该代码块
+    if (state & Error || state & End || !(state & Begin) ||
         document()->lastBlock() == block)
         return;
-
+    //unfolding为否（未折叠)
     bool unfolding = state & Folded;
 
-    if (unfolding)
+    if (unfolding)//如果已折叠
+    {
         block.setUserState(block.userState() & ~Folded);
-    else
+        qDebug()<<"block.userState() & ~Folded"<<(block.userState() & ~Folded);
+    }
+    else{
         block.setUserState(block.userState() | Folded);
+        //qDebug()<<"block.userState() | Folded"<<(block.userState() | Folded);
+
+    }
 
     int previousBlockState = block.previous().userState();
     int endBraceDepth = previousBlockState & Error ? 0 : previousBlockState >> StateShift;
@@ -171,7 +191,7 @@ void Editor::FoldUnfold(QTextBlock &block)
         int state = block.userState();
         braceDepth = state >> StateShift;
 
-        if (unfolding){
+        if (unfolding){//如果状态同时为begin和Folded
             if (state & Begin && !skipDepth && state & Folded) {
                 skipDepth = block.previous().userState() >> StateShift;
             } else if (skipDepth) {
@@ -285,6 +305,39 @@ void Editor::keyPressEvent(QKeyEvent *e)
     if (!c || !isShortcut) // do not process the shortcut when we have a completer
         QPlainTextEdit::keyPressEvent(e);
     //! [7]
+
+    QTextCursor completionText;
+    completionText=textCursor();
+    completionText.select(QTextCursor::LineUnderCursor);
+    if(!(e->modifiers().testFlag(Qt::ControlModifier) && e->key() == Qt::Key_Z)&&!(e->modifiers().testFlag(Qt::ControlModifier) && e->key() == Qt::Key_Y))
+    {
+        if(e->text().right(1)=="{")
+        {
+            addBraceRight();
+        }
+        else if(e->text().right(1)=="(")
+        {
+            insertCompletion(")");
+        }
+        else if(e->text().right(1)=="[")
+        {
+            insertCompletion("]");
+        }
+        else if(e->text().right(1)=="\r")
+        {
+            autoIndent(true);
+        }
+        else if(completionText.selectedText()==NULL)
+        {
+            if(e->text().right(1)=="\b")
+            {
+            }
+            else
+            {
+                autoIndent(true);
+            }
+        }
+    }
 
     //! [8]
     const bool ctrlOrShift = e->modifiers().testFlag(Qt::ControlModifier) ||
@@ -411,6 +464,85 @@ void Editor::SLOT_HighlightCurrentLine()
     setExtraSelections(extraSelections);
 }
 
+void Editor::SLOT_ChangeLineNum(int num){
+    this->setTextCursor(QTextCursor(document()->findBlockByNumber(num-1)));
+}
+void Editor::FoldCurrent(){
+
+    QTextBlock currentBlock=document()->findBlockByLineNumber(this->textCursor().blockNumber());
+    int state=0;//0->进行折叠,1->展开
+    qDebug()<<currentBlock.userState();
+    if(currentBlock.userState()&Begin){
+        state=1;//如果已折叠,将模式改为展开
+        currentBlock.setUserState(currentBlock.userState()&!Begin);//去掉begin标记
+    }else{
+        currentBlock.setUserState(currentBlock.userState()|Begin);//设置为折叠开头
+    }
+
+    int begin=this->textCursor().blockNumber();
+    int end=0;
+    QString texttemp;
+    int nextNum=0;
+
+    texttemp=currentBlock.text();
+    foreach(QChar qc,texttemp)
+    {
+        if(qc=="{")
+        nextNum++;
+    }
+    qDebug()<<"当前行"<<texttemp<<nextNum;
+
+    while(currentBlock.next().isValid())
+    {
+        texttemp=currentBlock.next().text(); qDebug()<<texttemp;
+        if(texttemp.contains("{")){//又有一层
+            foreach(QChar qc,texttemp)
+            {
+                if(qc=="{")
+                nextNum++;//多一层
+            }
+        }
+        qDebug()<<"继续找{"<<nextNum<<texttemp;
+        if(texttemp.contains("}"))
+        {
+            foreach(QChar qc,texttemp)
+            {
+                if(qc=="}")
+                nextNum--;
+                if(nextNum==0) break;
+            }
+            qDebug()<<"继续找}"<<nextNum<<texttemp;
+            if(nextNum==0)
+            {//索引成功
+                end=currentBlock.blockNumber()+1;
+                break;
+            }
+        }
+        //啥都没找到
+          currentBlock=currentBlock.next();
+    }
+    QTextBlock blktemp;
+    qDebug()<<"state"<<state;
+    if(!state){//如果未折叠
+        for(int i=begin+1;i<end;i++){
+            blktemp=document()->findBlockByNumber(i);
+            blktemp.setVisible(false);
+            blktemp.setUserState((blktemp.userState())|Folded);
+        }
+    }else{
+        for(int i=begin+1;i<end;i++){
+            blktemp=document()->findBlockByNumber(i);
+            qDebug()<<"i"<<i<<"blktext"<<blktemp.text();
+            blktemp.setVisible(true);
+            blktemp.setUserState((blktemp.userState())&!Folded);//去掉Folded标记
+        }
+    }
+
+
+
+    resizeEvent(new QResizeEvent(QSize(0, 0), size()));
+}
+
 void Editor::Line_Number_Area_Paint_Event(QPaintEvent *event)
 {
     QPainter painter(lineNumberArea);
@@ -423,12 +555,19 @@ void Editor::Line_Number_Area_Paint_Event(QPaintEvent *event)
     int bottom = top + (int) blockBoundingRect(block).height();
 
     while (block.isValid() && top <= event->rect().bottom()) {
+
+        if(block.userState()==Debug){
+            painter.setPen(Qt::red);
+            painter.drawText(-2, top, lineNumberArea->width(), fontMetrics().height(),
+                             Qt::AlignRight, QString::number(blockNumber + 1));
+        }else
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);
             painter.setPen(Qt::black);
             painter.drawText(-2, top, lineNumberArea->width(), fontMetrics().height(),
                              Qt::AlignRight, number);
         }
+
 
         block = block.next();
         top = bottom;
@@ -459,6 +598,17 @@ void Editor::toggleComment()
     }
 }
 
+void Editor::mouseDoubleClickEvent(QMouseEvent *){
+    QTextBlock b=document()->findBlockByLineNumber(this->textCursor().blockNumber());
+    //首先判断这次双击是不是为了折叠代码
+
+    if(b.text().contains('{')&&b.userState()!=Begin){
+        this->FoldCurrent();
+    }
+    else if(b.userState()&Debug)b.setUserState(b.userState()&!Debug);//把debug状态去掉
+    else b.setUserState(b.userState()|Debug);//把它的状态增加一个debug
+}
+
 void Editor::Set_Mode(editorMode mode)
 {
     if(mode == BROWSE)
@@ -474,3 +624,42 @@ void Editor::Set_Mode(editorMode mode)
         SLOT_HighlightCurrentLine();
     }
 }
+
+
+void Editor::autoIndent(bool temp)
+{
+    this->moveCursor(QTextCursor::Up);
+    QTextCursor cursor=textCursor();
+    cursor.select(QTextCursor::LineUnderCursor);
+    QString previousRowText=cursor.selectedText();
+    this->moveCursor(QTextCursor::Down);
+    this->moveCursor(QTextCursor::StartOfLine);
+    bool includeBraceLeft=previousRowText.contains("{");
+    int spaceNumber=0;
+    foreach(QChar qc,previousRowText)
+    {
+        if(qc==" ")
+        {
+            spaceNumber++;
+        }
+        else break;
+    }
+    if(includeBraceLeft)
+    {
+        if(temp) spaceNumber+=4;
+    }
+    for(int i=0;i<spaceNumber;i++)
+    {
+        this->insertPlainText(" ");
+    }
+}
+
+void Editor::addBraceRight()
+{
+    this->insertPlainText("\n");
+    autoIndent(false);
+    this->insertPlainText("}");
+    this->moveCursor(QTextCursor::Up);
+    this->moveCursor(QTextCursor::EndOfLine);
+}
+

@@ -25,6 +25,7 @@
 
 #include <QThread>
 #include <QtConcurrent>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -296,6 +297,8 @@ void MainWindow::Func_MenuBar(){
         ftr1.waitForFinished();
         QFuture<void> ftr2 = QtConcurrent::run(RunC,openingFileName);
         ftr2.waitForFinished();
+        CompileC(openingFileName);
+        RunC(openingFileName);
     });
     //代码风格
     connect(ui->actioncodeStyle,&QAction::triggered,this,[=](){
@@ -436,6 +439,7 @@ void MainWindow::Func_MenuBar(){
             return;
         QFuture<void> ftr1 = QtConcurrent::run(CompileC,openingFileName);
         ftr1.waitForFinished();
+        CompileC(openingFileName);
     });
     //运行文件
     connect(ui->actionRun,&QAction::triggered,this,[=](){
@@ -446,6 +450,8 @@ void MainWindow::Func_MenuBar(){
             return;
         QFuture<void> ftr2 = QtConcurrent::run(RunC,openingFileName);
         ftr2.waitForFinished();
+
+        RunC(openingFileName);
     });
 
     //撤销
@@ -511,6 +517,13 @@ void MainWindow::CompileC(QString filename){
         return;
     }
 
+    //文件不是C/C++
+    QString suf = QFileInfo(filename).suffix();
+    suf = suf.toLower();
+    if(suf.compare("c") == 0 || suf.compare("c++") == 0 || suf.compare("cpp") == 0){
+        QMessageBox::warning(nullptr,"警告",filename + " 文件不是c,c++,cpp文件");
+        return;
+    }
 
     //用指针形式
     QProcess *p = new QProcess;
