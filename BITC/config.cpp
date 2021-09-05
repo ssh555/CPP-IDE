@@ -79,8 +79,8 @@ void Config::ChangeCodeStyle(){//改代码风格
 
     QString *GroupName=new QString("colorgroup");
     int CodeStyleNum=setting->value("codeStyle").toString().toUInt();
-    qDebug()<<CodeStyleNum;
-    setting->setValue("codeStyle",(CodeStyleNum+1)%3);
+
+//    setting->setValue("codeStyle",(CodeStyleNum+1)%3);
 //    setting->setValue("codeStyle",CodeStyleNum);
     QString *CodeStylebf=new QString();//就是换一个colorgroup
     CodeStylebf->setNum((CodeStyleNum+1)%3+1);

@@ -8,6 +8,7 @@
 Editor::Editor(QWidget *parent) : QPlainTextEdit(parent)
 {
     this->Init();
+
 }
 void Editor::Init()
 {
@@ -15,6 +16,7 @@ void Editor::Init()
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(SLOT_UpdateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(SLOT_UpdateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_HighlightCurrentLine()));
+
     //改了个可爱的字体
     this->setFont(QFont("Consolas",12));
     SLOT_UpdateLineNumberAreaWidth(0);
@@ -36,6 +38,19 @@ void Editor::SLOT_ReplaceWhole(QString findword,QString replaceword)
     setTextCursor(cursor);
 
     while (SLOT_ReplaceKeywords(findword, replaceword));
+}
+QVector<qint32> Editor::GetBreakPoints()
+{
+    QVector<qint32> *breakpoints=new QVector<qint32>;
+    QTextBlock b=document()->firstBlock();
+    while(b.next().isValid()){
+        if(b.userState()&Debug){
+            breakpoints->append(b.lineCount());
+        qDebug()<<(b.lineCount());
+        }
+        b=b.next();
+    }
+    return *breakpoints;
 }
 bool Editor::SLOT_ReplaceKeywords(QString findword,QString replaceword)//替换下一个
 {
@@ -70,58 +85,25 @@ bool Editor::SLOT_ReplacePrivious(QString findword,QString replaceword)//替换�
     setTextCursor(cursor);
     return true;
 }
-void Editor::SLOT_FindWhole(QString keyword)//寻找关键字
+bool Editor::SLOT_FindWhole(QString keyword)//寻找关键字
 {
-
-    bool found = false;
-    QTextDocument *document = this->document();
-    // undo previous change (if any)
-    document->undo();
-
-    if (keyword.isEmpty()) {
-        QMessageBox::information(this, tr("输入为空"),
-                                 tr("输入不能为空 "
-                                    "请输点东西吧"));
-    } else {
-        QTextCursor highlightCursor(document);
-        QTextCursor cursor(document);
-
-        cursor.beginEditBlock();
-
-
-        QTextCharFormat plainFormat(highlightCursor.charFormat());
-        colorFormat = plainFormat;
-        colorFormat.setForeground(Qt::red);
-        colorFormat.setBackground(Qt::yellow);
-        while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
-            highlightCursor = document->find(keyword, highlightCursor);
-
-            if (!highlightCursor.isNull()) {
-                found = true;
-                //qDebug()<<keyword.size();
-                highlightCursor.movePosition(QTextCursor::NoMove,
-                                             QTextCursor::KeepAnchor,keyword.size());
-                highlightCursor.mergeCharFormat(colorFormat);
-            }
-        }
-
-        cursor.endEditBlock();
-
-        if (found == false) {
-            QMessageBox::information(this, tr("Word Not Found"),
-                                     tr("Sorry, the word cannot be found."));
-        }
-        FindAllState=true;
+    this ->moveCursor(QTextCursor::Start, QTextCursor::MoveAnchor);
+    QTextCursor cursor = this->textCursor();
+    cursor = document()->find(keyword, cursor);
+    if(cursor.isNull()){
+        return false;
     }
+    setTextCursor(cursor);
+    return true;
 }
 void Editor::SLOT_SearchEnd()
 {
     //查询结束,把之前换的颜色换回去
-    if(FindAllState==true){
-            QTextDocument *document = this->document();
-            // undo previous change (if any)
-            document->undo();
-    }
+    //    if(FindAllState==true){
+    //            QTextDocument *document = this->document();
+    //            // undo previous change (if any)
+    //            document->undo();
+    //    }
 
 }
 void Editor::FoldUnfoldAll(bool folding)//折叠代码
@@ -131,9 +113,6 @@ void Editor::FoldUnfoldAll(bool folding)//折叠代码
     do {
         int state = block.userState();
         blockcount++;
-        //qDebug()<<"blockcount<<!(state & Begin)<<(document()->lastBlock() == block)<<(state & Folded)"
-                   //<<blockcount<<!(state & Begin)<<(document()->lastBlock() == block)<<(state & Folded);
-
         //如果该block可见、错误、嵌套、已经折叠且folding为true、未折叠且folding为false，就跳过这个block
         if (!block.isVisible() || state & Error || state & Nested ||
             (state & Folded && folding) || (!(state & Folded) && !folding))
@@ -146,7 +125,6 @@ void Editor::FoldUnfoldAll(bool folding)//折叠代码
     ensureCursorVisible();
 
 }
-
 
 void Editor::ChangeCodeStyle(){
     Config::GetInstance()->ChangeCodeStyle();
@@ -177,7 +155,6 @@ void Editor::FoldUnfold(QTextBlock &block)
     }
     else{
         block.setUserState(block.userState() | Folded);
-        //qDebug()<<"block.userState() | Folded"<<(block.userState() | Folded);
 
     }
 
@@ -445,6 +422,7 @@ void Editor::resizeEvent(QResizeEvent *e)
     QRect cr = contentsRect();
     lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
+
 void Editor::SLOT_HighlightCurrentLine()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
@@ -463,10 +441,10 @@ void Editor::SLOT_HighlightCurrentLine()
 
     setExtraSelections(extraSelections);
 }
-
 void Editor::SLOT_ChangeLineNum(int num){
     this->setTextCursor(QTextCursor(document()->findBlockByNumber(num-1)));
 }
+
 void Editor::FoldCurrent(){
 
     QTextBlock currentBlock=document()->findBlockByLineNumber(this->textCursor().blockNumber());
@@ -537,10 +515,15 @@ void Editor::FoldCurrent(){
             blktemp.setUserState((blktemp.userState())&!Folded);//去掉Folded标记
         }
     }
-
-
-
     resizeEvent(new QResizeEvent(QSize(0, 0), size()));
+}
+
+int Editor::CountLeftKuohao(QTextBlock block)
+{
+    QString text=block.text();
+    int l=text.count("{");
+    int r=text.count("}");
+    return l-r;
 }
 
 void Editor::Line_Number_Area_Paint_Event(QPaintEvent *event)
@@ -555,7 +538,6 @@ void Editor::Line_Number_Area_Paint_Event(QPaintEvent *event)
     int bottom = top + (int) blockBoundingRect(block).height();
 
     while (block.isValid() && top <= event->rect().bottom()) {
-
         if(block.userState()==Debug){
             painter.setPen(Qt::red);
             painter.drawText(-2, top, lineNumberArea->width(), fontMetrics().height(),
@@ -596,12 +578,12 @@ void Editor::toggleComment()
 
         cursor.endEditBlock();
     }
+
 }
 
 void Editor::mouseDoubleClickEvent(QMouseEvent *){
     QTextBlock b=document()->findBlockByLineNumber(this->textCursor().blockNumber());
     //首先判断这次双击是不是为了折叠代码
-
     if(b.text().contains('{')&&b.userState()!=Begin){
         this->FoldCurrent();
     }

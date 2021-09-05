@@ -3,6 +3,7 @@
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
 #include <QTextDocument>
+
 class Highlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
@@ -23,14 +24,14 @@ private:
 
     QRegExp commentStartExpression;
     QRegExp commentEndExpression;
-    QTextCharFormat expFunctionFormat;
-    QTextCharFormat keywordFormat;
-    QTextCharFormat classFormat;
+    QTextCharFormat expFunctionFormat;//goto等内置函数颜色
+    QTextCharFormat keywordFormat;//关键字颜色-i9*
+    QTextCharFormat classFormat;//类颜色
     QTextCharFormat singleLineKey;
     QTextCharFormat singleLineValue;
-    QTextCharFormat singleLineCommentFormat;
-    QTextCharFormat multiLineCommentFormat;
-    QTextCharFormat quotationFormat;
-    QTextCharFormat functionFormat;
+    QTextCharFormat singleLineCommentFormat;//单行注释颜色
+    QTextCharFormat multiLineCommentFormat;//多行注释颜色
+    QTextCharFormat quotationFormat;//引用颜色
+    QTextCharFormat functionFormat;//函数颜色(printf之类)
 };
 #endif // Highlighter_H

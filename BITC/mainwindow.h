@@ -65,7 +65,7 @@ private:
     QGridLayout *editorLayout;
     //临时窗口，只有一个
     QWidget *TempWidget;
-    SearchWindow *searchWindow;
+    SearchWindow *searchWindow=NULL;
     static MainWindow* m_pInstance;
 
     Ui::MainWindow *ui;
@@ -145,5 +145,11 @@ signals:
     void SIGNAL_Paste();
     //查询访问信号
     void SIGNAL_Search();
+    //替换信号
+    void SIGNAL_Replace();
+    //保存打开的文件信号
+    void SIGNAL_SaveOpenedFiles();
+    //Debug信号
+    void SIGNAL_Debug();
 };
 #endif // MAINWINDOW_H

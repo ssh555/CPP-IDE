@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QSettings>
 #include <toolbox.h>
 #include "FileMgr.h"
 #include <QTabWidget>
@@ -22,7 +22,6 @@
 #include <QFont>
 #include <QGridLayout>
 #include "searchwindow.h"
-
 #include <QThread>
 #include <QtConcurrent>
 
@@ -40,7 +39,13 @@ MainWindow::MainWindow(QWidget *parent)
     //清空编辑页
     for(int i = 0;ui->tabWgtEditArea->count(); ++i)
         ui->tabWgtEditArea->removeTab(i);
-    //qDebug() << ui->tabWgtEditArea->currentIndex();
+    //切换编辑页
+    connect(ui->tabWgtEditArea,&QTabWidget::tabBarClicked,this,[=](){
+        if(searchWindow!=NULL)
+        {
+            searchWindow->setEditor((Editor *)ui->tabWgtEditArea->currentWidget());
+        }
+    });
     //编辑页的关闭事件
     connect(ui->tabWgtEditArea,&QTabWidget::tabCloseRequested,[=](int i){
         QString str =ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(ui->tabWgtEditArea->widget(i))).replace("(未保存)","");
@@ -56,12 +61,33 @@ MainWindow::MainWindow(QWidget *parent)
                 emit SIGNAL_SaveFile();
             }
         }
+        //保存打开的文件名
+
+
         openedFileNames->removeAll(GetTABFilePath(ui->tabWgtEditArea->widget(i),str));
         //如果为临时窗口
         if(TempWidget == ui->tabWgtEditArea->widget(i)){
             TempWidget = NULL;
         }
         ui->tabWgtEditArea->removeTab(i);
+    });
+    connect(this,&MainWindow::SIGNAL_SaveOpenedFiles,this,[=](){
+        QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+
+        setting->beginGroup("savedFileName");
+
+        QStringList settingList=setting->childKeys();
+        if(!settingList.isEmpty()){//把之前存的东西删掉
+            for(int i=0;i<settingList.length();i++){
+                setting->remove(settingList.at(i));
+            }
+        }
+        QString *variableStr=new QString();//存那堆现在打开的文件路径
+        for(int i=0;i<openedFileNames->length();i++){
+            variableStr->setNum(i);
+            setting->setValue(*variableStr,openedFileNames->at(i));
+        }
+        setting->endGroup();
     });
     //始终将当前操作文件名指向当前文件
     connect(ui->tabWgtEditArea,&QTabWidget::currentChanged,[=](int i){
@@ -77,17 +103,34 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     /*测试代码*/
+    QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    setting->beginGroup("savedFileName");
+    QStringList settingList=setting->childKeys();
+    if(!settingList.isEmpty()){//不为空，就打开之前打开的文件
+        for (int i =0; i<settingList.length();i++){
+            QString filename = setting->value(settingList.at(i)).toString();
+
+            if(filename.isEmpty())
+                return ;
+            AddTextEditToEditArea(filename,TabTemp::Permanent);//非临时窗口
+        }
+    }
+
+
+    setting->endGroup();
     /*测试代码*/
 
 }
 
 MainWindow::~MainWindow()
 {
+
     if (m_pInstance != NULL)
     {
         delete m_pInstance;
         m_pInstance = NULL;
     }
+
     delete ui;
     delete openedFileNames;
 }
@@ -95,18 +138,12 @@ MainWindow::~MainWindow()
 //窗口关闭时调用
 void MainWindow::closeEvent(QCloseEvent *){
     //如果有未保存文件则询问是否保存
+    emit(SIGNAL_SaveOpenedFiles());
     int num = ui->tabWgtEditArea->count();
     for(int i = 0;i < num; ++i){
         emit ui->tabWgtEditArea->tabCloseRequested(0);
     }
 }
-
-//void MainWindow::resizeEvent(QResizeEvent* event)
-//{
-//    QMainWindow::resizeEvent(event);
-//    // Your code here
-//    tBoxFolderMgr->Size_Changed();
-//}
 
 //获取C文件绝对路径的文件名.
 QString MainWindow::GetCFileName(QString filename){
@@ -151,13 +188,12 @@ void MainWindow::AddTextEditToEditArea(QString filename,bool isTemp){
             connect(t,&QPlainTextEdit::textChanged,TempWidget,[=](){
                 if(ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(TempWidget)).contains("(未保存)")){
                     TempTabToPermTab();
-                    //qDebug() << ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(TempWidget));
+
                 }
             });
             return;
         }
         //保存当前文件,移出当前文件
-        //emit SIGNAL_SaveFile();
         openedFileNames->removeAll(GetTABFilePath(TempWidget,ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(TempWidget))));
         //添加选择文件
         openedFileNames->append(filename);
@@ -279,6 +315,12 @@ void MainWindow::keyPressEvent(QKeyEvent  *event){
     if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_F){
         emit SIGNAL_Search();
     }
+    //替换 CTRL + SHIFT + F
+    if(event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && event ->key() == Qt::Key_F){
+        emit SIGNAL_Replace();
+    }
+
+
 
 }
 
@@ -290,7 +332,6 @@ void MainWindow::Func_MenuBar(){
         emit SIGNAL_CompileRun();
     });
     connect(this,&MainWindow::SIGNAL_CompileRun,this,[=](){
-        //qDebug() << "bbb";
         if(openingFileName.isEmpty())
             return;
         QFuture<void> ftr1 = QtConcurrent::run(CompileC,openingFileName);
@@ -302,7 +343,57 @@ void MainWindow::Func_MenuBar(){
     });
     //代码风格
     connect(ui->actioncodeStyle,&QAction::triggered,this,[=](){
-        workingEditor->ChangeCodeStyle();
+        workingEditor->isChanged=false;
+        QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+        int CodeStyleNum=setting->value("codeStyle").toString().toUInt();
+        setting->setValue("codeStyle",(CodeStyleNum+1)%3);
+            for(int i =0;i<ui->tabWgtEditArea->count();i++){
+                Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
+                e->ChangeCodeStyle();
+            }
+
+        workingEditor->isChanged=true;
+
+    });
+    //替换
+    connect(ui->actionReplace,&QAction::triggered,this,[=](){
+        emit SIGNAL_Replace();
+        //槽函数得在editor创建后连接,在eidtor那边
+    });
+    connect(this,&MainWindow::SIGNAL_Replace,this,[=](){
+        if(workingEditor==NULL){
+            return;
+        }else
+        {
+            for(int i =0;i<ui->tabWgtEditArea->count();i++){
+                Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
+                e->isChanged=false;
+            }
+
+            //新建搜索框,并初始化各槽函数
+            if (searchWindow!=NULL){
+                //qDebug()<<"notnull";
+                ui->verticalLayout->removeWidget(searchWindow);
+            }
+            searchWindow=new SearchWindow();
+
+            ui->verticalLayout->addWidget(searchWindow);
+            //设置editor,连接槽函数
+            searchWindow->setEditor(workingEditor);
+            if(!workingEditor->textCursor().selectedText().isEmpty())
+            {
+                searchWindow->showWithText(workingEditor->textCursor().selectedText());
+            }else searchWindow->show();
+            workingEditor->isChanged=true;
+            searchWindow->on_btnReplace_clicked();
+            for(int i =0;i<ui->tabWgtEditArea->count();i++){
+                Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
+                e->isChanged=true;
+            }
+        }
+
+
+
     });
     //查询
 
@@ -317,17 +408,21 @@ void MainWindow::Func_MenuBar(){
         {
             workingEditor->isChanged=false;
             //新建搜索框,并初始化各槽函数
+            if (searchWindow!=NULL){
+                //qDebug()<<"notnull";
+                ui->verticalLayout->removeWidget(searchWindow);
+            }
+
             searchWindow=new SearchWindow();
-            searchWindow->setMinimumSize(682,152);
-            searchWindow->move(20,0);
+            ui->verticalLayout->addWidget(searchWindow);
             //设置editor,连接槽函数
             searchWindow->setEditor(workingEditor);
             if(!workingEditor->textCursor().selectedText().isEmpty())
             {
                 searchWindow->showWithText(workingEditor->textCursor().selectedText());
+
             }else searchWindow->show();
             workingEditor->isChanged=true;
-
         }
 
 
@@ -358,6 +453,7 @@ void MainWindow::Func_MenuBar(){
     });
     connect(this,&MainWindow::SIGNAL_OpenFile,this,[=](){
         QString filename = QFileDialog::getOpenFileName(this,"打开文件",".",tr("C(*.c *.c++ *.cpp)"));
+
         if(filename.isEmpty())
             return ;
         AddTextEditToEditArea(filename,TabTemp::Permanent);//非临时窗口
@@ -416,7 +512,15 @@ void MainWindow::Func_MenuBar(){
         //qDebug() << t->toPlainText();
         file.close();
     });
-
+    //调试
+//    connect(ui->actionDebug,&QAction::triggered,this,[=](){
+//       emit SIGNAL_Debug();
+//    });
+//    connect(this,&MainWindow::SIGNAL_Debug,this,[=](){
+//        Debuger *debuger=new Debuger(ui->tab_3, GetCFileName(openingFileName), GetCFolderName(openingFileName), workingEditor->GetBreakPoints(),workingEditor);
+//        //初始化设置
+//        debuger->show();
+//    });
     //关闭所有文件
     connect(ui->actionCloseAll, &QAction::triggered, this, [=](){
         emit SIGNAL_CloseAll();
@@ -514,9 +618,9 @@ void MainWindow::Func_MenuBar(){
 void MainWindow::CompileC(QString filename){
     //文件不存在
     if(!QFileInfo(filename).exists()){
+        QMessageBox::warning(nullptr,"警告",filename + " 文件不存在");
         return;
     }
-
     //文件不是C/C++
     QString suf = QFileInfo(filename).suffix();
     suf = suf.toLower();
@@ -524,6 +628,7 @@ void MainWindow::CompileC(QString filename){
         QMessageBox::warning(nullptr,"警告",filename + " 文件不是c,c++,cpp文件");
         return;
     }
+
 
     //用指针形式
     QProcess *p = new QProcess;
@@ -563,18 +668,13 @@ QWidget* MainWindow::CreateEditText(QString filename){
         return TempWidget;
     }
     //新建页
+
+
     openedFileNames->append(filename);
 
     //设置工作中editor,用于搜索等功能获取
     Editor *editor = new Editor();
-    //    //创建QGridLayout,用于放置editor及相关组件
 
-    //    editorLayout=new QGridLayout(ui->tabWgtEditArea);
-
-    //    editorLayout->addWidget(editor,0,0);
-    //    editorLayout->setRowStretch(0, 8);//设置行列比例系数
-    //    editorLayout->setRowStretch(1, 1);
-    //    editorLayout->setSpacing(10);//设置间距
 
     //设置工作中editor
     workingEditor=editor;
@@ -619,6 +719,12 @@ QWidget* MainWindow::CreateEditText(QString filename){
             editor->isChanged = true;
         }
     });
+    //防止searchwindow未替换
+
+    if(searchWindow!=NULL)
+    {
+        searchWindow->setEditor((Editor *)ui->tabWgtEditArea->currentWidget());
+    }
     return  ui->tabWgtEditArea->currentWidget();
 }
 

@@ -64,6 +64,16 @@ void SearchWindow::on_btnReplace_clicked()
 }
 void SearchWindow::setEditor(Editor *editor_far)//设置editor,连接槽函数
 {
+    if(this->editor!=NULL){
+        disconnect(this,&SearchWindow::SIGNAL_FindNext,editor_far,&Editor::SLOT_FindKeywords);
+        disconnect(this,&SearchWindow::SIGNAL_FindWhole,editor_far,&Editor::SLOT_FindWhole);
+        disconnect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::SLOT_FindPrivious);
+        disconnect(this,&SearchWindow::SIGNAL_ReplaceNext,editor_far,&Editor::SLOT_ReplaceKeywords);
+        disconnect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
+        disconnect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);
+        disconnect(this,&SearchWindow::SIGNAL_Exit,editor_far,&Editor::SLOT_SearchEnd);
+        disconnect(ui->btnReplace,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
+    }
     this->editor=editor_far;
     //connect(this,&SearchWindow::on_btnFindNext_clicked,this,&SearchWindow::BtnFindNextClicked);//this->editor,&Editor::SLOT_FindKeywords
     connect(this,&SearchWindow::SIGNAL_FindNext,editor_far,&Editor::SLOT_FindKeywords);
@@ -73,7 +83,6 @@ void SearchWindow::setEditor(Editor *editor_far)//设置editor,连接槽函数
     connect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
     connect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);
     connect(this,&SearchWindow::SIGNAL_Exit,editor_far,&Editor::SLOT_SearchEnd);
-    //connect(ui->btnFind,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
     connect(ui->btnReplace,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
 }
 void SearchWindow::on_btnFindWhole_clicked()//找所有的
@@ -113,11 +122,7 @@ void SearchWindow::on_btnCancel_clicked()//关掉,统统关掉
     this->close();
 }
 
-void SearchWindow::on_btnExit_clicked()
-{
-    emit(SIGNAL_Exit());
-    this->close();
-}
+
 //获取鼠标的按下操作
 //用于移动
 void SearchWindow::mousePressEvent(QMouseEvent *ev)

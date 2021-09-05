@@ -32,6 +32,12 @@
     </property>
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWgtEditArea">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="styleSheet">
        <string notr="true">font:</string>
       </property>
@@ -58,6 +64,12 @@
     </item>
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWgtResArea">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -71,7 +83,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="movable">
        <bool>true</bool>
@@ -83,6 +95,17 @@
        <attribute name="title">
         <string>查找</string>
        </attribute>
+       <widget class="QWidget" name="verticalLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>-1</x>
+          <y>-1</y>
+          <width>521</width>
+          <height>191</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout"/>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
@@ -104,7 +127,7 @@
      <x>0</x>
      <y>0</y>
      <width>674</width>
-     <height>26</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -412,7 +435,7 @@
      <normaloff>:/resources/UIImages/Replace.png</normaloff>:/resources/UIImages/Replace.png</iconset>
    </property>
    <property name="text">
-    <string>替换          CTRL+R</string>
+    <string>替换          CTRL+SHIFT+F</string>
    </property>
    <property name="iconText">
     <string>替换</string>
