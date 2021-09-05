@@ -537,16 +537,7 @@ void Editor::autoIndent(bool temp)
     }
     if(includeBraceLeft)
     {
-        spaceNumber=previousRowText.length();
-        if(!temp)
-        {
-            spaceNumber-=1;
-            qDebug()<<spaceNumber;
-        }
-        else
-        {
-            spaceNumber+=3;
-        }
+        if(temp) spaceNumber+=4;
     }
     for(int i=0;i<spaceNumber;i++)
     {
