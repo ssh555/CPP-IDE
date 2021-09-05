@@ -38,6 +38,20 @@ public:
         return m_pInstance;
     }
 
+    ///获取UI的控件
+    //获取tabWgtEditArea
+    QTabWidget* GettabWgtEditArea();
+    //获取tabWgtResArea
+    QTabWidget* GettabWgtResArea();
+    //获取menubar
+    QMenuBar* Getmenubar();
+    //获取gBoxFileMgr
+    QDockWidget* GetgBoxFileMgr();
+    //获取statusbarTips
+    QStatusBar* GetstatusbarTips();
+    //获取toolBar
+    QToolBar* GettoolBar();
+
 protected:
     void closeEvent(QCloseEvent *) override;
 
@@ -73,7 +87,7 @@ private:
     void AddFolderToGBox(QString foldername);
 
     //键盘按下响应事件，添加快捷键
-    void keyPressEvent(QKeyEvent  *event);
+    void keyPressEvent(QKeyEvent  *event) override;
     //编译C文件
     static void CompileC(QString filename);
     //运行C文件
@@ -127,13 +141,6 @@ signals:
     void SIGNAL_Shear();
     //复制信号
     void SIGNAL_Copy();
-    //粘贴信号
-    void SIGNAL_Paste();
-    //查询访问信号
-    void SIGNAL_Search();
-};
-#endif // MAINWINDOW_H
-
     //粘贴信号
     void SIGNAL_Paste();
     //查询访问信号
