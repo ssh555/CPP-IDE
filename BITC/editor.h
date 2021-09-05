@@ -37,7 +37,9 @@ public:
     int lineNumberAreaWidth();
     QString FolderName;//保存当前页的文件的文件夹绝对路径
     bool isChanged;
+    QVector<qint32> GetBreakPoints();//获取断点堆
     void mouseDoubleClickEvent(QMouseEvent *e) override;
+    int CountLeftKuohao(QTextBlock block);//判断括号
     //字符组状态
     enum BlockState {
         End         = 1,     // 00000001
@@ -53,7 +55,6 @@ public:
     };
     const static int StateShift = 8;//切换模式
     bool FindAllState=false;//用来观测有没有进行全局查看
-    QTextCharFormat *plainFormat;//保存基础字体
 public :signals:
     void SIGNAL_ChangeCodeStyle();
 
@@ -63,10 +64,6 @@ protected:
     void Refresh_Text();
     void keyPressEvent(QKeyEvent *e) override;
     void focusInEvent(QFocusEvent *e) override;
-    //添加部分
-    void autoIndent(bool temp);
-    void addBraceRight();
-    //添加结束
 public slots:
     bool SLOT_FindKeywords(QString keyword);
     bool SLOT_FindWhole(QString keyword);

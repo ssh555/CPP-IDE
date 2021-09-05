@@ -38,6 +38,20 @@ public:
         return m_pInstance;
     }
 
+    ///获取UI的控件
+    //获取tabWgtEditArea
+    QTabWidget* GettabWgtEditArea();
+    //获取tabWgtResArea
+    QTabWidget* GettabWgtResArea();
+    //获取menubar
+    QMenuBar* Getmenubar();
+    //获取gBoxFileMgr
+    QDockWidget* GetgBoxFileMgr();
+    //获取statusbarTips
+    QStatusBar* GetstatusbarTips();
+    //获取toolBar
+    QToolBar* GettoolBar();
+
 protected:
     void closeEvent(QCloseEvent *) override;
 
@@ -51,7 +65,7 @@ private:
     QGridLayout *editorLayout;
     //临时窗口，只有一个
     QWidget *TempWidget;
-    SearchWindow *searchWindow;
+    SearchWindow *searchWindow=NULL;
     static MainWindow* m_pInstance;
 
     Ui::MainWindow *ui;
@@ -75,9 +89,9 @@ private:
     //键盘按下响应事件，添加快捷键
     void keyPressEvent(QKeyEvent  *event) override;
     //编译C文件
-    static void CompileC(QString filename);
+    void CompileC(QString filename);
     //运行C文件
-    static void RunC(QString filename);
+    void RunC(QString filename);
     //获取C文件绝对路径的文件名
     QString GetCFileName(QString filename);
     //获取C文件绝对路径的文件夹路径 不包括最后的/
@@ -135,9 +149,7 @@ signals:
     void SIGNAL_Replace();
     //保存打开的文件信号
     void SIGNAL_SaveOpenedFiles();
-    //折叠当前代码信号
-    void SIGNAL_FoldCurrent();
+    //Debug信号
+    void SIGNAL_Debug();
 };
 #endif // MAINWINDOW_H
-
-

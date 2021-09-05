@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/UIImages/Compile.png</file>
+        <file>resources/UIImages/ComplieRun.png</file>
+        <file>resources/UIImages/Debug.png</file>
+        <file>resources/UIImages/Redo.png</file>
+        <file>resources/UIImages/Restore.png</file>
+        <file>resources/UIImages/Run.png</file>
+        <file>resources/UIImages/Save.png</file>
+    </qresource>
+</RCC>

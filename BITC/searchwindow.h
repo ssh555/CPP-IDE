@@ -54,6 +54,8 @@ private slots:
 
     void on_btnFindPrivious_clicked();
 
+
+
     void on_btnFind_clicked();
 private:
     int mode=0;//0--find,1--replace

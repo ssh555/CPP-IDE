@@ -22,9 +22,8 @@
 #include <QFont>
 #include <QGridLayout>
 #include "searchwindow.h"
-
 #include <QThread>
-#include <QtConcurrent>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -39,7 +38,13 @@ MainWindow::MainWindow(QWidget *parent)
     //清空编辑页
     for(int i = 0;ui->tabWgtEditArea->count(); ++i)
         ui->tabWgtEditArea->removeTab(i);
-
+    //切换编辑页
+    connect(ui->tabWgtEditArea,&QTabWidget::tabBarClicked,this,[=](){
+        if(searchWindow!=NULL)
+        {
+            searchWindow->setEditor((Editor *)ui->tabWgtEditArea->currentWidget());
+        }
+    });
     //编辑页的关闭事件
     connect(ui->tabWgtEditArea,&QTabWidget::tabCloseRequested,[=](int i){
         QString str =ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(ui->tabWgtEditArea->widget(i))).replace("(未保存)","");
@@ -139,7 +144,6 @@ void MainWindow::closeEvent(QCloseEvent *){
     }
 }
 
-
 //获取C文件绝对路径的文件名.
 QString MainWindow::GetCFileName(QString filename){
     filename = filename.replace("(未保存)","");
@@ -180,17 +184,15 @@ void MainWindow::AddTextEditToEditArea(QString filename,bool isTemp){
         if(TempWidget == NULL){
             TempWidget = CreateEditText(filename);
             Editor *t = (Editor*)TempWidget;
-            this->workingEditor=t;
             connect(t,&QPlainTextEdit::textChanged,TempWidget,[=](){
                 if(ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(TempWidget)).contains("(未保存)")){
                     TempTabToPermTab();
-                    //qDebug() << ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(TempWidget));
+
                 }
             });
             return;
         }
         //保存当前文件,移出当前文件
-        //emit SIGNAL_SaveFile();
         openedFileNames->removeAll(GetTABFilePath(TempWidget,ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(TempWidget))));
         //添加选择文件
         openedFileNames->append(filename);
@@ -316,14 +318,8 @@ void MainWindow::keyPressEvent(QKeyEvent  *event){
     if(event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && event ->key() == Qt::Key_F){
         emit SIGNAL_Replace();
     }
-    //测试 CTRL + T
-    if(event->modifiers() == Qt::ControlModifier && event ->key() == Qt::Key_T){
-        emit SIGNAL_FoldCurrent();
-    }
-//    for(int i =0;i<ui->tabWgtEditArea->count();i++){
-//        Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
 
-//    }
+
 
 }
 
@@ -337,10 +333,8 @@ void MainWindow::Func_MenuBar(){
     connect(this,&MainWindow::SIGNAL_CompileRun,this,[=](){
         if(openingFileName.isEmpty())
             return;
-        QFuture<void> ftr1 = QtConcurrent::run(CompileC,openingFileName);
-        ftr1.waitForFinished();
-        QFuture<void> ftr2 = QtConcurrent::run(RunC,openingFileName);
-        ftr2.waitForFinished();
+        CompileC(openingFileName);
+        RunC(openingFileName);
     });
     //代码风格
     connect(ui->actioncodeStyle,&QAction::triggered,this,[=](){
@@ -372,9 +366,13 @@ void MainWindow::Func_MenuBar(){
             }
 
             //新建搜索框,并初始化各槽函数
+            if (searchWindow!=NULL){
+                //qDebug()<<"notnull";
+                ui->verticalLayout->removeWidget(searchWindow);
+            }
             searchWindow=new SearchWindow();
-            searchWindow->setMinimumSize(682,152);
-            searchWindow->move(20,0);
+
+            ui->verticalLayout->addWidget(searchWindow);
             //设置editor,连接槽函数
             searchWindow->setEditor(workingEditor);
             if(!workingEditor->textCursor().selectedText().isEmpty())
@@ -404,19 +402,22 @@ void MainWindow::Func_MenuBar(){
         }else
         {
             workingEditor->isChanged=false;
-            //searchWindow->setEditor(workingEditor);
             //新建搜索框,并初始化各槽函数
+            if (searchWindow!=NULL){
+                //qDebug()<<"notnull";
+                ui->verticalLayout->removeWidget(searchWindow);
+            }
+
             searchWindow=new SearchWindow();
-            searchWindow->setMinimumSize(682,152);
-            searchWindow->move(20,0);
+            ui->verticalLayout->addWidget(searchWindow);
             //设置editor,连接槽函数
             searchWindow->setEditor(workingEditor);
             if(!workingEditor->textCursor().selectedText().isEmpty())
             {
                 searchWindow->showWithText(workingEditor->textCursor().selectedText());
+
             }else searchWindow->show();
             workingEditor->isChanged=true;
-
         }
 
 
@@ -506,7 +507,15 @@ void MainWindow::Func_MenuBar(){
         //qDebug() << t->toPlainText();
         file.close();
     });
-
+    //调试
+//    connect(ui->actionDebug,&QAction::triggered,this,[=](){
+//       emit SIGNAL_Debug();
+//    });
+//    connect(this,&MainWindow::SIGNAL_Debug,this,[=](){
+//        Debuger *debuger=new Debuger(ui->tab_3, GetCFileName(openingFileName), GetCFolderName(openingFileName), workingEditor->GetBreakPoints(),workingEditor);
+//        //初始化设置
+//        debuger->show();
+//    });
     //关闭所有文件
     connect(ui->actionCloseAll, &QAction::triggered, this, [=](){
         emit SIGNAL_CloseAll();
@@ -527,8 +536,7 @@ void MainWindow::Func_MenuBar(){
     connect(this,&MainWindow::SIGNAL_Compile,this,[=](){
         if(openingFileName.isEmpty())
             return;
-        QFuture<void> ftr1 = QtConcurrent::run(CompileC,openingFileName);
-        ftr1.waitForFinished();
+        CompileC(openingFileName);
     });
     //运行文件
     connect(ui->actionRun,&QAction::triggered,this,[=](){
@@ -537,8 +545,8 @@ void MainWindow::Func_MenuBar(){
     connect(this,&MainWindow::SIGNAL_Run,this,[=](){
         if(openingFileName.isEmpty())
             return;
-        QFuture<void> ftr2 = QtConcurrent::run(RunC,openingFileName);
-        ftr2.waitForFinished();
+
+        RunC(openingFileName);
     });
 
     //撤销
@@ -601,9 +609,16 @@ void MainWindow::Func_MenuBar(){
 void MainWindow::CompileC(QString filename){
     //文件不存在
     if(!QFileInfo(filename).exists()){
+        QMessageBox::warning(this,"警告",filename + " 文件不存在");
         return;
     }
-
+    //文件不是C/C++
+    QString suf = QFileInfo(filename).suffix();
+    suf = suf.toLower();
+    if(suf.compare("c") == 0 || suf.compare("c++") == 0 || suf.compare("cpp") == 0){
+        QMessageBox::warning(this,"警告",filename + " 文件不是c,c++,cpp文件");
+        return;
+    }
 
     //用指针形式
     QProcess *p = new QProcess;
@@ -615,7 +630,7 @@ void MainWindow::CompileC(QString filename){
     //qDebug() << "——————————————————";
     //qDebug() << QString::fromLocal8Bit(p->readAllStandardOutput());
     if(!QFileInfo(filename.mid(0,filename.lastIndexOf(".")) + ".exe").exists()){
-        QMessageBox::critical(nullptr,"编译错误","请检查是否安装了MINGW");
+        QMessageBox::critical(this,"编译错误","请检查是否安装了MINGW");
         return;
     }
 
@@ -627,7 +642,7 @@ void MainWindow::RunC(QString filename){
     //文件不存在
     filename = filename.mid(0,filename.lastIndexOf(".")) + ".exe";
     if(!QFileInfo(filename).exists()){
-        QMessageBox::warning(nullptr,"警告","程序未编译");
+        QMessageBox::warning(this,"警告","程序未编译");
         return;
     }
 
@@ -643,11 +658,13 @@ QWidget* MainWindow::CreateEditText(QString filename){
         return TempWidget;
     }
     //新建页
+
+
     openedFileNames->append(filename);
 
     //设置工作中editor,用于搜索等功能获取
     Editor *editor = new Editor();
-    connect(this,&MainWindow::SIGNAL_FoldCurrent,editor,&Editor::FoldCurrent);
+
 
     //设置工作中editor
     workingEditor=editor;
@@ -692,6 +709,12 @@ QWidget* MainWindow::CreateEditText(QString filename){
             editor->isChanged = true;
         }
     });
+    //防止searchwindow未替换
+
+    if(searchWindow!=NULL)
+    {
+        searchWindow->setEditor((Editor *)ui->tabWgtEditArea->currentWidget());
+    }
     return  ui->tabWgtEditArea->currentWidget();
 }
 
@@ -712,6 +735,33 @@ void MainWindow::TempTabToPermTab(){
         ui->tabWgtEditArea->setCurrentIndex(openedFileNames->indexOf(filePath));
         TempWidget = NULL;
     }
+}
+
+
+///获取UI的控件
+//获取tabWgtEditArea
+QTabWidget* MainWindow::GettabWgtEditArea(){
+    return  ui->tabWgtEditArea;
+}
+//获取tabWgtResArea
+QTabWidget* MainWindow::GettabWgtResArea(){
+    return  ui->tabWgtResArea;
+}
+//获取menubar
+QMenuBar* MainWindow::Getmenubar(){
+    return  ui->menubar;
+}
+//获取gBoxFileMgr
+QDockWidget* MainWindow::GetgBoxFileMgr(){
+    return  ui->gBoxFileMgr;
+}
+//获取statusbarTips
+QStatusBar* MainWindow::GetstatusbarTips(){
+    return ui->statusbarTips;
+}
+//获取toolBar
+QToolBar* MainWindow::GettoolBar(){
+    return ui->toolBar;
 }
 
 MainWindow* MainWindow::m_pInstance = NULL;

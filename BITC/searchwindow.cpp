@@ -3,7 +3,6 @@
 #include <QLineEdit>
 #include "mainwindow.h"
 #include <QMouseEvent>
-#include <QDebug>
 SearchWindow::SearchWindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SearchWindow)
@@ -20,7 +19,6 @@ SearchWindow::SearchWindow(QWidget *parent) :
     connect(ui->btnFindPrivious,&QPushButton::clicked,this,&SearchWindow::on_btnFindPrivious_clicked);
     connect(ui->btnReplace,&QPushButton::clicked,this,&SearchWindow::on_btnReplace_clicked);
     connect(ui->btnFind,&QPushButton::clicked,this,&SearchWindow::on_btnFind_clicked);
-    this->ui->lineEdit->setFocus();
 
 }
 SearchWindow::~SearchWindow()
@@ -66,6 +64,16 @@ void SearchWindow::on_btnReplace_clicked()
 }
 void SearchWindow::setEditor(Editor *editor_far)//设置editor,连接槽函数
 {
+    if(this->editor!=NULL){
+        disconnect(this,&SearchWindow::SIGNAL_FindNext,editor_far,&Editor::SLOT_FindKeywords);
+        disconnect(this,&SearchWindow::SIGNAL_FindWhole,editor_far,&Editor::SLOT_FindWhole);
+        disconnect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::SLOT_FindPrivious);
+        disconnect(this,&SearchWindow::SIGNAL_ReplaceNext,editor_far,&Editor::SLOT_ReplaceKeywords);
+        disconnect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
+        disconnect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);
+        disconnect(this,&SearchWindow::SIGNAL_Exit,editor_far,&Editor::SLOT_SearchEnd);
+        disconnect(ui->btnReplace,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
+    }
     this->editor=editor_far;
     //connect(this,&SearchWindow::on_btnFindNext_clicked,this,&SearchWindow::BtnFindNextClicked);//this->editor,&Editor::SLOT_FindKeywords
     connect(this,&SearchWindow::SIGNAL_FindNext,editor_far,&Editor::SLOT_FindKeywords);
@@ -75,7 +83,6 @@ void SearchWindow::setEditor(Editor *editor_far)//设置editor,连接槽函数
     connect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
     connect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);
     connect(this,&SearchWindow::SIGNAL_Exit,editor_far,&Editor::SLOT_SearchEnd);
-    //connect(ui->btnFind,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
     connect(ui->btnReplace,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
 }
 void SearchWindow::on_btnFindWhole_clicked()//找所有的
@@ -127,13 +134,11 @@ void SearchWindow::mousePressEvent(QMouseEvent *ev)
 void SearchWindow::keyPressEvent(QKeyEvent *event)
 {
     searchtext=ui->lineEdit->text();
-    if( event ->key() == Qt::Key_Return){
-        qDebug()<<"receive Signal key_enter";
+
+    if( event ->key() == Qt::Key_Enter){
         emit SIGNAL_FindNext(searchtext);
     }
-    if(event->modifiers()==Qt::ControlModifier&&event->key()==Qt::Key_F){
-        delete(this);
-    }
+
 }
 void SearchWindow::showWithText(QString text)
 {
