@@ -27,7 +27,8 @@ SOURCES += \
     mainwindow.cpp \
     searchwindow.cpp \
     toolboxchild.cpp \
-    gcccheck.cpp
+    gcccheck.cpp \
+    uiinterface.cpp
 
 HEADERS += \
     FileMgr.h \
@@ -41,7 +42,8 @@ HEADERS += \
     searchwindow.h \
     toolboxchild.h \
     gcccheck.h \
-    type.h
+    type.h \
+    uiinterface.h
 
 FORMS += \
     FileMgr.ui \
@@ -57,5 +59,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
+    UIImages.qrc \
     img.qrc \
     qss.qrc

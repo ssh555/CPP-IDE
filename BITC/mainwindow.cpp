@@ -505,9 +505,16 @@ void MainWindow::Func_MenuBar(){
 void MainWindow::CompileC(QString filename){
     //文件不存在
     if(!QFileInfo(filename).exists()){
+        QMessageBox::warning(this,"警告",filename + " 文件不存在");
         return;
     }
-
+    //文件不是C/C++
+    QString suf = QFileInfo(filename).suffix();
+    suf = suf.toLower();
+    if(suf.compare("c") == 0 || suf.compare("c++") == 0 || suf.compare("cpp") == 0){
+        QMessageBox::warning(this,"警告",filename + " 文件不是c,c++,cpp文件");
+        return;
+    }
 
     //用指针形式
     QProcess *p = new QProcess;
@@ -623,6 +630,33 @@ void MainWindow::TempTabToPermTab(){
         ui->tabWgtEditArea->setCurrentIndex(openedFileNames->indexOf(filePath));
         TempWidget = NULL;
     }
+}
+
+
+///获取UI的控件
+//获取tabWgtEditArea
+QTabWidget* MainWindow::GettabWgtEditArea(){
+    return  ui->tabWgtEditArea;
+}
+//获取tabWgtResArea
+QTabWidget* MainWindow::GettabWgtResArea(){
+    return  ui->tabWgtResArea;
+}
+//获取menubar
+QMenuBar* MainWindow::Getmenubar(){
+    return  ui->menubar;
+}
+//获取gBoxFileMgr
+QDockWidget* MainWindow::GetgBoxFileMgr(){
+    return  ui->gBoxFileMgr;
+}
+//获取statusbarTips
+QStatusBar* MainWindow::GetstatusbarTips(){
+    return ui->statusbarTips;
+}
+//获取toolBar
+QToolBar* MainWindow::GettoolBar(){
+    return ui->toolBar;
 }
 
 MainWindow* MainWindow::m_pInstance = NULL;
