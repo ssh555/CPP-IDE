@@ -16,6 +16,7 @@ void gccCheck::gccCheckAndInstall(){
     if(cmdoutput.startsWith("gcc")){
         return;
     }
+    cmdprocess.start("cmd", QStringList()<<"/c"<<"https://osdn.net/projects/mingw/downloads/68260/mingw-get-setup.exe/");
     QString str=QFileDialog::getExistingDirectory(this,"mingw安装地址");
     cmdprocess.start("cmd", QStringList()<<"/c"<<"set path="<<str);
 }
