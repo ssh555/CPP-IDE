@@ -247,6 +247,7 @@ void Editor::focusInEvent(QFocusEvent *e)
 
 void Editor::keyPressEvent(QKeyEvent *e)
 {
+
     if (c && c->popup()->isVisible()) {
         // The following keys are forwarded by the completer to the widget
         switch (e->key()) {
