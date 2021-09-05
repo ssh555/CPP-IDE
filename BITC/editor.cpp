@@ -436,23 +436,23 @@ void Editor::SLOT_ChangeLineNum(int num){
 void Editor::FoldCurrent(){
 
     QTextBlock currentBlock=document()->findBlockByLineNumber(this->textCursor().blockNumber());
-    int begin=0;
+    int state=0;//0->进行折叠,1->展开
+    qDebug()<<currentBlock.userState();
+    if(currentBlock.userState()&Begin){
+        state=1;//如果已折叠,将模式改为展开
+        currentBlock.setUserState(currentBlock.userState()&!Begin);//去掉begin标记
+    }else{
+        currentBlock.setUserState(currentBlock.userState()|Begin);//设置为折叠开头
+    }
+
+    int begin=this->textCursor().blockNumber();
     int end=0;
     QString texttemp;
-    while(currentBlock.previous().isValid())
-    {
-        texttemp=currentBlock.previous().text();
-        if(texttemp.contains("{")){//找到了
-            begin=currentBlock.blockNumber()-1;
-            break;
-        }else{
-            currentBlock=currentBlock.previous();
-        }
-    }
+
     int nextNum=1;
     while(currentBlock.next().isValid())
     {
-        texttemp=currentBlock.next().text();
+        texttemp=currentBlock.next().text(); qDebug()<<texttemp;
         if(texttemp.contains("{")){//又有一层
             nextNum++;//多一层
 
@@ -464,11 +464,24 @@ void Editor::FoldCurrent(){
             }
         }//啥都没找到
           currentBlock=currentBlock.next();
+    }
+    QTextBlock blktemp;
+    qDebug()<<"state"<<state;
+    if(!state){//如果未折叠
+        for(int i=begin+1;i<end;i++){
+            blktemp=document()->findBlockByNumber(i);
+            blktemp.setVisible(false);
+            blktemp.setUserState((blktemp.userState())|Folded);
+        }
+    }else{
+        for(int i=begin+1;i<end;i++){
+            blktemp=document()->findBlockByNumber(i);
+            qDebug()<<"i"<<i<<"blktext"<<blktemp.text();
+            blktemp.setVisible(true);
+            blktemp.setUserState((blktemp.userState())&!Folded);//去掉Folded标记
+        }
+    }
 
-    }
-    for(int i=begin+1;i<end;i++){
-        document()->findBlockByLineNumber(i).setVisible(false);
-    }
 
 
     resizeEvent(new QResizeEvent(QSize(0, 0), size()));
@@ -528,11 +541,14 @@ void Editor::toggleComment()
 
 }
 void Editor::mouseDoubleClickEvent(QMouseEvent *e){
-    QPoint p=e->pos();
     QTextBlock b=document()->findBlockByLineNumber(this->textCursor().blockNumber());
-    if(b.userState()==Debug)b.setUserState(0);
-    else b.setUserState(Debug);//把它的状态改成debug
+    //首先判断这次双击是不是为了折叠代码
 
+    if(b.text().contains('{')&&b.userState()!=Begin){
+        this->FoldCurrent();
+    }
+    else if(b.userState()&Debug)b.setUserState(b.userState()&!Debug);//把debug状态去掉
+    else b.setUserState(b.userState()|Debug);//把它的状态增加一个debug
 }
 void Editor::Set_Mode(editorMode mode)
 {
