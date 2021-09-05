@@ -1,9 +1,9 @@
 QT       += core gui
-
+QT += concurrent
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
-
+#CONFIG += console
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -27,8 +27,7 @@ SOURCES += \
     mainwindow.cpp \
     searchwindow.cpp \
     toolboxchild.cpp \
-    gcccheck.cpp \
-    uiinterface.cpp
+    gcccheck.cpp
 
 HEADERS += \
     FileMgr.h \
@@ -42,8 +41,7 @@ HEADERS += \
     searchwindow.h \
     toolboxchild.h \
     gcccheck.h \
-    type.h \
-    uiinterface.h
+    type.h
 
 FORMS += \
     FileMgr.ui \
@@ -59,6 +57,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    UIImages.qrc \
     img.qrc \
     qss.qrc
+
