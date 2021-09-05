@@ -5,7 +5,14 @@
         <file>resources/UIImages/Debug.png</file>
         <file>resources/UIImages/Redo.png</file>
         <file>resources/UIImages/Restore.png</file>
+        <file>resources/UIImages/CloseAllTab.png</file>
+        <file>resources/UIImages/Find.png</file>
+        <file>resources/UIImages/New.png</file>
+        <file>resources/UIImages/OpenFolder.png</file>
+        <file>resources/UIImages/Replace.png</file>
+        <file>resources/UIImages/SaveAs.png</file>
         <file>resources/UIImages/Run.png</file>
         <file>resources/UIImages/Save.png</file>
+        <file>resources/UIImages/OpenFile.png</file>
     </qresource>
 </RCC>

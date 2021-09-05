@@ -236,27 +236,66 @@
    <addaction name="actionRevocate"/>
    <addaction name="actionRestore"/>
    <addaction name="separator"/>
+   <addaction name="actionNewFile"/>
+   <addaction name="actionOpenFile"/>
+   <addaction name="actionOpenFolder"/>
    <addaction name="actionSave"/>
+   <addaction name="actionSaveAs"/>
    <addaction name="separator"/>
    <addaction name="actionCompile"/>
    <addaction name="actionRun"/>
    <addaction name="actionCompileRun"/>
    <addaction name="separator"/>
    <addaction name="actionDebug"/>
+   <addaction name="separator"/>
+   <addaction name="actionFind"/>
+   <addaction name="actionReplace"/>
+   <addaction name="separator"/>
+   <addaction name="actionCloseAll"/>
   </widget>
   <action name="actionNewFile">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/New.png</normaloff>:/resources/UIImages/New.png</iconset>
+   </property>
    <property name="text">
     <string>新建文件    CTRL+N</string>
    </property>
+   <property name="iconText">
+    <string>新建文件</string>
+   </property>
+   <property name="toolTip">
+    <string>新建文件</string>
+   </property>
   </action>
   <action name="actionOpenFile">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/OpenFile.png</normaloff>:/resources/UIImages/OpenFile.png</iconset>
+   </property>
    <property name="text">
     <string>打开文件    CTRL+O</string>
    </property>
+   <property name="iconText">
+    <string>打开文件</string>
+   </property>
+   <property name="toolTip">
+    <string>打开文件</string>
+   </property>
   </action>
   <action name="actionOpenFolder">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/OpenFolder.png</normaloff>:/resources/UIImages/OpenFolder.png</iconset>
+   </property>
    <property name="text">
     <string>打开文件夹 CTRL+ALT+O</string>
+   </property>
+   <property name="iconText">
+    <string>打开文件夹</string>
+   </property>
+   <property name="toolTip">
+    <string>打开文件夹</string>
    </property>
   </action>
   <action name="actionSave">
@@ -267,15 +306,41 @@
    <property name="text">
     <string>保存           CTRL+S</string>
    </property>
+   <property name="iconText">
+    <string>保存</string>
+   </property>
+   <property name="toolTip">
+    <string>保存</string>
+   </property>
   </action>
   <action name="actionSaveAs">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/SaveAs.png</normaloff>:/resources/UIImages/SaveAs.png</iconset>
+   </property>
    <property name="text">
     <string>另存为        CTRL+SHIFT+S</string>
    </property>
+   <property name="iconText">
+    <string>另存为</string>
+   </property>
+   <property name="toolTip">
+    <string>另存为</string>
+   </property>
   </action>
   <action name="actionCloseAll">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/CloseAllTab.png</normaloff>:/resources/UIImages/CloseAllTab.png</iconset>
+   </property>
    <property name="text">
     <string>关闭所有    CTRL+W</string>
+   </property>
+   <property name="iconText">
+    <string>关闭所有</string>
+   </property>
+   <property name="toolTip">
+    <string>关闭所有</string>
    </property>
   </action>
   <action name="actionRevocate">
@@ -286,6 +351,15 @@
    <property name="text">
     <string>撤销          CTRL+Z</string>
    </property>
+   <property name="iconText">
+    <string>撤销</string>
+   </property>
+   <property name="toolTip">
+    <string>撤销</string>
+   </property>
+   <property name="statusTip">
+    <string extracomment=" "/>
+   </property>
   </action>
   <action name="actionRestore">
    <property name="icon">
@@ -294,6 +368,12 @@
    </property>
    <property name="text">
     <string>恢复          CTRL+Y</string>
+   </property>
+   <property name="iconText">
+    <string>恢复</string>
+   </property>
+   <property name="toolTip">
+    <string>恢复 </string>
    </property>
   </action>
   <action name="actionShear">
@@ -312,13 +392,33 @@
    </property>
   </action>
   <action name="actionFind">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/Find.png</normaloff>:/resources/UIImages/Find.png</iconset>
+   </property>
    <property name="text">
     <string>查找          CTRL+F</string>
    </property>
+   <property name="iconText">
+    <string>查找</string>
+   </property>
+   <property name="toolTip">
+    <string>查找</string>
+   </property>
   </action>
   <action name="actionReplace">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/Replace.png</normaloff>:/resources/UIImages/Replace.png</iconset>
+   </property>
    <property name="text">
     <string>替换          CTRL+R</string>
+   </property>
+   <property name="iconText">
+    <string>替换</string>
+   </property>
+   <property name="toolTip">
+    <string>替换</string>
    </property>
   </action>
   <action name="action_7">
@@ -334,6 +434,12 @@
    <property name="text">
     <string>编译          CTRL+B</string>
    </property>
+   <property name="iconText">
+    <string>编译</string>
+   </property>
+   <property name="toolTip">
+    <string>编译</string>
+   </property>
   </action>
   <action name="actionRun">
    <property name="icon">
@@ -343,6 +449,12 @@
    <property name="text">
     <string>运行          CTRL+R</string>
    </property>
+   <property name="iconText">
+    <string>运行</string>
+   </property>
+   <property name="toolTip">
+    <string>运行</string>
+   </property>
   </action>
   <action name="actionCompileRun">
    <property name="icon">
@@ -351,6 +463,12 @@
    </property>
    <property name="text">
     <string>编译运行   CTRL+ALT+N</string>
+   </property>
+   <property name="iconText">
+    <string>编译运行</string>
+   </property>
+   <property name="toolTip">
+    <string>编译运行</string>
    </property>
   </action>
   <action name="actionDebug">

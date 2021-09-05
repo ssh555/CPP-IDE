@@ -522,7 +522,7 @@ void Editor::FoldCurrent(){
           currentBlock=currentBlock.next();
     }
     QTextBlock blktemp;
-    qDebug()<<"state"<<state;
+    //qDebug()<<"state"<<state;
     if(!state){//如果未折叠
         for(int i=begin+1;i<end;i++){
             blktemp=document()->findBlockByNumber(i);
