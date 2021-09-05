@@ -53,6 +53,7 @@ public:
     };
     const static int StateShift = 8;//切换模式
     bool FindAllState=false;//用来观测有没有进行全局查看
+    QTextCharFormat *plainFormat;//保存基础字体
 public :signals:
     void SIGNAL_ChangeCodeStyle();
 
@@ -64,7 +65,7 @@ protected:
     void focusInEvent(QFocusEvent *e) override;
 public slots:
     bool SLOT_FindKeywords(QString keyword);
-    void SLOT_FindWhole(QString keyword);
+    bool SLOT_FindWhole(QString keyword);
     bool SLOT_FindPrivious(QString keyword);
     bool SLOT_ReplaceKeywords(QString keyword,QString replaceword);
     void SLOT_ReplaceWhole(QString keyword,QString replaceword);

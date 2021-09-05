@@ -26,7 +26,8 @@ void Editor::Init()
     //设置高亮
     highlighter = new Highlighter(this->document());
     highlighter->Start_Highlight();
-
+    QTextCursor highlightCursor(document());
+    plainFormat=new QTextCharFormat(highlightCursor.charFormat());
 
 }
 
@@ -72,58 +73,24 @@ bool Editor::SLOT_ReplacePrivious(QString findword,QString replaceword)//替换�
     setTextCursor(cursor);
     return true;
 }
-void Editor::SLOT_FindWhole(QString keyword)//寻找关键字
+bool Editor::SLOT_FindWhole(QString keyword)//寻找关键字
 {
-
-    bool found = false;
-    QTextDocument *document = this->document();
-    // undo previous change (if any)
-    document->undo();
-
-    if (keyword.isEmpty()) {
-        QMessageBox::information(this, tr("输入为空"),
-                                 tr("输入不能为空 "
-                                    "请输点东西吧"));
-    } else {
-        QTextCursor highlightCursor(document);
-        QTextCursor cursor(document);
-
-        cursor.beginEditBlock();
-
-
-        QTextCharFormat plainFormat(highlightCursor.charFormat());
-        colorFormat = plainFormat;
-        colorFormat.setForeground(Qt::red);
-        colorFormat.setBackground(Qt::yellow);
-        while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
-            highlightCursor = document->find(keyword, highlightCursor);
-
-            if (!highlightCursor.isNull()) {
-                found = true;
-                //qDebug()<<keyword.size();
-                highlightCursor.movePosition(QTextCursor::NoMove,
-                                             QTextCursor::KeepAnchor,keyword.size());
-                highlightCursor.mergeCharFormat(colorFormat);
-            }
-        }
-
-        cursor.endEditBlock();
-
-        if (found == false) {
-            QMessageBox::information(this, tr("Word Not Found"),
-                                     tr("Sorry, the word cannot be found."));
-        }
-        FindAllState=true;
+    QTextCursor cursor = QTextCursor(this->document()->begin());
+    cursor = document()->find(keyword, cursor);
+    if(cursor.isNull()){
+        return false;
     }
+    setTextCursor(cursor);
+    return true;
 }
 void Editor::SLOT_SearchEnd()
 {
     //查询结束,把之前换的颜色换回去
-    if(FindAllState==true){
-            QTextDocument *document = this->document();
-            // undo previous change (if any)
-            document->undo();
-    }
+//    if(FindAllState==true){
+//            QTextDocument *document = this->document();
+//            // undo previous change (if any)
+//            document->undo();
+//    }
 
 }
 void Editor::FoldUnfoldAll(bool folding)//折叠代码
@@ -152,12 +119,6 @@ void Editor::ChangeCodeStyle(){
     Config::GetInstance()->ChangeCodeStyle();
     highlighter = new Highlighter(this->document());
     highlighter->Start_Highlight();
-
-    /*test*/
-    QTextBlock currentBlock = document()->begin();
-    currentBlock.setUserState(Begin);
-    FoldUnfoldAll(true);
-
 }
 
 void Editor::FoldUnfold(QTextBlock &block)

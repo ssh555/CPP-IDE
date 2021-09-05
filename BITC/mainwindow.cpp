@@ -139,12 +139,6 @@ void MainWindow::closeEvent(QCloseEvent *){
     }
 }
 
-//void MainWindow::resizeEvent(QResizeEvent* event)
-//{
-//    QMainWindow::resizeEvent(event);
-//    // Your code here
-//    tBoxFolderMgr->Size_Changed();
-//}
 
 //获取C文件绝对路径的文件名.
 QString MainWindow::GetCFileName(QString filename){
@@ -186,6 +180,7 @@ void MainWindow::AddTextEditToEditArea(QString filename,bool isTemp){
         if(TempWidget == NULL){
             TempWidget = CreateEditText(filename);
             Editor *t = (Editor*)TempWidget;
+            this->workingEditor=t;
             connect(t,&QPlainTextEdit::textChanged,TempWidget,[=](){
                 if(ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(TempWidget)).contains("(未保存)")){
                     TempTabToPermTab();
@@ -355,7 +350,7 @@ void MainWindow::Func_MenuBar(){
                 Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
                 e->ChangeCodeStyle();
             }
-        emit(SIGNAL_FoldCurrent());
+
         workingEditor->isChanged=true;
 
     });
@@ -407,6 +402,7 @@ void MainWindow::Func_MenuBar(){
         }else
         {
             workingEditor->isChanged=false;
+            //searchWindow->setEditor(workingEditor);
             //新建搜索框,并初始化各槽函数
             searchWindow=new SearchWindow();
             searchWindow->setMinimumSize(682,152);
@@ -649,17 +645,6 @@ QWidget* MainWindow::CreateEditText(QString filename){
     //设置工作中editor,用于搜索等功能获取
     Editor *editor = new Editor();
     connect(this,&MainWindow::SIGNAL_FoldCurrent,editor,&Editor::FoldCurrent);
-//    connect(editor->document(),&QTextDocument::contentsChanged,this,[=](){
-//        qDebug()<<"changed";
-//    });
-    //    //创建QGridLayout,用于放置editor及相关组件
-
-    //    editorLayout=new QGridLayout(ui->tabWgtEditArea);
-
-    //    editorLayout->addWidget(editor,0,0);
-    //    editorLayout->setRowStretch(0, 8);//设置行列比例系数
-    //    editorLayout->setRowStretch(1, 1);
-    //    editorLayout->setSpacing(10);//设置间距
 
     //设置工作中editor
     workingEditor=editor;

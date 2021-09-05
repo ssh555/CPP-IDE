@@ -3,6 +3,7 @@
 #include <QLineEdit>
 #include "mainwindow.h"
 #include <QMouseEvent>
+#include <QDebug>
 SearchWindow::SearchWindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SearchWindow)
@@ -19,6 +20,7 @@ SearchWindow::SearchWindow(QWidget *parent) :
     connect(ui->btnFindPrivious,&QPushButton::clicked,this,&SearchWindow::on_btnFindPrivious_clicked);
     connect(ui->btnReplace,&QPushButton::clicked,this,&SearchWindow::on_btnReplace_clicked);
     connect(ui->btnFind,&QPushButton::clicked,this,&SearchWindow::on_btnFind_clicked);
+    this->ui->lineEdit->setFocus();
 
 }
 SearchWindow::~SearchWindow()
@@ -113,11 +115,7 @@ void SearchWindow::on_btnCancel_clicked()//关掉,统统关掉
     this->close();
 }
 
-void SearchWindow::on_btnExit_clicked()
-{
-    emit(SIGNAL_Exit());
-    this->close();
-}
+
 //获取鼠标的按下操作
 //用于移动
 void SearchWindow::mousePressEvent(QMouseEvent *ev)
@@ -129,11 +127,13 @@ void SearchWindow::mousePressEvent(QMouseEvent *ev)
 void SearchWindow::keyPressEvent(QKeyEvent *event)
 {
     searchtext=ui->lineEdit->text();
-
-    if( event ->key() == Qt::Key_Enter){
+    if( event ->key() == Qt::Key_Return){
+        qDebug()<<"receive Signal key_enter";
         emit SIGNAL_FindNext(searchtext);
     }
-
+    if(event->modifiers()==Qt::ControlModifier&&event->key()==Qt::Key_F){
+        delete(this);
+    }
 }
 void SearchWindow::showWithText(QString text)
 {

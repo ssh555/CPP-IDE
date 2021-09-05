@@ -50,13 +50,9 @@ private slots:
 
     void on_btnCancel_clicked();
 
-    void on_btnExit_clicked();
-
     void on_btnFindWhole_clicked();
 
     void on_btnFindPrivious_clicked();
-
-
 
     void on_btnFind_clicked();
 private:
