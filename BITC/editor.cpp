@@ -131,10 +131,7 @@ void Editor::ChangeCodeStyle(){
     highlighter = new Highlighter(this->document());
     highlighter->Start_Highlight();
 
-    /*test*/
-    QTextBlock currentBlock = document()->begin();
-    currentBlock.setUserState(Begin);
-    FoldUnfoldAll(true);
+
 
 }
 
@@ -449,65 +446,37 @@ void Editor::FoldCurrent(){
 
     QTextBlock currentBlock=document()->findBlockByLineNumber(this->textCursor().blockNumber());
     int state=0;//0->进行折叠,1->展开
-    qDebug()<<currentBlock.userState();
+    int nextNum=CountLeftKuohao(currentBlock);
     if(currentBlock.userState()&Begin){
         state=1;//如果已折叠,将模式改为展开
         currentBlock.setUserState(currentBlock.userState()&!Begin);//去掉begin标记
     }else{
+        if(nextNum<=0){//如果该行左括号数量小等于右括号
+            return;
+        }
         currentBlock.setUserState(currentBlock.userState()|Begin);//设置为折叠开头
     }
 
     int begin=this->textCursor().blockNumber();
     int end=0;
     QString texttemp;
-    int nextNum=0;
-
-    texttemp=currentBlock.text();
-    foreach(QChar qc,texttemp)
-    {
-        if(qc=="{")
-        nextNum++;
-    }
-    qDebug()<<"当前行"<<texttemp<<nextNum;
-
     while(currentBlock.next().isValid())
     {
-        texttemp=currentBlock.next().text(); qDebug()<<texttemp;
-        if(texttemp.contains("{")){//又有一层
-            foreach(QChar qc,texttemp)
-            {
-                if(qc=="{")
-                nextNum++;//多一层
-            }
-        }
-        qDebug()<<"继续找{"<<nextNum<<texttemp;
-        if(texttemp.contains("}"))
-        {
-            foreach(QChar qc,texttemp)
-            {
-                if(qc=="}")
-                nextNum--;
-                if(nextNum==0) break;
-            }
-            qDebug()<<"继续找}"<<nextNum<<texttemp;
-            if(nextNum==0)
-            {//索引成功
+        nextNum=nextNum+CountLeftKuohao(currentBlock.next());
+            if(nextNum<=0){//索引成功
                 end=currentBlock.blockNumber()+1;
                 break;
             }
-        }
         //啥都没找到
-          currentBlock=currentBlock.next();
+        currentBlock=currentBlock.next();
     }
     QTextBlock blktemp;
-    //qDebug()<<"state"<<state;
     if(!state){//如果未折叠
         for(int i=begin+1;i<end;i++){
             blktemp=document()->findBlockByNumber(i);
             blktemp.setVisible(false);
             blktemp.setUserState((blktemp.userState())|Folded);
-        }
-    }else{
+        }    }else{
         for(int i=begin+1;i<end;i++){
             blktemp=document()->findBlockByNumber(i);
             qDebug()<<"i"<<i<<"blktext"<<blktemp.text();
@@ -515,9 +484,9 @@ void Editor::FoldCurrent(){
             blktemp.setUserState((blktemp.userState())&!Folded);//去掉Folded标记
         }
     }
+
     resizeEvent(new QResizeEvent(QSize(0, 0), size()));
 }
-
 int Editor::CountLeftKuohao(QTextBlock block)
 {
     QString text=block.text();
