@@ -14,9 +14,22 @@ class UIInterface : public QObject
 {
     Q_OBJECT
 public:
-    explicit UIInterface(QObject *parent = nullptr);
+
+    static UIInterface* Instance()
+    {
+        if (m_pInstance == NULL)
+        {
+            m_pInstance = new UIInterface();
+        }
+        return m_pInstance;
+    }
+
+
 
 private:
+    explicit UIInterface(QObject *parent = nullptr);
+    static UIInterface* m_pInstance;
+
     //总窗口MainWidget
     MainWindow* mainWindow = MainWindow::Instance();
     //总的编辑区的TABWIDHET

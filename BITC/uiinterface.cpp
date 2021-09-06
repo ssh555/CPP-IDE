@@ -36,3 +36,5 @@ void UIInterface::SetToolBar(){
 void UIInterface::SetStatusBarTips(){
 
 }
+
+UIInterface* UIInterface::m_pInstance = NULL;
