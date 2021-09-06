@@ -58,8 +58,9 @@ public:
     bool FindAllState=false;//用来观测有没有进行全局查看
 public :signals:
     void SIGNAL_ChangeCodeStyle();
-
+    void SIGNAL_ChangeFont(bool flag);
 protected:
+    void wheelEvent(QWheelEvent *e) override;
     void FoldUnfold(QTextBlock &block);
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     void Refresh_Text();

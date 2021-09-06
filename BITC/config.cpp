@@ -15,15 +15,17 @@ void Config::printChild()
 int Config::init()
 {
     setting = new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
-    if (setting->value("HaveRead").toString()=="2")return 1;//这时候已经初始化好了
+    if (setting->value("HaveRead").toString()=="1")return 1;//这时候已经初始化好了
     if(!(readSetting=new QSettings(":/resources/config.ini",QSettings::IniFormat)))
     {
         return 0;//读取失败
     }else {
         //开始读取设置
-        setting->setValue("HaveRead",2);
+        setting->setValue("HaveRead",1);
         //支持中文
         setting->setIniCodec(QTextCodec::codecForName("utf-8"));
+        //初始化字体
+        setting->setValue("editorfontsize",12);
         //初始化color组
         readSetting->beginGroup("colorgroup1");
         setting->beginGroup("colorgroup1");
@@ -70,20 +72,16 @@ int Config::init()
         setting->sync();
         setting->endGroup();
         readSetting->endGroup();
-        ChangeCodeStyle();
+        ChangeCodeStyle(1);
         return 1;
     }//读取成功
 
 }
-void Config::ChangeCodeStyle(){//改代码风格
+void Config::ChangeCodeStyle(int flag){//改代码风格
 
     QString *GroupName=new QString("colorgroup");
-    int CodeStyleNum=setting->value("codeStyle").toString().toUInt();
-
-//    setting->setValue("codeStyle",(CodeStyleNum+1)%3);
-//    setting->setValue("codeStyle",CodeStyleNum);
     QString *CodeStylebf=new QString();//就是换一个colorgroup
-    CodeStylebf->setNum((CodeStyleNum+1)%3+1);
+    CodeStylebf->setNum(flag);
     GroupName->append(CodeStylebf);
     GroupName->append('/');
     setting->setValue("expFunctioncolor",setting->value(*GroupName+"expFunctioncolor"));

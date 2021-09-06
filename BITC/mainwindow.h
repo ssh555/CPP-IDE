@@ -10,6 +10,8 @@
 
 #include <QCloseEvent>
 
+#include <QDebug>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -35,6 +37,7 @@ public:
         {
             m_pInstance = new MainWindow();
         }
+        qDebug() << m_pInstance;
         return m_pInstance;
     }
 
@@ -51,7 +54,8 @@ public:
     QStatusBar* GetstatusbarTips();
     //获取toolBar
     QToolBar* GettoolBar();
-
+    //打开历史文件
+    void OpenHistroyFile();
 protected:
     void closeEvent(QCloseEvent *) override;
 

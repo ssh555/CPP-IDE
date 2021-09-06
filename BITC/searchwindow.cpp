@@ -155,6 +155,5 @@ void SearchWindow::mouseMoveEvent(QMouseEvent *ev)
         QPoint ptDelta = ptMouseNow - this->posMouseOrigin;
         move(this->pos() + ptDelta); posMouseOrigin = ptMouseNow;
     }
-
 }
 

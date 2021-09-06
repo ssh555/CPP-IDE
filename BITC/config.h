@@ -23,7 +23,7 @@ public:
         }
         return config_Instance;
     }
-    void ChangeCodeStyle();
+    void ChangeCodeStyle(int flag);
 public slots:
 
     void reconfig(int receiver) { emit reread(receiver);}

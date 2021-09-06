@@ -158,6 +158,7 @@
     <addaction name="actionFind"/>
     <addaction name="actionReplace"/>
     <addaction name="separator"/>
+    <addaction name="actionquickJump_2"/>
    </widget>
    <widget class="QMenu" name="menuSelect">
     <property name="title">
@@ -515,7 +516,17 @@
   </action>
   <action name="actioncodeStyle">
    <property name="text">
-    <string>代码风格</string>
+    <string>整体设置</string>
+   </property>
+  </action>
+  <action name="actionquickJump">
+   <property name="text">
+    <string>快速跳转</string>
+   </property>
+  </action>
+  <action name="actionquickJump_2">
+   <property name="text">
+    <string>快速跳转</string>
    </property>
   </action>
  </widget>

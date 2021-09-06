@@ -5,6 +5,7 @@
 #include "config.h"
 #include "highlighter.h"
 #include "config.h"
+#include "uiinterface.h"
 Editor::Editor(QWidget *parent) : QPlainTextEdit(parent)
 {
     this->Init();
@@ -18,7 +19,9 @@ void Editor::Init()
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_HighlightCurrentLine()));
 
     //改了个可爱的字体
-    this->setFont(QFont("Consolas",12));
+    QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    int fontsize=setting->value("editorfontsize").toUInt();
+    this->setFont(QFont("Consolas",fontsize));
     SLOT_UpdateLineNumberAreaWidth(0);
     int fontWidth = QFontMetrics(this->currentCharFormat().font()).averageCharWidth();
     this->setTabStopDistance( 3 * fontWidth );
@@ -29,7 +32,89 @@ void Editor::Init()
 
 
 }
+void Editor::mouseDoubleClickEvent(QMouseEvent *){
+    QTextBlock b=document()->findBlockByNumber(this->textCursor().blockNumber());
+    //首先判断这次双击是不是为了折叠代码
+    if(b.text().contains('{')&&(b.userState()&Begin)){
+        this->FoldCurrent();
+    }
+    else if(b.userState()&Debug){
+        b.setUserState(b.userState()&!Debug);//把debug状态去掉
+        qDebug()<<b.userState();
+    }
 
+    else {
+        b.setUserState(b.userState()|Debug);//把它的状态增加一个debug
+        qDebug()<<b.userState();
+    }
+}
+void Editor::FoldCurrent(){
+
+    QTextBlock currentBlock=document()->findBlockByLineNumber(this->textCursor().blockNumber());
+    int state=0;//0->进行折叠,1->展开
+    int nextNum=CountLeftKuohao(currentBlock);
+    if(currentBlock.userState()&Begin){
+        state=1;//如果已折叠,将模式改为展开
+        currentBlock.setUserState(currentBlock.userState()&!Begin);//去掉begin标记
+    }else{
+        if(nextNum<=0){//如果该行左括号数量小等于右括号
+            return;
+        }
+        currentBlock.setUserState(currentBlock.userState()|Begin);//设置为折叠开头
+    }
+
+    int begin=this->textCursor().blockNumber();
+    int end=0;
+    QString texttemp;
+    while(currentBlock.next().isValid())
+    {
+        nextNum=nextNum+CountLeftKuohao(currentBlock.next());
+            if(nextNum<=0){//索引成功
+                end=currentBlock.blockNumber()+1;
+                break;
+            }
+        //啥都没找到
+        currentBlock=currentBlock.next();
+    }
+    QTextBlock blktemp;
+    if(!state){//如果未折叠
+        for(int i=begin+1;i<end;i++){
+            blktemp=document()->findBlockByNumber(i);
+            blktemp.setVisible(false);
+            blktemp.setUserState((blktemp.userState())|Folded);
+            qDebug()<<blktemp.userState();
+        }    }else{
+        for(int i=begin+1;i<end;i++){
+            blktemp=document()->findBlockByNumber(i);
+            qDebug()<<"i"<<i<<"blktext"<<blktemp.text();
+            blktemp.setVisible(true);
+            blktemp.setUserState((blktemp.userState())&!Folded);//去掉Folded标记
+            qDebug()<<blktemp.userState();
+        }
+    }
+
+    resizeEvent(new QResizeEvent(QSize(0, 0), size()));
+}
+
+void Editor::wheelEvent(QWheelEvent *e)
+{
+    if(e->modifiers() == Qt::ControlModifier) {
+        if(e->delta() > 0){                    // 当滚轮远离使用者时
+               emit(SIGNAL_ChangeFont(true));               // 进行放大
+           }else{                                     // 当滚轮向使用者方向旋转时
+               emit(SIGNAL_ChangeFont(false));               // 进行缩小
+           }
+    }else{
+        QTextCursor cursor = textCursor();
+        if(e->delta() > 0){                    // 当滚轮远离使用者时
+               cursor.movePosition(QTextCursor::Up,QTextCursor::MoveAnchor,1);
+
+           }else{                                     // 当滚轮向使用者方向旋转时
+               cursor.movePosition(QTextCursor::Down,QTextCursor::MoveAnchor,1);             // 进行缩小
+           }
+        this->setTextCursor(cursor);
+    }
+}
 void Editor::SLOT_ReplaceWhole(QString findword,QString replaceword)
 {
     QTextCursor cursor = textCursor();
@@ -127,12 +212,9 @@ void Editor::FoldUnfoldAll(bool folding)//折叠代码
 }
 
 void Editor::ChangeCodeStyle(){
-    Config::GetInstance()->ChangeCodeStyle();
+
     highlighter = new Highlighter(this->document());
     highlighter->Start_Highlight();
-
-
-
 }
 
 void Editor::FoldUnfold(QTextBlock &block)
@@ -442,51 +524,7 @@ void Editor::SLOT_ChangeLineNum(int num){
     this->setTextCursor(QTextCursor(document()->findBlockByNumber(num-1)));
 }
 
-void Editor::FoldCurrent(){
 
-    QTextBlock currentBlock=document()->findBlockByLineNumber(this->textCursor().blockNumber());
-    int state=0;//0->进行折叠,1->展开
-    int nextNum=CountLeftKuohao(currentBlock);
-    if(currentBlock.userState()&Begin){
-        state=1;//如果已折叠,将模式改为展开
-        currentBlock.setUserState(currentBlock.userState()&!Begin);//去掉begin标记
-    }else{
-        if(nextNum<=0){//如果该行左括号数量小等于右括号
-            return;
-        }
-        currentBlock.setUserState(currentBlock.userState()|Begin);//设置为折叠开头
-    }
-
-    int begin=this->textCursor().blockNumber();
-    int end=0;
-    QString texttemp;
-    while(currentBlock.next().isValid())
-    {
-        nextNum=nextNum+CountLeftKuohao(currentBlock.next());
-            if(nextNum<=0){//索引成功
-                end=currentBlock.blockNumber()+1;
-                break;
-            }
-        //啥都没找到
-        currentBlock=currentBlock.next();
-    }
-    QTextBlock blktemp;
-    if(!state){//如果未折叠
-        for(int i=begin+1;i<end;i++){
-            blktemp=document()->findBlockByNumber(i);
-            blktemp.setVisible(false);
-            blktemp.setUserState((blktemp.userState())|Folded);
-        }    }else{
-        for(int i=begin+1;i<end;i++){
-            blktemp=document()->findBlockByNumber(i);
-            qDebug()<<"i"<<i<<"blktext"<<blktemp.text();
-            blktemp.setVisible(true);
-            blktemp.setUserState((blktemp.userState())&!Folded);//去掉Folded标记
-        }
-    }
-
-    resizeEvent(new QResizeEvent(QSize(0, 0), size()));
-}
 int Editor::CountLeftKuohao(QTextBlock block)
 {
     QString text=block.text();
@@ -550,15 +588,7 @@ void Editor::toggleComment()
 
 }
 
-void Editor::mouseDoubleClickEvent(QMouseEvent *){
-    QTextBlock b=document()->findBlockByLineNumber(this->textCursor().blockNumber());
-    //首先判断这次双击是不是为了折叠代码
-    if(b.text().contains('{')&&b.userState()!=Begin){
-        this->FoldCurrent();
-    }
-    else if(b.userState()&Debug)b.setUserState(b.userState()&!Debug);//把debug状态去掉
-    else b.setUserState(b.userState()|Debug);//把它的状态增加一个debug
-}
+
 
 void Editor::Set_Mode(editorMode mode)
 {
