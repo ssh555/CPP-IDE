@@ -11,6 +11,8 @@
 #include <QCloseEvent>
 #include <QTimer>
 
+#include <QDebug>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -54,6 +56,8 @@ public:
     QToolBar* GettoolBar();
     //设置自动保存信号
     void SetAutoSave(bool b);
+    //打开历史文件
+    void OpenHistroyFile();
 
 protected:
     void closeEvent(QCloseEvent *) override;

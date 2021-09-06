@@ -23,7 +23,8 @@ public:
         }
         return m_pInstance;
     }
-
+    //总的编辑区的TABWIDHET
+    QTabWidget* tabEditArea = MainWindow::Instance()->GettabWgtEditArea();
 
 
 private:
@@ -32,8 +33,7 @@ private:
 
     //总窗口MainWidget
     MainWindow* mainWindow = MainWindow::Instance();
-    //总的编辑区的TABWIDHET
-    QTabWidget* tabEditArea = MainWindow::Instance()->GettabWgtEditArea();
+
     //总的结果区
     QTabWidget* tabResArea = MainWindow::Instance()->GettabWgtResArea();
     //总的资源管理器
@@ -63,6 +63,8 @@ private:
 
 signals:
 
+public slots:
+    void SLOT_ChangeCodeFont(bool flag);
 };
 
 #endif // UIINTERFACE_H

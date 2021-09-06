@@ -28,6 +28,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     searchwindow.cpp \
+    settingwindow.cpp \
     toolboxchild.cpp \
     gcccheck.cpp \
     uiinterface.cpp \
@@ -43,6 +44,7 @@ HEADERS += \
     highlighter.h \
     mainwindow.h \
     searchwindow.h \
+    settingwindow.h \
     toolboxchild.h \
     gcccheck.h \
     type.h \
@@ -55,6 +57,7 @@ FORMS += \
     ToolPage.ui \
     mainwindow.ui \
     searchwindow.ui \
+    settingwindow.ui \
     toolboxchild.ui \
     debuger.ui
 

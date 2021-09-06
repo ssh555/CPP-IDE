@@ -10,5 +10,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName(QString("打架了找组长"));
     Config::GetInstance();//初始化设置
     MainWindow::Instance()->show();
+    MainWindow::Instance()->OpenHistroyFile();
     return a.exec();
 }

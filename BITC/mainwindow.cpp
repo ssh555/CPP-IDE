@@ -26,6 +26,8 @@
 #include <QtConcurrent>
 #include "debuger.h"
 #include <QElapsedTimer>
+#include "uiinterface.h"
+#include "settingwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -105,21 +107,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     /*测试代码*/
-    QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
-    setting->beginGroup("savedFileName");
-    QStringList settingList=setting->childKeys();
-    if(!settingList.isEmpty()){//不为空，就打开之前打开的文件
-        for (int i =0; i<settingList.length();i++){
-            QString filename = setting->value(settingList.at(i)).toString();
 
-            if(filename.isEmpty())
-                return ;
-            AddTextEditToEditArea(filename,TabTemp::Permanent);//非临时窗口
-        }
-    }
-
-
-    setting->endGroup();
     /*测试代码*/
 }
 
@@ -136,7 +124,21 @@ MainWindow::~MainWindow()
     delete ui;
     delete openedFileNames;
 }
+void MainWindow::OpenHistroyFile(){
+    QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    setting->beginGroup("savedFileName");
+    QStringList settingList=setting->childKeys();
+    if(!settingList.isEmpty()){//不为空，就打开之前打开的文件
+        for (int i =0; i<settingList.length();i++){
+            QString filename = setting->value(settingList.at(i)).toString();
 
+            if(filename.isEmpty())
+                return ;
+            AddTextEditToEditArea(filename,TabTemp::Permanent);//非临时窗口
+        }
+    }
+    setting->endGroup();
+}
 //窗口关闭时调用
 void MainWindow::closeEvent(QCloseEvent *){
     //如果有未保存文件则询问是否保存
@@ -322,8 +324,6 @@ void MainWindow::keyPressEvent(QKeyEvent  *event){
         emit SIGNAL_Replace();
     }
 
-
-
 }
 
 //-----实现菜单栏的功能
@@ -345,17 +345,18 @@ void MainWindow::Func_MenuBar(){
     });
     //代码风格
     connect(ui->actioncodeStyle,&QAction::triggered,this,[=](){
-        workingEditor->isChanged=false;
-        QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
-        int CodeStyleNum=setting->value("codeStyle").toString().toUInt();
-        setting->setValue("codeStyle",(CodeStyleNum+1)%3);
-        for(int i =0;i<ui->tabWgtEditArea->count();i++){
-            Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
-            e->ChangeCodeStyle();
-        }
+//        workingEditor->isChanged=false;
+//        QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+//        int CodeStyleNum=setting->value("codeStyle").toString().toUInt();
+//        setting->setValue("codeStyle",(CodeStyleNum+1)%3);
+//        for(int i =0;i<ui->tabWgtEditArea->count();i++){
+//            Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
+//            e->ChangeCodeStyle();
+//        }
 
-        workingEditor->isChanged=true;
-
+//        workingEditor->isChanged=true;
+        SettingWindow *s=new SettingWindow();
+        s->show();
     });
     //替换
     connect(ui->actionReplace,&QAction::triggered,this,[=](){
@@ -524,6 +525,7 @@ void MainWindow::Func_MenuBar(){
         //        qDebug()<<GetCFileName(openingFileName);
         //        qDebug()<<GetCFolderName(openingFileName);
         Debuger *debuger=new Debuger(nullptr, GetCFileName(openingFileName), GetCFolderName(openingFileName), workingEditor->GetBreakPoints());
+        connect(debuger,&Debuger::SIGNAL_NowLine,workingEditor,&Editor::SLOT_ChangeLineNum);
         //初始化设置
         //        debuger->SetFile(GetCFileName(openingFileName));
         //        debuger->SetFilePath(GetCFolderName(openingFileName));
@@ -765,7 +767,7 @@ QWidget* MainWindow::CreateEditText(QString filename){
 
     //设置工作中editor
     workingEditor=editor;
-
+    connect(editor,&Editor::SIGNAL_ChangeFont,UIInterface::Instance(),&UIInterface::SLOT_ChangeCodeFont);
     editor->FolderName = GetCFolderName(filename);
     editor->isChanged = false;
 
