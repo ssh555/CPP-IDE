@@ -337,9 +337,9 @@ void MainWindow::Func_MenuBar(){
     connect(this,&MainWindow::SIGNAL_CompileRun,this,[=](){
         if(openingFileName.isEmpty())
             return;
-        QFuture<void> ftr1 = QtConcurrent::run(CompileC,openingFileName);
+        QFuture<void> ftr1 = QtConcurrent::run(this,&MainWindow::CompileC,openingFileName);
         ftr1.waitForFinished();
-        QFuture<void> ftr2 = QtConcurrent::run(RunC,openingFileName);
+        QFuture<void> ftr2 = QtConcurrent::run(this,&MainWindow::RunC,openingFileName);
         ftr2.waitForFinished();
         //CompileC(openingFileName);
         //RunC(openingFileName);
@@ -552,7 +552,7 @@ void MainWindow::Func_MenuBar(){
     connect(this,&MainWindow::SIGNAL_Compile,this,[=](){
         if(openingFileName.isEmpty())
             return;
-        QFuture<void> ftr1 = QtConcurrent::run(CompileC,openingFileName);
+        QFuture<void> ftr1 = QtConcurrent::run(this,&MainWindow::CompileC,openingFileName);
         ftr1.waitForFinished();
         //CompileC(openingFileName);
     });
@@ -563,9 +563,8 @@ void MainWindow::Func_MenuBar(){
     connect(this,&MainWindow::SIGNAL_Run,this,[=](){
         if(openingFileName.isEmpty())
             return;
-        QFuture<void> ftr2 = QtConcurrent::run(RunC,openingFileName);
+       QFuture<void> ftr2 = QtConcurrent::run(this,&MainWindow::CompileC,openingFileName);
         ftr2.waitForFinished();
-
         //RunC(openingFileName);
     });
 
@@ -623,22 +622,40 @@ void MainWindow::Func_MenuBar(){
             return ;
         t->paste();
     });
+    //文件不存在
+    connect(this,&MainWindow::SIGNAL_NotExist,this,[=](){
+        QMessageBox::warning(nullptr,"警告",openingFileName + " 文件不存在");
+    });
+    //文件不是C/C++
+    connect(this,&MainWindow::SIGNAL_NotCorCpp,this,[=]{
+        QMessageBox::warning(nullptr,"警告",openingFileName + " 文件不是c,c++,cpp文件");
+    });
+    //编译错误
+    connect(this,&MainWindow::SIGNAL_CompileError,this,[=]{
+        QMessageBox::critical(nullptr,"编译错误","请检查是否安装了MINGW");
+    });
+    //程序未编译
+    connect(this,&MainWindow::SIGNAL_NotCompiled,this,[=]{
+        QMessageBox::warning(nullptr,"警告","程序未编译");
+    });
 }
 
 //-----编译C文件  参数为文件的完整绝对路径
 void MainWindow::CompileC(QString filename){
     //文件不存在
     if(!QFileInfo(filename).exists()){
-        QMessageBox::warning(nullptr,"警告",filename + " 文件不存在");
+        emit SIGNAL_NotExist();
         return;
     }
     //文件不是C/C++
     QString suf = QFileInfo(filename).suffix();
     suf = suf.toLower();
     if(suf.compare("c") != 0 && suf.compare("c++") != 0 && suf.compare("cpp") != 0){
-        QMessageBox::warning(nullptr,"警告",filename + " 文件不是c,c++,cpp文件");
+        emit SIGNAL_NotCorCpp();
         return;
     }
+
+
     //用指针形式
     QProcess *p = new QProcess;
     //没有配置MINGW
@@ -647,7 +664,7 @@ void MainWindow::CompileC(QString filename){
     p->waitForFinished();
     QString cmdoutput = QString::fromLocal8Bit(p->readAllStandardOutput());
     if(!cmdoutput.startsWith("gcc")){
-        QMessageBox::critical(nullptr,"编译错误","请检查是否安装了MINGW");
+        emit SIGNAL_CompileError();
         return;
     }
     QString str = "g++ -o " + filename.mid(0,filename.lastIndexOf(".")) + ".exe " + filename;
@@ -682,7 +699,7 @@ void MainWindow::CompileC(QString filename){
 
     //qDebug() << QString::fromLocal8Bit(p->readAllStandardOutput());
     if(!QFileInfo(str).exists()){
-        QMessageBox::critical(nullptr,"编译错误","请检查是否安装了MINGW");
+        emit SIGNAL_CompileError();
         return;
     }
 
@@ -694,7 +711,7 @@ void MainWindow::RunC(QString filename){
     //文件不存在
     filename = filename.mid(0,filename.lastIndexOf(".")) + ".exe";
     if(!QFileInfo(filename).exists()){
-        QMessageBox::warning(nullptr,"警告","程序未编译");
+        emit SIGNAL_NotCompiled();
         return;
     }
 

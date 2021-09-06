@@ -89,9 +89,9 @@ private:
     //键盘按下响应事件，添加快捷键
     void keyPressEvent(QKeyEvent  *event) override;
     //编译C文件
-    static void CompileC(QString filename);
+    void CompileC(QString filename);
     //运行C文件
-    static void RunC(QString filename);
+    void RunC(QString filename);
     //获取C文件绝对路径的文件名
     QString GetCFileName(QString filename);
     //获取C文件绝对路径的文件夹路径 不包括最后的/
@@ -151,5 +151,13 @@ signals:
     void SIGNAL_SaveOpenedFiles();
     //Debug信号
     void SIGNAL_Debug();
+    //文件不存在信号
+    void SIGNAL_NotExist();
+    //不是C/C++文件信号
+    void SIGNAL_NotCorCpp();
+    //编译错误信号
+    void SIGNAL_CompileError();
+    //程序未编译信号
+    void SIGNAL_NotCompiled();
 };
 #endif // MAINWINDOW_H
