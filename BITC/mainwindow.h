@@ -9,6 +9,7 @@
 #include "searchwindow.h"
 
 #include <QCloseEvent>
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -51,6 +52,8 @@ public:
     QStatusBar* GetstatusbarTips();
     //获取toolBar
     QToolBar* GettoolBar();
+    //设置自动保存信号
+    void SetAutoSave(bool b);
 
 protected:
     void closeEvent(QCloseEvent *) override;
@@ -113,6 +116,10 @@ private:
     //临时TAB页转非临时TAB页
     void TempTabToPermTab();
 
+    //是否自动保存
+    bool isAutoSave = false;
+    //自动保存计时器
+    QTimer* autoSaveTimer = new QTimer;
     /*信号*/
 signals:
     //编译运行信号
@@ -159,5 +166,7 @@ signals:
     void SIGNAL_CompileError();
     //程序未编译信号
     void SIGNAL_NotCompiled();
+    //自动保存信号，isAutoSave为true则开启自动保存
+    void SIGNAL_AutoSave();
 };
 #endif // MAINWINDOW_H

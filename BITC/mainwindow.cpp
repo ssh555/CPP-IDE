@@ -27,7 +27,6 @@
 #include "debuger.h"
 #include <QElapsedTimer>
 
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -122,7 +121,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     setting->endGroup();
     /*测试代码*/
-
 }
 
 MainWindow::~MainWindow()
@@ -134,6 +132,7 @@ MainWindow::~MainWindow()
         m_pInstance = NULL;
     }
 
+    delete autoSaveTimer;
     delete ui;
     delete openedFileNames;
 }
@@ -517,19 +516,19 @@ void MainWindow::Func_MenuBar(){
     });
     //调试
     connect(ui->actionDebug,&QAction::triggered,this,[=](){
-       emit SIGNAL_Debug();
+        emit SIGNAL_Debug();
     });
     connect(this,&MainWindow::SIGNAL_Debug,this,[=](){
         //存储正在准备调试的文件信息
-//        qDebug()<<openingFileName;
-//        qDebug()<<GetCFileName(openingFileName);
-//        qDebug()<<GetCFolderName(openingFileName);
+        //        qDebug()<<openingFileName;
+        //        qDebug()<<GetCFileName(openingFileName);
+        //        qDebug()<<GetCFolderName(openingFileName);
         Debuger *debuger=new Debuger(nullptr, GetCFileName(openingFileName), GetCFolderName(openingFileName), workingEditor->GetBreakPoints());
         //初始化设置
-//        debuger->SetFile(GetCFileName(openingFileName));
-//        debuger->SetFilePath(GetCFolderName(openingFileName));
-//        debuger->SetBreakPoints(workingEditor->GetBreakPoints());
-//        debuger->ReadyToStart();
+        //        debuger->SetFile(GetCFileName(openingFileName));
+        //        debuger->SetFilePath(GetCFolderName(openingFileName));
+        //        debuger->SetBreakPoints(workingEditor->GetBreakPoints());
+        //        debuger->ReadyToStart();
         debuger->show();
     });
     //关闭所有文件
@@ -563,7 +562,7 @@ void MainWindow::Func_MenuBar(){
     connect(this,&MainWindow::SIGNAL_Run,this,[=](){
         if(openingFileName.isEmpty())
             return;
-       QFuture<void> ftr2 = QtConcurrent::run(this,&MainWindow::CompileC,openingFileName);
+        QFuture<void> ftr2 = QtConcurrent::run(this,&MainWindow::CompileC,openingFileName);
         ftr2.waitForFinished();
         //RunC(openingFileName);
     });
@@ -637,6 +636,35 @@ void MainWindow::Func_MenuBar(){
     //程序未编译
     connect(this,&MainWindow::SIGNAL_NotCompiled,this,[=]{
         QMessageBox::warning(nullptr,"警告","程序未编译");
+    });
+    //自动保存
+    connect(autoSaveTimer,&QTimer::timeout,this,[=](){
+        //没有打开任何文件
+        if(openedFileNames->count() == 0)
+            return ;
+        //未开启自动保存
+        if(!isAutoSave){
+            return ;
+        }
+        qDebug() << "aaa";
+        emit SIGNAL_AutoSave();
+    });
+    connect(this,&MainWindow::SIGNAL_AutoSave,this,[=](){
+        //未开启自动保存
+        if(!isAutoSave){
+            return ;
+        }
+        int len = ui->tabWgtEditArea->count();
+        for(int i = 0;i < len; ++i){
+            Editor *t = (Editor*)ui->tabWgtEditArea->widget(i);
+            QString filename = t->FolderName + "/" + ui->tabWgtEditArea->tabText(i).replace("(未保存)","");
+            QFile file(filename);
+            file.open(QIODevice::WriteOnly | QIODevice::Text);
+            file.write(t->toPlainText().toUtf8().data());
+            file.close();
+            t->isChanged = false;
+            ui->tabWgtEditArea->setTabText(i,ui->tabWgtEditArea->tabText(i).replace("(未保存)",""));
+        }
     });
 }
 
@@ -805,6 +833,25 @@ void MainWindow::TempTabToPermTab(){
         TempWidget = NULL;
     }
 }
+
+//设置自动保存信号
+void MainWindow::SetAutoSave(bool b){
+    isAutoSave = b;
+    //开启自动保存
+    if(isAutoSave){
+        //未开始则开始计时
+        if(!autoSaveTimer->isActive())
+            autoSaveTimer->start(1000*60*3);//每3分钟自动保存一次
+    }
+    //关闭自动保存
+    else{
+        //正在计时
+        if(autoSaveTimer->isActive())
+            autoSaveTimer->stop();//每停止计时
+    }
+}
+
+
 
 
 ///获取UI的控件
