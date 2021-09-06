@@ -30,7 +30,8 @@ SOURCES += \
     searchwindow.cpp \
     toolboxchild.cpp \
     gcccheck.cpp \
-    uiinterface.cpp
+    uiinterface.cpp \
+    debuger.cpp
 
 HEADERS += \
     FileMgr.h \
@@ -45,7 +46,8 @@ HEADERS += \
     toolboxchild.h \
     gcccheck.h \
     type.h \
-    uiinterface.h
+    uiinterface.h \
+    debuger.h
 
 FORMS += \
     FileMgr.ui \
@@ -53,7 +55,8 @@ FORMS += \
     ToolPage.ui \
     mainwindow.ui \
     searchwindow.ui \
-    toolboxchild.ui
+    toolboxchild.ui \
+    debuger.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -24,6 +24,8 @@
 #include "searchwindow.h"
 #include <QThread>
 #include <QtConcurrent>
+#include "debuger.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -338,8 +340,8 @@ void MainWindow::Func_MenuBar(){
         ftr1.waitForFinished();
         QFuture<void> ftr2 = QtConcurrent::run(RunC,openingFileName);
         ftr2.waitForFinished();
-        CompileC(openingFileName);
-        RunC(openingFileName);
+        //CompileC(openingFileName);
+        //RunC(openingFileName);
     });
     //代码风格
     connect(ui->actioncodeStyle,&QAction::triggered,this,[=](){
@@ -513,14 +515,22 @@ void MainWindow::Func_MenuBar(){
         file.close();
     });
     //调试
-    //    connect(ui->actionDebug,&QAction::triggered,this,[=](){
-    //       emit SIGNAL_Debug();
-    //    });
-    //    connect(this,&MainWindow::SIGNAL_Debug,this,[=](){
-    //        Debuger *debuger=new Debuger(ui->tab_3, GetCFileName(openingFileName), GetCFolderName(openingFileName), workingEditor->GetBreakPoints(),workingEditor);
-    //        //初始化设置
-    //        debuger->show();
-    //    });
+    connect(ui->actionDebug,&QAction::triggered,this,[=](){
+       emit SIGNAL_Debug();
+    });
+    connect(this,&MainWindow::SIGNAL_Debug,this,[=](){
+        //存储正在准备调试的文件信息
+//        qDebug()<<openingFileName;
+//        qDebug()<<GetCFileName(openingFileName);
+//        qDebug()<<GetCFolderName(openingFileName);
+        Debuger *debuger=new Debuger(nullptr, GetCFileName(openingFileName), GetCFolderName(openingFileName), workingEditor->GetBreakPoints());
+        //初始化设置
+//        debuger->SetFile(GetCFileName(openingFileName));
+//        debuger->SetFilePath(GetCFolderName(openingFileName));
+//        debuger->SetBreakPoints(workingEditor->GetBreakPoints());
+//        debuger->ReadyToStart();
+        debuger->show();
+    });
     //关闭所有文件
     connect(ui->actionCloseAll, &QAction::triggered, this, [=](){
         emit SIGNAL_CloseAll();
@@ -543,7 +553,7 @@ void MainWindow::Func_MenuBar(){
             return;
         QFuture<void> ftr1 = QtConcurrent::run(CompileC,openingFileName);
         ftr1.waitForFinished();
-        CompileC(openingFileName);
+        //CompileC(openingFileName);
     });
     //运行文件
     connect(ui->actionRun,&QAction::triggered,this,[=](){
@@ -555,7 +565,7 @@ void MainWindow::Func_MenuBar(){
         QFuture<void> ftr2 = QtConcurrent::run(RunC,openingFileName);
         ftr2.waitForFinished();
 
-        RunC(openingFileName);
+        //RunC(openingFileName);
     });
 
     //撤销
@@ -628,8 +638,6 @@ void MainWindow::CompileC(QString filename){
         QMessageBox::warning(nullptr,"警告",filename + " 文件不是c,c++,cpp文件");
         return;
     }
-
-
     //用指针形式
     QProcess *p = new QProcess;
     //没有配置MINGW
