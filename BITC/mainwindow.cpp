@@ -25,6 +25,7 @@
 #include <QThread>
 #include <QtConcurrent>
 #include "debuger.h"
+#include <QElapsedTimer>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -644,7 +645,7 @@ void MainWindow::CompileC(QString filename){
     p->start("cmd.exe",QStringList() << "/c" << "gcc --version");
     p->waitForStarted();
     p->waitForFinished();
-    QString cmdoutput=QString::fromLocal8Bit(p->readAllStandardOutput());
+    QString cmdoutput = QString::fromLocal8Bit(p->readAllStandardOutput());
     if(!cmdoutput.startsWith("gcc")){
         QMessageBox::critical(nullptr,"编译错误","请检查是否安装了MINGW");
         return;
@@ -652,11 +653,35 @@ void MainWindow::CompileC(QString filename){
     QString str = "g++ -o " + filename.mid(0,filename.lastIndexOf(".")) + ".exe " + filename;
     //qDebug() << str;
     p->start("cmd.exe", QStringList()<<"/c"<<str);
+    QElapsedTimer time;
+    time.start();
     p->waitForStarted();
     p->waitForFinished();
-    //qDebug() << "——————————————————";
+    qint64 t = time.elapsed();
+    cmdoutput = QString::fromLocal8Bit(p->readAllStandardError());
+    str = filename.mid(0,filename.lastIndexOf(".")) + ".exe";
+    Instance()->ui->tabWgtResArea->setCurrentIndex(2);//显示编译日志界面
+    Instance()->ui->CompileLog->append("————————————————————————————————");
+    //编译成功
+    if(cmdoutput.compare("") == 0){
+        Instance()->ui->CompileLog->append(QString("  %1：Compile %2\n"
+                                                   "  - 编译成功\n"
+                                                   //"  - 警告：0\n"
+                                                   "  - 输出文件名：%3\n"
+                                                   "  - 输出大小：%4 KB\n"
+                                                   "  - 编译时间：%5 s"
+                                                   ).arg(__TIME__).arg(filename).arg(str).arg(QFile(str).size()/1024.0).arg(t/1000.0));
+    }
+    //编译失败
+    else{
+        Instance()->ui->CompileLog->append(QString("  %1：Compile %2\n"
+                                                   "  - 编译失败\n%3").arg(__TIME__).arg(filename).arg(cmdoutput));
+    }
+
+
+
     //qDebug() << QString::fromLocal8Bit(p->readAllStandardOutput());
-    if(!QFileInfo(filename.mid(0,filename.lastIndexOf(".")) + ".exe").exists()){
+    if(!QFileInfo(str).exists()){
         QMessageBox::critical(nullptr,"编译错误","请检查是否安装了MINGW");
         return;
     }
