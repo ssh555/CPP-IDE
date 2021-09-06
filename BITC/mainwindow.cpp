@@ -347,10 +347,10 @@ void MainWindow::Func_MenuBar(){
         QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
         int CodeStyleNum=setting->value("codeStyle").toString().toUInt();
         setting->setValue("codeStyle",(CodeStyleNum+1)%3);
-            for(int i =0;i<ui->tabWgtEditArea->count();i++){
-                Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
-                e->ChangeCodeStyle();
-            }
+        for(int i =0;i<ui->tabWgtEditArea->count();i++){
+            Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
+            e->ChangeCodeStyle();
+        }
 
         workingEditor->isChanged=true;
 
@@ -513,14 +513,14 @@ void MainWindow::Func_MenuBar(){
         file.close();
     });
     //调试
-//    connect(ui->actionDebug,&QAction::triggered,this,[=](){
-//       emit SIGNAL_Debug();
-//    });
-//    connect(this,&MainWindow::SIGNAL_Debug,this,[=](){
-//        Debuger *debuger=new Debuger(ui->tab_3, GetCFileName(openingFileName), GetCFolderName(openingFileName), workingEditor->GetBreakPoints(),workingEditor);
-//        //初始化设置
-//        debuger->show();
-//    });
+    //    connect(ui->actionDebug,&QAction::triggered,this,[=](){
+    //       emit SIGNAL_Debug();
+    //    });
+    //    connect(this,&MainWindow::SIGNAL_Debug,this,[=](){
+    //        Debuger *debuger=new Debuger(ui->tab_3, GetCFileName(openingFileName), GetCFolderName(openingFileName), workingEditor->GetBreakPoints(),workingEditor);
+    //        //初始化设置
+    //        debuger->show();
+    //    });
     //关闭所有文件
     connect(ui->actionCloseAll, &QAction::triggered, this, [=](){
         emit SIGNAL_CloseAll();
@@ -630,8 +630,18 @@ void MainWindow::CompileC(QString filename){
     }
 
 
+
     //用指针形式
     QProcess *p = new QProcess;
+    //没有配置MINGW
+    p->start("cmd.exe",QStringList() << "/c" << "gcc --version");
+    p->waitForStarted();
+    p->waitForFinished();
+    QString cmdoutput=QString::fromLocal8Bit(p->readAllStandardOutput());
+    if(!cmdoutput.startsWith("gcc")){
+        QMessageBox::critical(nullptr,"编译错误","请检查是否安装了MINGW");
+        return;
+    }
     QString str = "g++ -o " + filename.mid(0,filename.lastIndexOf(".")) + ".exe " + filename;
     //qDebug() << str;
     p->start("cmd.exe", QStringList()<<"/c"<<str);
