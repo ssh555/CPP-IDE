@@ -25,6 +25,7 @@ SOURCES += \
     editor.cpp \
     filelabel.cpp \
     highlighter.cpp \
+    jumpwindow.cpp \
     main.cpp \
     mainwindow.cpp \
     searchwindow.cpp \
@@ -42,6 +43,7 @@ HEADERS += \
     editor.h \
     filelabel.h \
     highlighter.h \
+    jumpwindow.h \
     mainwindow.h \
     searchwindow.h \
     settingwindow.h \
@@ -55,6 +57,7 @@ FORMS += \
     FileMgr.ui \
     ToolBox.ui \
     ToolPage.ui \
+    jumpwindow.ui \
     mainwindow.ui \
     searchwindow.ui \
     settingwindow.ui \

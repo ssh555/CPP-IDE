@@ -25,6 +25,8 @@ int Config::init()
         //支持中文
         setting->setIniCodec(QTextCodec::codecForName("utf-8"));
         //初始化字体
+        setting->setValue("CodeFont","Consolas");
+        //初始化字体大小
         setting->setValue("editorfontsize",12);
         //初始化color组
         readSetting->beginGroup("colorgroup1");

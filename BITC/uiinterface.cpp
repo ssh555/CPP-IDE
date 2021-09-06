@@ -3,7 +3,8 @@
 #include <QApplication>
 UIInterface::UIInterface(QObject *parent) : QObject(parent)
 {
-
+    //初始化Setting
+    setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
 }
 
 
@@ -37,10 +38,36 @@ void UIInterface::SetToolBar(){
 void UIInterface::SetStatusBarTips(){
 
 }
-//更改字体
+
+//更改 代码风格
+void UIInterface::ChangeCodeStyle()
+{
+    int num=tabEditArea->count();
+    //现在num记录总共打开了几个标签页
+    for(int i=0;i<num;i++){
+        //给每个标签页修改codestyle
+        Editor *e=(Editor*)tabEditArea->widget(i);
+        e->isChanged = false;
+        e->ChangeCodeStyle();
+        e->isChanged = true;
+    }
+}
+//更改字体大小--根据num改
+void UIInterface::ChangeCodeFont(int size){
+    int num=tabEditArea->count();
+    QString fontname=setting->value("CodeFont").toString();
+    for(int i=0;i<num;i++){
+        Editor *e=(Editor*)tabEditArea->widget(i);
+        e->setFont(QFont(fontname,size));
+    }
+    setting->setValue("editorfontsize",size);
+    setting->sync();//防止操作过快
+}
+
+//更改字体--根据传进来的滚轮信号改
 void UIInterface::SLOT_ChangeCodeFont(bool flag){
     int num=tabEditArea->count();
-    QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+
     int fontsize=setting->value("editorfontsize").toUInt();
     if((fontsize>50 and flag) or (fontsize<6 and !flag))return;
     if(flag){//增加
@@ -48,9 +75,10 @@ void UIInterface::SLOT_ChangeCodeFont(bool flag){
     }else{//降低
         fontsize--;
     }
+    QString fontname=setting->value("CodeFont").toString();
     for(int i=0;i<num;i++){
         Editor *e=(Editor*)tabEditArea->widget(i);
-        e->setFont(QFont("Consolas",fontsize));
+        e->setFont(QFont(fontname,fontsize));
     }
     setting->setValue("editorfontsize",fontsize);
     setting->sync();//防止操作过快

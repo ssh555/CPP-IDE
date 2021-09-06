@@ -21,7 +21,8 @@ void Editor::Init()
     //改了个可爱的字体
     QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
     int fontsize=setting->value("editorfontsize").toUInt();
-    this->setFont(QFont("Consolas",fontsize));
+    QString fontname=setting->value("CodeFont").toString();
+    this->setFont(QFont(fontname,fontsize));
     SLOT_UpdateLineNumberAreaWidth(0);
     int fontWidth = QFontMetrics(this->currentCharFormat().font()).averageCharWidth();
     this->setTabStopDistance( 3 * fontWidth );
