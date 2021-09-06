@@ -624,11 +624,10 @@ void MainWindow::CompileC(QString filename){
     //文件不是C/C++
     QString suf = QFileInfo(filename).suffix();
     suf = suf.toLower();
-    if(suf.compare("c") == 0 || suf.compare("c++") == 0 || suf.compare("cpp") == 0){
+    if(suf.compare("c") != 0 && suf.compare("c++") != 0 && suf.compare("cpp") != 0){
         QMessageBox::warning(nullptr,"警告",filename + " 文件不是c,c++,cpp文件");
         return;
     }
-
 
 
     //用指针形式

@@ -60,7 +60,7 @@ void FileMgr::AddFolderLabel(QString foldername){
 }
 
 void FileMgr::UpdateFolder(){
-    qDebug() << folderName;
+    //qDebug() << folderName;
     //清空布局内的所有元素
     QLayoutItem *child;
     while ((child = ui->verticalLayout->takeAt(0)) != 0)
