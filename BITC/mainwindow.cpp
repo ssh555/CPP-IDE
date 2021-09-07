@@ -493,6 +493,7 @@ void MainWindow::Func_MenuBar(){
         file.close();
         t->isChanged = false;
         ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
+
     });
 
     //另存文件

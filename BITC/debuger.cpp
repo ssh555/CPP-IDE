@@ -98,6 +98,7 @@ Debuger::Debuger(QWidget *parent, QString filename, QString filepath, QVector<qi
     Write("gcc -g "+fileName+" -o main");
     Write("gdb main");
     Write("set logging overwrite on");
+    Write("set new-console on");
 
     //SetBreakPoints
     qint32 b = 0;

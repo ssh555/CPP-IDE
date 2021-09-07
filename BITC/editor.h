@@ -42,7 +42,6 @@ public:
     bool isChanged;
     QVector<qint32> GetBreakPoints();//获取断点堆
     void mouseDoubleClickEvent(QMouseEvent *e) override;
-    int CountLeftKuohao(QTextBlock block);//判断括号
     //字符组状态
     enum BlockState {
         End         = 1,     // 00000001
@@ -52,6 +51,7 @@ public:
         Debug       = 8,     // 00001000
         Nested      = 16,    // 00010000
         Folded      = 32,    // 00100000
+        ExplainFold = 33,    // 00100001
         Error       = 64,    // 01000000
         Rehighlight = 128,   // 10000000
         //Bookmark    = 256, // 100000000
@@ -81,6 +81,8 @@ public slots:
     bool SLOT_ReplacePrivious(QString keyword,QString replaceword);
     void SLOT_SearchEnd();//搜索结束
     void FoldUnfoldAll(bool folding);//用于代码折叠
+    void explainFold();
+    void explainUnfold();
 
     void SLOT_ChangeLineNum(int num);
 
