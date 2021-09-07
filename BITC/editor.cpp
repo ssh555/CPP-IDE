@@ -56,24 +56,43 @@ void Editor::FoldCurrent(){
 
     QTextBlock currentBlock=document()->findBlockByLineNumber(this->textCursor().blockNumber());
     int state=0;//0->进行折叠,1->展开
-    int nextNum=CountLeftKuohao(currentBlock);
+    qDebug()<<currentBlock.userState();
     if(currentBlock.userState()&Begin){
         state=1;//如果已折叠,将模式改为展开
         currentBlock.setUserState(currentBlock.userState()&!Begin);//去掉begin标记
     }else{
-        if(nextNum<=0){//如果该行左括号数量小等于右括号
-            return;
-        }
         currentBlock.setUserState(currentBlock.userState()|Begin);//设置为折叠开头
     }
 
     int begin=this->textCursor().blockNumber();
     int end=0;
     QString texttemp;
+    int nextNum=0;
+
+    texttemp=currentBlock.text();
+    foreach(QChar qc,texttemp)
+    {
+        if(qc=="{")
+        nextNum++;
+    }
+    qDebug()<<"当前行"<<texttemp<<nextNum;
+
     while(currentBlock.next().isValid())
     {
-        nextNum=nextNum+CountLeftKuohao(currentBlock.next());
-        if(nextNum<=0){//索引成功
+        texttemp=currentBlock.next().text(); qDebug()<<texttemp;
+        if(texttemp.contains("{")||texttemp.contains("}"))
+        {//判断该行是否匹配成功
+            foreach(QChar qc,texttemp)
+            {
+                if(qc=="{")
+                nextNum++;
+                if(qc=="}")
+                nextNum--;
+                if(nextNum==0) break;
+            }
+        }
+        if(nextNum==0)
+        {//索引成功
             end=currentBlock.blockNumber()+1;
             break;
         }
@@ -86,19 +105,24 @@ void Editor::FoldCurrent(){
             blktemp=document()->findBlockByNumber(i);
             blktemp.setVisible(false);
             blktemp.setUserState((blktemp.userState())|Folded);
-            qDebug()<<blktemp.userState();
-        }    }else{
+        }
+    }else{
         for(int i=begin+1;i<end;i++){
             blktemp=document()->findBlockByNumber(i);
-            qDebug()<<"i"<<i<<"blktext"<<blktemp.text();
-            blktemp.setVisible(true);
-            blktemp.setUserState((blktemp.userState())&!Folded);//去掉Folded标记
-            qDebug()<<blktemp.userState();
+            if(blktemp.userState()==Folded)
+            {
+                qDebug()<<"i"<<i<<"blktext"<<blktemp.text()<<blktemp.userState();
+                blktemp.setVisible(true);
+                blktemp.setUserState((blktemp.userState())&!Folded);//去掉Folded标记
+            }
         }
     }
 
+
+
     resizeEvent(new QResizeEvent(QSize(0, 0), size()));
 }
+
 
 void Editor::wheelEvent(QWheelEvent *e)
 {
@@ -351,6 +375,80 @@ void Editor::focusInEvent(QFocusEvent *e)
 
 void Editor::keyPressEvent(QKeyEvent *e)
 {
+    //
+    if(e->key() == Qt::Key_F1){
+        QTextDocument *doc = this->document();
+        QTextCursor cursor = textCursor();
+        int position = cursor.position();
+
+        if ((!cursor.atBlockEnd()   && doc->characterAt(position) == '(') ||
+            (!cursor.atBlockStart() && doc->characterAt(position - 1) == ')')) {
+
+            QTextCursor cursorBegin;
+            QTextCursor cursorEnd;
+
+            bool forward = doc->characterAt(position) == '(';
+
+            QTextCursor::MoveOperation moveMode;
+
+            QChar c, charBegin, charEnd;
+
+            if (forward) { //bool forward =
+                position++;
+                moveMode = QTextCursor::NextCharacter;
+                charBegin = '(';
+                charEnd   = ')';
+
+            } else {
+                position -= 2;
+                moveMode = QTextCursor::PreviousCharacter;
+                charBegin = ')';
+                charEnd   = '(';
+            }
+
+            cursorBegin = QTextCursor(cursor);
+            cursorBegin.movePosition(moveMode, QTextCursor::KeepAnchor);
+
+            QTextCharFormat fmtMismatch;
+            fmtMismatch.setFontUnderline(true);
+
+            QTextCharFormat fmtMatch;
+            fmtMatch.setFontItalic(true);
+            QTextCharFormat format = fmtMismatch;
+
+            int counter = 1;
+
+            while (!(c = doc->characterAt(position)).isNull()) {
+                if (c == charBegin) {
+                    counter++;
+                }
+                else if (c == charEnd) {
+                    counter--;
+                    if (0 == counter) {
+                        cursorEnd = QTextCursor(doc);
+                        cursorEnd.setPosition(position);
+                        cursorEnd.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+                        cursorEnd.setCharFormat(fmtMatch);
+                        format = fmtMatch;
+                        break;
+                    }
+                }
+                forward ? position++ : position--;
+            }
+            cursorBegin.setCharFormat(format);
+        }
+    }
+    if(e->key()==Qt::Key_F2)
+    {
+        explainFold();
+        qDebug()<<"fold happen";
+    }
+    if(e->key()==Qt::Key_F3)
+    {
+        explainUnfold();
+        qDebug()<<"unfold happen";
+    }
+
     if (c && c->popup()->isVisible()) {
         // The following keys are forwarded by the completer to the widget
         switch (e->key()) {
@@ -534,14 +632,6 @@ void Editor::SLOT_ChangeLineNum(int num){
 }
 
 
-int Editor::CountLeftKuohao(QTextBlock block)
-{
-    QString text=block.text();
-    int l=text.count("{");
-    int r=text.count("}");
-    return l-r;
-}
-
 void Editor::Line_Number_Area_Paint_Event(QPaintEvent *event)
 {
     QPainter painter(lineNumberArea);
@@ -653,3 +743,51 @@ void Editor::addBraceRight()
     this->moveCursor(QTextCursor::EndOfLine);
 }
 
+void Editor::explainFold()
+{
+    QTextBlock block=document()->firstBlock();
+    QString text=block.text().simplified();
+    for(;block.isValid();)
+    {
+        text=block.text().simplified();
+        if(text.size()>=2&&text.at(0)=="/")
+        {
+            if(text.at(1)=="/")
+            {
+                block.setVisible(false);
+                block.setUserState((block.userState())|ExplainFold);
+                qDebug()<<block.userState()<<block.blockNumber()<<"fold";
+            }
+            else if(text.at(1)=="*")
+            {
+                for(;block.isValid();)
+                {
+                    text=block.text().simplified();
+                    block.setVisible(false);
+                    block.setUserState((block.userState())|ExplainFold);
+                    qDebug()<<block.userState()<<block.blockNumber()<<"fold";
+                    if(text.contains("*/")) break;
+                    block=block.next();
+                }
+            }
+        }
+        block=block.next();
+    }
+    resizeEvent(new QResizeEvent(QSize(0, 0), size()));
+}
+
+void Editor::explainUnfold()
+{
+    QTextBlock block=document()->firstBlock();
+    for(;block.isValid();)
+    {
+        if(block.userState()==ExplainFold)
+        {
+            block.setVisible(true);
+            block.setUserState((block.userState())&!ExplainFold);
+            qDebug()<<block.userState()<<block.blockNumber()<<"unfold";
+        }
+        block=block.next();
+    }
+    resizeEvent(new QResizeEvent(QSize(0, 0), size()));
+}
