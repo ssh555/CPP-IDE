@@ -10,6 +10,7 @@
 #include <type.h>
 #include <QSyntaxHighlighter>
 #include <QCompleter>
+#include <QSettings>
 #include "highlighter.h"
 //Editor类
 //继承QPlainTextEdit
@@ -23,12 +24,14 @@ public:
     QTextCharFormat colorFormat;//查询颜色
     void ChangeCodeStyle();
     void FoldCurrent();
+    QSettings *setting;//设置
     Highlighter *highlighter;//高亮器
     QCompleter *c = nullptr;
     void setCompleter(QCompleter *c);
     QCompleter *completer() const;
     Editor(QWidget *parent = 0);
     Editor(QWidget *parent,QString foldername);
+    QString LineNumberColor=NULL;
     void toggleComment();
     void performCompletion();
     void Init();//初始化

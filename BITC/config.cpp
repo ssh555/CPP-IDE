@@ -15,15 +15,18 @@ void Config::printChild()
 int Config::init()
 {
     setting = new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
-    if (setting->value("HaveRead").toString()=="1")return 1;//这时候已经初始化好了
+    if (setting->value("HaveRead").toString()=="4")return 1;//这时候已经初始化好了
     if(!(readSetting=new QSettings(":/resources/config.ini",QSettings::IniFormat)))
     {
         return 0;//读取失败
     }else {
         //开始读取设置
-        setting->setValue("HaveRead",1);
+        setting->setValue("HaveRead",4);
         //支持中文
         setting->setIniCodec(QTextCodec::codecForName("utf-8"));
+        //初始化行边颜色
+        setting->setValue("LineColor","#EEEEEE");
+        //qDebug()<<"set"<<setting->value("LineColor");
         //初始化字体
         setting->setValue("CodeFont","Consolas");
         //初始化字体大小
@@ -32,6 +35,7 @@ int Config::init()
         readSetting->beginGroup("colorgroup1");
         setting->beginGroup("colorgroup1");
         qDebug()<<"readsetting"<<readSetting->value("expFunctioncolor");
+        setting->setValue("LineColor",readSetting->value("LineColor"));
         setting->setValue("expFunctioncolor",readSetting->value("expFunctioncolor"));
         setting->setValue("keywordColor",readSetting->value("keywordColor"));
         setting->setValue("classselfColor",readSetting->value("classselfColor"));
@@ -47,6 +51,7 @@ int Config::init()
         //初始化color组
         readSetting->beginGroup("colorgroup2");
         setting->beginGroup("colorgroup2");
+        setting->setValue("LineColor",readSetting->value("LineColor"));
         setting->setValue("expFunctioncolor",readSetting->value("expFunctioncolor"));
         setting->setValue("keywordColor",readSetting->value("keywordColor"));
         setting->setValue("classselfColor",readSetting->value("classselfColor"));
@@ -62,6 +67,7 @@ int Config::init()
         //初始化color组
         readSetting->beginGroup("colorgroup3");
         setting->beginGroup("colorgroup3");
+        setting->setValue("LineColor",readSetting->value("LineColor"));
         setting->setValue("expFunctioncolor",readSetting->value("expFunctioncolor"));
         setting->setValue("keywordColor",readSetting->value("keywordColor"));
         setting->setValue("classselfColor",readSetting->value("classselfColor"));
@@ -86,6 +92,7 @@ void Config::ChangeCodeStyle(int flag){//改代码风格
     CodeStylebf->setNum(flag);
     GroupName->append(CodeStylebf);
     GroupName->append('/');
+    setting->setValue("LineColor",readSetting->value(*GroupName+"LineColor"));
     setting->setValue("expFunctioncolor",setting->value(*GroupName+"expFunctioncolor"));
     setting->setValue("keywordColor",setting->value(*GroupName+"keywordColor"));
     setting->setValue("classselfColor",setting->value(*GroupName+"classselfColor"));
