@@ -92,7 +92,7 @@ void Config::ChangeCodeStyle(int flag){//改代码风格
     CodeStylebf->setNum(flag);
     GroupName->append(CodeStylebf);
     GroupName->append('/');
-    setting->setValue("LineColor",readSetting->value(*GroupName+"LineColor"));
+    setting->setValue("LineColor",setting->value(*GroupName+"LineColor"));
     setting->setValue("expFunctioncolor",setting->value(*GroupName+"expFunctioncolor"));
     setting->setValue("keywordColor",setting->value(*GroupName+"keywordColor"));
     setting->setValue("classselfColor",setting->value(*GroupName+"classselfColor"));

@@ -85,35 +85,21 @@ void Highlighter::Start_Highlight()
     multiLineCommentFormat.setForeground(*b1);
     b1=new QColor(setting->value("quotationColor").toString());
     quotationFormat.setForeground(*b1);
-    rule.pattern = QRegExp("\".*\"");
+    rule.pattern = QRegExp("\"[^\"]*\"");
     rule.format = quotationFormat;
     highlightingRules.append(rule);
+//    rule.pattern = QRegExp("([^)]*)");
+//    rule.format = quotationFormat;
+//    highlightingRules.append(rule);
 
     functionFormat.setFontItalic(true);
     //函数颜色
-    //蓝色!
     b1=new QColor(setting->value("functionColor").toString());
     functionFormat.setForeground(*b1);
     rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
     rule.format = functionFormat;
     highlightingRules.append(rule);
-    //输入中文标号报错
-//    rule.pattern=QRegExp("\\b；\\b");
-//    b1=new QColor(255,0,0);
-//    QTextCharFormat chinglishFormat;
-//    chinglishFormat.setUnderlineColor(Qt::red);
-//    chinglishFormat.setForeground(*b1);
-//    rule.format=chinglishFormat;
-//    highlightingRules.append(rule);
 
-//    //数字
-
-//    rule.pattern=QRegExp(R"((?<=\b|\s|^)(?i)(?:(?:(?:(?:(?:\d+(?:'\d+)*)?\.(?:\d+(?:'\d+)*)(?:e[+-]?(?:\d+(?:'\d+)*))?)|(?:(?:\d+(?:'\d+)*)\.(?:e[+-]?(?:\d+(?:'\d+)*))?)|(?:(?:\d+(?:'\d+)*)(?:e[+-]?(?:\d+(?:'\d+)*)))|(?:0x(?:[0-9a-f]+(?:'[0-9a-f]+)*)?\.(?:[0-9a-f]+(?:'[0-9a-f]+)*)(?:p[+-]?(?:\d+(?:'\d+)*)))|(?:0x(?:[0-9a-f]+(?:'[0-9a-f]+)*)\.?(?:p[+-]?(?:\d+(?:'\d+)*))))[lf]?)|(?:(?:(?:[1-9]\d*(?:'\d+)*)|(?:0[0-7]*(?:'[0-7]+)*)|(?:0x[0-9a-f]+(?:'[0-9a-f]+)*)|(?:0b[01]+(?:'[01]+)*))(?:u?l{0,2}|l{0,2}u?)))(?=\b|\s|$))");
-//    classselfFormat.setFontWeight(QFont::Bold);
-//    b1->setRgb(75,194,242);
-//    functionFormat.setForeground(*b1);
-//    rule.format=classselfFormat;
-//    highlightingRules.append(rule);
 
     commentStartExpression = QRegExp("/\\*");
     commentEndExpression = QRegExp("\\*/");
