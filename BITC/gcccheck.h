@@ -12,6 +12,8 @@ public:
     void gccCheckAndInstall();
 private:
     QString cmdoutput;
+    QString str;
 };
 
 #endif // GCCCHECK_H
+
