@@ -6,6 +6,7 @@ JumpWindow::JumpWindow(QWidget *parent) :
     ui(new Ui::JumpWindow)
 {
     ui->setupUi(this);
+    this->setWindowFlag(Qt::FramelessWindowHint);
 
 }
 void JumpWindow::Init(Editor *e){

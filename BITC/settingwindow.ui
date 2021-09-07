@@ -99,17 +99,17 @@
      <widget class="QComboBox" name="SytleBox">
       <item>
        <property name="text">
-        <string>直男风格</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
         <string>北理风格</string>
        </property>
       </item>
       <item>
        <property name="text">
         <string>少女风格</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>直男风格</string>
        </property>
       </item>
      </widget>

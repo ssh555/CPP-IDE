@@ -80,7 +80,7 @@ int Config::init()
 
 }
 void Config::ChangeCodeStyle(int flag){//改代码风格
-
+    setting->setValue("styleflag",flag);//将风格换为flag
     QString *GroupName=new QString("colorgroup");
     QString *CodeStylebf=new QString();//就是换一个colorgroup
     CodeStylebf->setNum(flag);

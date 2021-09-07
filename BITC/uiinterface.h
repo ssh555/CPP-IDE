@@ -67,6 +67,10 @@ signals:
 
 public slots:
     void SLOT_ChangeCodeFont(bool flag);
+private:
+    void SetStyletoDefault();
+    void SetStyletoBIT();
+    void SetStyletoPurple();
 };
 
 #endif // UIINTERFACE_H

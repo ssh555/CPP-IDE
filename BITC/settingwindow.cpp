@@ -19,6 +19,9 @@ void SettingWindow::Init()
     {
         ui->comboBox_5->addItem(family);
     }
+    //初始化combobox,让它们指向默认选项
+    ui->comboBox_5->setCurrentText(setting->value("CodeFont").toString());
+    ui->comboBox->setCurrentText(setting->value("editorfontsize").toString());
 
 }
 SettingWindow::~SettingWindow()
@@ -43,4 +46,9 @@ void SettingWindow::on_CommitBtn_clicked()
     MainWindow::Instance()->SetAutoSave(ui->comboBox_4->currentIndex()==0);
     this->close();
 
+}
+
+void SettingWindow::on_pushButton_clicked()
+{
+    this->close();
 }

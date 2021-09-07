@@ -20,6 +20,8 @@ private slots:
     void on_CommitBtn_clicked();
     //先获取到interface,方便之后用
 
+    void on_pushButton_clicked();
+
 private:
     UIInterface *inf =UIInterface::Instance();
     Ui::SettingWindow *ui;

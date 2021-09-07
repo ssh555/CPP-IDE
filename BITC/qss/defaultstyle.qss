@@ -1,0 +1,64 @@
+QDockWidget{/*资源管理器*/
+    background-color:rgb(78,78,78);
+    color: white;
+}
+.QDockWidget .QWidget{/*資源管理器下方*/
+    background-color:rgb(78,78,78);
+}
+
+#pushButtonFold{/*文件夹名*/
+    background-color:rgb(78,78,78);
+    color: white;
+}
+FileLabel{/*文件名*/
+    color: white;
+}
+FileLabel[FileLabelState= "enter"]{/*用rgba模式會叠加透明度，導致程度變深*/
+    background-color:rgb(55,55,61);
+}
+FileLabel[FileLabelState="leave"]{
+    background-color:rgb(78,78,78);
+}
+
+
+#toolBar{
+    background-color:rgba(51,51,51,1);
+    color:white;
+}
+
+#tabWgtResArea{
+    background-color:rgba(51,51,51,1);
+    color:white;
+}
+
+#tabWgtEditArea{
+    background-color:rgba(37,37,38,0.8);
+    color:white;
+}
+
+QMenuBar{
+    /*菜单栏背景色*/
+   background-color:rgb(60,60,60);
+   color:white;
+}
+QMenuBar::item::selected {
+    /*菜单栏鼠标悬浮的选项颜色*/
+    background-color : rgb(55,55,61);
+}
+QMenu {
+    border-radius:15px;
+}
+QMenu::item {
+    color: white;
+    /*下拉菜单背景色*/
+    background-color:rgb(37,37,38);
+}
+QMenu::item:selected {
+    /*下拉菜单鼠标悬浮的选项颜色*/
+    background-color : rgb(68,114,196);
+}
+QMenu::separator {
+    background: rgba(235,235,236,1);
+    height:1px;
+}
+

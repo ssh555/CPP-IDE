@@ -43,6 +43,15 @@ void UIInterface::SetStatusBarTips(){
 void UIInterface::ChangeCodeStyle()
 {
     int num=tabEditArea->count();
+    int flag=setting->value("styleflag").toUInt();
+    qDebug()<<flag;
+    switch (flag) {
+    case 1: SetStyletoBIT();break;
+    case 2: SetStyletoPurple();break;
+    case 3: SetStyletoDefault();break;
+    default: break;
+
+    }
     //现在num记录总共打开了几个标签页
     for(int i=0;i<num;i++){
         //给每个标签页修改codestyle
@@ -50,6 +59,51 @@ void UIInterface::ChangeCodeStyle()
         e->isChanged = false;
         e->ChangeCodeStyle();
         e->isChanged = true;
+    }
+}
+//--------换风格
+void UIInterface::SetStyletoDefault(){
+    QString filename= ":/qss/defaultstyle.qss";
+    QFile file(filename);
+    if(file.open(QFile::ReadOnly)){
+        QString styleSheet = tr(file.readAll());
+        mainWindow->setStyleSheet(styleSheet);
+        file.close();
+        qDebug()<<"default";
+        return;
+    }
+}
+void UIInterface::SetStyletoBIT(){
+    mainWindow->GettabWgtResArea()->setAttribute(Qt::WA_StyledBackground);
+    mainWindow->GettabWgtEditArea()->setAttribute(Qt::WA_StyledBackground);
+    //不要妄想把下面这行修改到qss里面去
+    mainWindow->GettabWgtEditArea()->setStyleSheet("QWidget{background-image: url(:/img/Background.png)};"
+                                                   "background-repeat: no repeat;"
+                                                   "background-position: center;"
+                                                   "background-attachment: fixed;");
+
+    QString filename= ":/qss/bitstyle.qss";
+    QFile file(filename);
+    if(file.open(QFile::ReadOnly)){
+        QString styleSheet = tr(file.readAll());
+        mainWindow->setStyleSheet(styleSheet);
+        file.close();
+        qDebug()<<"BIT";
+        return;
+    }
+}
+
+void UIInterface::SetStyletoPurple(){
+    mainWindow->GettabWgtResArea()->setAttribute(Qt::WA_StyledBackground);
+    mainWindow->GettabWgtEditArea()->setAttribute(Qt::WA_StyledBackground);
+    QString filename= ":/qss/purplestyle.qss";
+    QFile file(filename);
+    if(file.open(QFile::ReadOnly)){
+        QString styleSheet = tr(file.readAll());
+        mainWindow->setStyleSheet(styleSheet);
+        file.close();
+        qDebug()<<"Purpel";
+        return;
     }
 }
 //更改字体大小--根据num改
