@@ -2,6 +2,9 @@
     <qresource prefix="/">
         <file>qss/toolpage.qss</file>
         <file>test.txt</file>
+        <file>qss/bitstyle.qss</file>
+        <file>qss/defaultstyle.qss</file>
+        <file>qss/purplestyle.qss</file>
     </qresource>
     <qresource prefix="/resources">
         <file>wordlist.txt</file>

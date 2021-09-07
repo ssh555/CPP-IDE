@@ -7,7 +7,7 @@
 #include <QToolBar>
 #include <QDockWidget>
 #include <QStatusBar>
-
+#include <QSettings>
 #include <mainwindow.h>
 
 class UIInterface : public QObject
@@ -25,12 +25,14 @@ public:
     }
     //总的编辑区的TABWIDHET
     QTabWidget* tabEditArea = MainWindow::Instance()->GettabWgtEditArea();
-
-
+    //更改 代码风格
+    void ChangeCodeStyle();
+    //更改 字体
+    void ChangeCodeFont(int size);
 private:
     explicit UIInterface(QObject *parent = nullptr);
     static UIInterface* m_pInstance;
-
+    QSettings *setting;
     //总窗口MainWidget
     MainWindow* mainWindow = MainWindow::Instance();
 
@@ -65,6 +67,10 @@ signals:
 
 public slots:
     void SLOT_ChangeCodeFont(bool flag);
+private:
+    void SetStyletoDefault();
+    void SetStyletoBIT();
+    void SetStyletoPurple();
 };
 
 #endif // UIINTERFACE_H

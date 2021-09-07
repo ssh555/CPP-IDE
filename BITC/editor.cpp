@@ -13,15 +13,13 @@ Editor::Editor(QWidget *parent) : QPlainTextEdit(parent)
 }
 void Editor::Init()
 {
-    lineNumberArea = new LineNumberArea(this);
-    connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(SLOT_UpdateLineNumberAreaWidth(int)));
-    connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(SLOT_UpdateLineNumberArea(QRect,int)));
-    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_HighlightCurrentLine()));
+
 
     //改了个可爱的字体
-    QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
     int fontsize=setting->value("editorfontsize").toUInt();
-    this->setFont(QFont("Consolas",fontsize));
+    QString fontname=setting->value("CodeFont").toString();
+    this->setFont(QFont(fontname,fontsize));
     SLOT_UpdateLineNumberAreaWidth(0);
     int fontWidth = QFontMetrics(this->currentCharFormat().font()).averageCharWidth();
     this->setTabStopDistance( 3 * fontWidth );
@@ -29,8 +27,14 @@ void Editor::Init()
     //设置高亮
     highlighter = new Highlighter(this->document());
     highlighter->Start_Highlight();
+    //设置旁边竖条的颜色
+    qDebug()<<setting->value("LineColor").toString();
+    LineNumberColor=setting->value("LineColor").toString();
+    lineNumberArea = new LineNumberArea(this);
 
-
+    connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(SLOT_UpdateLineNumberAreaWidth(int)));
+    connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(SLOT_UpdateLineNumberArea(QRect,int)));
+    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_HighlightCurrentLine()));
 }
 void Editor::mouseDoubleClickEvent(QMouseEvent *){
     QTextBlock b=document()->findBlockByNumber(this->textCursor().blockNumber());
@@ -218,6 +222,8 @@ void Editor::FoldUnfoldAll(bool folding)//折叠代码
 void Editor::ChangeCodeStyle(){
     highlighter = new Highlighter(this->document());
     highlighter->Start_Highlight();
+    this->LineNumberColor=setting->value("LineColor").toString();
+    qDebug()<<setting->value("LineColor").toString();
 }
 
 void Editor::FoldUnfold(QTextBlock &block)
@@ -539,7 +545,7 @@ int Editor::CountLeftKuohao(QTextBlock block)
 void Editor::Line_Number_Area_Paint_Event(QPaintEvent *event)
 {
     QPainter painter(lineNumberArea);
-    painter.fillRect(event->rect(), Qt::lightGray);
+    painter.fillRect(event->rect(), QColor(LineNumberColor));
 
 
     QTextBlock block = firstVisibleBlock();

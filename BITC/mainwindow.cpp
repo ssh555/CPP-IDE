@@ -28,7 +28,7 @@
 #include <QElapsedTimer>
 #include "uiinterface.h"
 #include "settingwindow.h"
-
+#include "jumpwindow.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -44,10 +44,10 @@ MainWindow::MainWindow(QWidget *parent)
     for(int i = 0;ui->tabWgtEditArea->count(); ++i)
         ui->tabWgtEditArea->removeTab(i);
     //切换编辑页
-    connect(ui->tabWgtEditArea,&QTabWidget::tabBarClicked,this,[=](){
+    connect(ui->tabWgtEditArea,&QTabWidget::tabBarClicked,this,[=](int index){
         if(searchWindow!=NULL)
         {
-            searchWindow->setEditor((Editor *)ui->tabWgtEditArea->currentWidget());
+            searchWindow->setEditor((Editor *)ui->tabWgtEditArea->widget(index));
         }
     });
     //编辑页的关闭事件
@@ -137,6 +137,8 @@ void MainWindow::OpenHistroyFile(){
             AddTextEditToEditArea(filename,TabTemp::Permanent);//非临时窗口
         }
     }
+    //换回之前的主题设置
+    UIInterface::Instance()->ChangeCodeStyle();
     setting->endGroup();
 }
 //窗口关闭时调用
@@ -323,6 +325,10 @@ void MainWindow::keyPressEvent(QKeyEvent  *event){
     if(event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && event ->key() == Qt::Key_F){
         emit SIGNAL_Replace();
     }
+    //快速跳转 CTRL + J
+    if(event->modifiers() == (Qt::ControlModifier ) && event ->key() == Qt::Key_J){
+        emit SIGNAL_Jump();
+    }
 
 }
 
@@ -345,16 +351,7 @@ void MainWindow::Func_MenuBar(){
     });
     //代码风格
     connect(ui->actioncodeStyle,&QAction::triggered,this,[=](){
-//        workingEditor->isChanged=false;
-//        QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
-//        int CodeStyleNum=setting->value("codeStyle").toString().toUInt();
-//        setting->setValue("codeStyle",(CodeStyleNum+1)%3);
-//        for(int i =0;i<ui->tabWgtEditArea->count();i++){
-//            Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
-//            e->ChangeCodeStyle();
-//        }
 
-//        workingEditor->isChanged=true;
         SettingWindow *s=new SettingWindow();
         s->show();
     });
@@ -667,6 +664,13 @@ void MainWindow::Func_MenuBar(){
             t->isChanged = false;
             ui->tabWgtEditArea->setTabText(i,ui->tabWgtEditArea->tabText(i).replace("(未保存)",""));
         }
+    });
+    //快速跳转
+    connect(ui->actionquickJump_2,&QAction::triggered,this,&MainWindow::SIGNAL_Jump);
+    connect(this,&MainWindow::SIGNAL_Jump,this,[=](){
+        JumpWindow *j = new JumpWindow();
+        j->Init(workingEditor);
+        j->show();
     });
 }
 

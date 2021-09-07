@@ -172,5 +172,7 @@ signals:
     void SIGNAL_NotCompiled();
     //自动保存信号，isAutoSave为true则开启自动保存
     void SIGNAL_AutoSave();
+    //快速跳转信号
+    void SIGNAL_Jump();
 };
 #endif // MAINWINDOW_H

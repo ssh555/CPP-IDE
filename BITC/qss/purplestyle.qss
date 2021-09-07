@@ -1,0 +1,67 @@
+QDockWidget{/*资源管理器*/
+    background-color:#ffdde1;
+    color: black;
+}
+.QDockWidget .QWidget{/*資源管理器下方*/
+    background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1,
+    stop:0 #ffdde1, stop:1 #ee9ca7);
+}
+
+#pushButtonFold{/*文件夹名*/
+    background-color:rgb(78,78,78);
+    color: black;
+}
+FileLabel{/*文件名*/
+    color: black;
+}
+FileLabel[FileLabelState= "enter"]{/*用rgba模式會叠加透明度，導致程度變深*/
+    background-color:white;
+}
+FileLabel[FileLabelState="leave"]{
+    background-color:rgb(165,255,206);
+}
+
+
+#toolBar{
+    background-color:#ee9ca7;
+    color:black;
+    margin:0;
+}
+
+#tabWgtResArea{/*貌似只能改纯色*/
+    background-color:#ee9ca7;
+    color:black;
+}
+
+#tabWgtEditArea{/*貌似只能改纯色*/
+    background-color:#ee9ca7;
+    color:black;
+}
+
+QMenuBar{
+    /*菜单栏背景色*/
+    background-color:qlineargradient(x1:0, y1:0, x2:1, y2:0,
+    stop:0 #ffdde1, stop:1 #ee9ca7);
+    color:black;
+}
+QMenuBar::item::selected {
+    /*菜单栏鼠标悬浮的选项颜色*/
+    background-color : #D3CCE3;
+}
+QMenu {
+    border-radius:15px;
+}
+QMenu::item {
+    color: black;
+    /*下拉菜单背景色*/
+    background-color:#E9E4F0;
+}
+QMenu::item:selected {
+    /*下拉菜单鼠标悬浮的选项颜色*/
+    background-color : #ffd452;
+}
+QMenu::separator {
+    background: rgba(235,235,236,1);
+    height:1px;
+}
+
