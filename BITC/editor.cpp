@@ -44,7 +44,7 @@ void Editor::mouseDoubleClickEvent(QMouseEvent *){
     }
     else if(b.userState()&Debug){
         b.setUserState(b.userState()&!Debug);//把debug状态去掉
-        qDebug()<<b.userState();
+
     }
 
     else {
@@ -66,7 +66,6 @@ void Editor::FoldCurrent(){
         }
         currentBlock.setUserState(currentBlock.userState()|Begin);//设置为折叠开头
     }
-
     int begin=this->textCursor().blockNumber();
     int end=0;
     QString texttemp;
@@ -115,7 +114,6 @@ void Editor::wheelEvent(QWheelEvent *e)
         if(e->delta() > 0){                    // 向上滚动
             //cursor.movePosition(QTextCursor::Up,QTextCursor::MoveAnchor,1);
             scrollBar->setValue(scrollBar->value()-2);
-
         }else{                                     // 向下滚动
             //cursor.movePosition(QTextCursor::Down,QTextCursor::MoveAnchor,1);
             scrollBar->setValue(scrollBar->value()+2);
@@ -545,8 +543,10 @@ int Editor::CountLeftKuohao(QTextBlock block)
 void Editor::Line_Number_Area_Paint_Event(QPaintEvent *event)
 {
     QPainter painter(lineNumberArea);
-    painter.fillRect(event->rect(), QColor(LineNumberColor));
 
+    painter.fillRect(event->rect(), QColor(LineNumberColor));
+    //设置画笔大小
+    painter.setFont(QFont(setting->value("CodeFont").toString(),setting->value("editorfontsize").toInt()));
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
@@ -564,6 +564,7 @@ void Editor::Line_Number_Area_Paint_Event(QPaintEvent *event)
                 painter.setPen(Qt::black);
                 painter.drawText(-2, top, lineNumberArea->width(), fontMetrics().height(),
                                  Qt::AlignRight, number);
+
             }
 
 
