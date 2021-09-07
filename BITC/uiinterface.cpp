@@ -44,7 +44,6 @@ void UIInterface::ChangeCodeStyle()
 {
     int num=tabEditArea->count();
     int flag=setting->value("styleflag").toUInt();
-    qDebug()<<flag;
     switch (flag) {
     case 1: SetStyletoBIT();break;
     case 2: SetStyletoPurple();break;
@@ -69,7 +68,6 @@ void UIInterface::SetStyletoDefault(){
         QString styleSheet = tr(file.readAll());
         mainWindow->setStyleSheet(styleSheet);
         file.close();
-        qDebug()<<"default";
         return;
     }
 }
@@ -88,7 +86,6 @@ void UIInterface::SetStyletoBIT(){
         QString styleSheet = tr(file.readAll());
         mainWindow->setStyleSheet(styleSheet);
         file.close();
-        qDebug()<<"BIT";
         return;
     }
 }
@@ -102,7 +99,6 @@ void UIInterface::SetStyletoPurple(){
         QString styleSheet = tr(file.readAll());
         mainWindow->setStyleSheet(styleSheet);
         file.close();
-        qDebug()<<"Purpel";
         return;
     }
 }

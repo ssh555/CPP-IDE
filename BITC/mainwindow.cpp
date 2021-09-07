@@ -137,6 +137,8 @@ void MainWindow::OpenHistroyFile(){
             AddTextEditToEditArea(filename,TabTemp::Permanent);//非临时窗口
         }
     }
+    //换回之前的主题设置
+    UIInterface::Instance()->ChangeCodeStyle();
     setting->endGroup();
 }
 //窗口关闭时调用
