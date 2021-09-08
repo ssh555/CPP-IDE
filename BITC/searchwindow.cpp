@@ -123,13 +123,7 @@ void SearchWindow::on_btnCancel_clicked()//关掉,统统关掉
 }
 
 
-//获取鼠标的按下操作
-//用于移动
-void SearchWindow::mousePressEvent(QMouseEvent *ev)
-{
-    if(ev->button() ==Qt::LeftButton)
-    this->posMouseOrigin = QCursor::pos(); //cursor是一个光标类；
-}
+
 //回车查找下一个
 void SearchWindow::keyPressEvent(QKeyEvent *event)
 {
@@ -146,14 +140,5 @@ void SearchWindow::showWithText(QString text)
 
     ui->lineEdit->setFocus();
     this->show();
-}
-//获得鼠标移动的操作
-void SearchWindow::mouseMoveEvent(QMouseEvent *ev)
-{
-    if(ev->buttons() &Qt::LeftButton){
-        QPoint ptMouseNow = QCursor::pos();
-        QPoint ptDelta = ptMouseNow - this->posMouseOrigin;
-        move(this->pos() + ptDelta); posMouseOrigin = ptMouseNow;
-    }
 }
 

@@ -24,9 +24,7 @@ public:
     explicit SearchWindow(QWidget *parent = nullptr);
     ~SearchWindow();
     QString searchtext;//查询语句
-    //移动窗口
-    void mousePressEvent(QMouseEvent *ev)override;
-    void mouseMoveEvent(QMouseEvent *ev)override;
+
     //带参展示
     void showWithText(QString text);
 
