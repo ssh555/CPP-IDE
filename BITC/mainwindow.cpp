@@ -764,7 +764,6 @@ QWidget* MainWindow::CreateEditText(QString filename){
     //ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
     //设置 是否保存对应标题的显示
     connect(editor,&QPlainTextEdit::textChanged,[=](){
-        qDebug() << editor->isChanged;
         if(isReadingOrWriting)
             return ;
         //改变内容但没有保存则标题处标明
