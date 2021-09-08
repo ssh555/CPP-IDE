@@ -71,7 +71,6 @@ void SearchWindow::setEditor(Editor *editor_far)//设置editor,连接槽函数
         disconnect(this,&SearchWindow::SIGNAL_ReplaceNext,editor_far,&Editor::SLOT_ReplaceKeywords);
         disconnect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
         disconnect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);
-        disconnect(this,&SearchWindow::SIGNAL_Exit,editor_far,&Editor::SLOT_SearchEnd);
         disconnect(ui->btnReplace,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
     }
     this->editor=editor_far;
@@ -82,7 +81,6 @@ void SearchWindow::setEditor(Editor *editor_far)//设置editor,连接槽函数
     connect(this,&SearchWindow::SIGNAL_ReplaceNext,editor_far,&Editor::SLOT_ReplaceKeywords);
     connect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
     connect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);
-    connect(this,&SearchWindow::SIGNAL_Exit,editor_far,&Editor::SLOT_SearchEnd);
     connect(ui->btnReplace,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
 }
 void SearchWindow::on_btnFindWhole_clicked()//找所有的
@@ -116,20 +114,9 @@ void SearchWindow::on_btnFindNext_clicked()//找下一个
 
 }
 
-void SearchWindow::on_btnCancel_clicked()//关掉,统统关掉
-{
-    emit(SIGNAL_Exit());
-    this->close();
-}
 
 
-//获取鼠标的按下操作
-//用于移动
-void SearchWindow::mousePressEvent(QMouseEvent *ev)
-{
-    if(ev->button() ==Qt::LeftButton)
-    this->posMouseOrigin = QCursor::pos(); //cursor是一个光标类；
-}
+
 //回车查找下一个
 void SearchWindow::keyPressEvent(QKeyEvent *event)
 {
@@ -147,13 +134,5 @@ void SearchWindow::showWithText(QString text)
     ui->lineEdit->setFocus();
     this->show();
 }
-//获得鼠标移动的操作
-void SearchWindow::mouseMoveEvent(QMouseEvent *ev)
-{
-    if(ev->buttons() &Qt::LeftButton){
-        QPoint ptMouseNow = QCursor::pos();
-        QPoint ptDelta = ptMouseNow - this->posMouseOrigin;
-        move(this->pos() + ptDelta); posMouseOrigin = ptMouseNow;
-    }
-}
+
 

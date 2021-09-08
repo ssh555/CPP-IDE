@@ -24,9 +24,6 @@ public:
     explicit SearchWindow(QWidget *parent = nullptr);
     ~SearchWindow();
     QString searchtext;//查询语句
-    //移动窗口
-    void mousePressEvent(QMouseEvent *ev)override;
-    void mouseMoveEvent(QMouseEvent *ev)override;
     //带参展示
     void showWithText(QString text);
 
@@ -44,11 +41,11 @@ signals:
     void SIGNAL_ReplaceNext(QString findtext,QString replacetext);
     void SIGNAL_ReplacePrivious(QString findtext,QString replacetext);
     void SIGNAL_ReplaceWhole(QString findtext,QString replacetext);
-    void SIGNAL_Exit();
+
 private slots:
     void on_btnFindNext_clicked();
 
-    void on_btnCancel_clicked();
+
 
     void on_btnFindWhole_clicked();
 

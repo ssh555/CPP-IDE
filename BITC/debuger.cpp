@@ -223,7 +223,7 @@ int Debuger::GetNowLine()
     }
     int number = log.mid(log.lastIndexOf(':')+1).replace("\r\n", "").toInt();
 //    ui->BreakView->append(QString::number(number));
-    emit SIGNAL_NowLine(number);
+    emit SIGNAL_NowLine(number+1);
     return number;
 }
 

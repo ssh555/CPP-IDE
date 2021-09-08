@@ -235,7 +235,20 @@ void MainWindow::AddTextEditToEditArea(QString filename,bool isTemp){
     CreateEditText(filename);
 
     //AddFolderToGBox(GetCFolderName(openingFileName));
+    //新建搜索框,并初始化各槽函数
+    if(searchWindow==NULL){//创建搜索框
+        workingEditor->isChanged=false;
+        searchWindow=new SearchWindow();
+        ui->verticalLayout->addWidget(searchWindow);
+        //设置editor,连接槽函数
+        searchWindow->setEditor(workingEditor);
+        if(!workingEditor->textCursor().selectedText().isEmpty())
+        {
+            searchWindow->showWithText(workingEditor->textCursor().selectedText());
 
+        }else searchWindow->show();
+        workingEditor->isChanged=true;
+    }
 }
 
 //-----键盘按下事件,用于快捷键
@@ -361,39 +374,8 @@ void MainWindow::Func_MenuBar(){
         //槽函数得在editor创建后连接,在eidtor那边
     });
     connect(this,&MainWindow::SIGNAL_Replace,this,[=](){
-        if(workingEditor==NULL){
-            return;
-        }else
-        {
-            for(int i =0;i<ui->tabWgtEditArea->count();i++){
-                Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
-                e->isChanged=false;
-            }
-
-            //新建搜索框,并初始化各槽函数
-            if (searchWindow!=NULL){
-                //qDebug()<<"notnull";
-                ui->verticalLayout->removeWidget(searchWindow);
-            }
-            searchWindow=new SearchWindow();
-
-            ui->verticalLayout->addWidget(searchWindow);
-            //设置editor,连接槽函数
-            searchWindow->setEditor(workingEditor);
-            if(!workingEditor->textCursor().selectedText().isEmpty())
-            {
-                searchWindow->showWithText(workingEditor->textCursor().selectedText());
-            }else searchWindow->show();
-            workingEditor->isChanged=true;
-            searchWindow->on_btnReplace_clicked();
-            for(int i =0;i<ui->tabWgtEditArea->count();i++){
-                Editor *e=(Editor *)ui->tabWgtEditArea->widget(i);
-                e->isChanged=true;
-            }
-        }
-
-
-
+        ui->tabWgtResArea->setCurrentIndex(0);
+        searchWindow->on_btnReplace_clicked();
     });
     //查询
 
@@ -402,31 +384,7 @@ void MainWindow::Func_MenuBar(){
         //槽函数得在editor创建后连接,在eidtor那边
     });
     connect(this,&MainWindow::SIGNAL_Search,this,[=](){
-        if(workingEditor==NULL){
-            return;
-        }else
-        {
-            workingEditor->isChanged=false;
-            //新建搜索框,并初始化各槽函数
-            if (searchWindow!=NULL){
-                //qDebug()<<"notnull";
-                ui->verticalLayout->removeWidget(searchWindow);
-            }
-
-            searchWindow=new SearchWindow();
-            ui->verticalLayout->addWidget(searchWindow);
-            //设置editor,连接槽函数
-            searchWindow->setEditor(workingEditor);
-            if(!workingEditor->textCursor().selectedText().isEmpty())
-            {
-                searchWindow->showWithText(workingEditor->textCursor().selectedText());
-
-            }else searchWindow->show();
-            workingEditor->isChanged=true;
-        }
-
-
-
+        ui->tabWgtResArea->setCurrentIndex(0);
     });
     //新建文件
     connect(ui->actionNewFile,&QAction::triggered,this,[=](){
