@@ -66,8 +66,6 @@ MainWindow::MainWindow(QWidget *parent)
             }
         }
         //保存打开的文件名
-
-
         openedFileNames->removeAll(GetTABFilePath(ui->tabWgtEditArea->widget(i),str));
         //如果为临时窗口
         if(TempWidget == ui->tabWgtEditArea->widget(i)){
@@ -848,5 +846,6 @@ QToolBar* MainWindow::GettoolBar(){
 }
 
 MainWindow* MainWindow::m_pInstance = NULL;
+bool MainWindow::isReadingOrWriting = false;
 
 
