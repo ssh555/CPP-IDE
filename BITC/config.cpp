@@ -8,7 +8,7 @@ void Config::printChild()
 {
     QStringList keys = setting->allKeys();
     for (int i=0;i<keys.length();i++){
-        qDebug()<<keys.at(i);
+        //qDebug()<<keys.at(i);
     }
 }
 
@@ -34,7 +34,7 @@ int Config::init()
         //初始化color组
         readSetting->beginGroup("colorgroup1");
         setting->beginGroup("colorgroup1");
-        qDebug()<<"readsetting"<<readSetting->value("expFunctioncolor");
+        //qDebug()<<"readsetting"<<readSetting->value("expFunctioncolor");
         setting->setValue("LineColor",readSetting->value("LineColor"));
         setting->setValue("expFunctioncolor",readSetting->value("expFunctioncolor"));
         setting->setValue("keywordColor",readSetting->value("keywordColor"));

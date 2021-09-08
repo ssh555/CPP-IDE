@@ -176,7 +176,7 @@ void Debuger::Read()
 //            qDebug()<<id<<"  "<<name<<"  "<<value;
             if(ui->DisplayView->rowCount()<id) {
                 ui->DisplayView->setRowCount(id);
-                qDebug()<<ui->DisplayView->rowCount();
+                //qDebug()<<ui->DisplayView->rowCount();
             }
             ui->DisplayView->setItem(id-1, 0, new QTableWidgetItem(name));
             ui->DisplayView->setItem(id-1, 1, new QTableWidgetItem(value));

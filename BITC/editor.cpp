@@ -28,7 +28,7 @@ void Editor::Init()
     highlighter = new Highlighter(this->document());
     highlighter->Start_Highlight();
     //设置旁边竖条的颜色
-    qDebug()<<setting->value("LineColor").toString();
+    //qDebug()<<setting->value("LineColor").toString();
     LineNumberColor=setting->value("LineColor").toString();
     lineNumberArea = new LineNumberArea(this);
 
@@ -49,14 +49,14 @@ void Editor::mouseDoubleClickEvent(QMouseEvent *){
 
     else {
         b.setUserState(b.userState()|Debug);//把它的状态增加一个debug
-        qDebug()<<b.userState();
+        //qDebug()<<b.userState();
     }
 }
 void Editor::FoldCurrent(){
 
     QTextBlock currentBlock=document()->findBlockByLineNumber(this->textCursor().blockNumber());
     int state=0;//0->进行折叠,1->展开
-    qDebug()<<currentBlock.userState();
+    //qDebug()<<currentBlock.userState();
     if(currentBlock.userState()&Begin){
         state=1;//如果已折叠,将模式改为展开
         currentBlock.setUserState(currentBlock.userState()&!Begin);//去掉begin标记
@@ -74,11 +74,11 @@ void Editor::FoldCurrent(){
         if(qc=="{")
         nextNum++;
     }
-    qDebug()<<"当前行"<<texttemp<<nextNum;
+    //qDebug()<<"当前行"<<texttemp<<nextNum;
 
     while(currentBlock.next().isValid())
     {
-        texttemp=currentBlock.next().text(); qDebug()<<texttemp;
+        texttemp=currentBlock.next().text(); //qDebug()<<texttemp;
         if(texttemp.contains("{")||texttemp.contains("}"))
         {//判断该行是否匹配成功
             foreach(QChar qc,texttemp)
@@ -110,7 +110,7 @@ void Editor::FoldCurrent(){
             blktemp=document()->findBlockByNumber(i);
             if(blktemp.userState()==Folded)
             {
-                qDebug()<<"i"<<i<<"blktext"<<blktemp.text()<<blktemp.userState();
+                //qDebug()<<"i"<<i<<"blktext"<<blktemp.text()<<blktemp.userState();
                 blktemp.setVisible(true);
                 blktemp.setUserState((blktemp.userState())&!Folded);//去掉Folded标记
             }
@@ -161,7 +161,7 @@ QVector<qint32> Editor::GetBreakPoints()
     while(b.next().isValid()){
         if(b.userState()&Debug){
             breakpoints->append(b.lineCount());
-            qDebug()<<(b.lineCount());
+            //qDebug()<<(b.lineCount());
         }
         b=b.next();
     }
@@ -245,7 +245,7 @@ void Editor::ChangeCodeStyle(){
     highlighter = new Highlighter(this->document());
     highlighter->Start_Highlight();
     this->LineNumberColor=setting->value("LineColor").toString();
-    qDebug()<<setting->value("LineColor").toString();
+    //qDebug()<<setting->value("LineColor").toString();
 }
 
 void Editor::FoldUnfold(QTextBlock &block)
@@ -439,12 +439,12 @@ void Editor::keyPressEvent(QKeyEvent *e)
     if(e->key()==Qt::Key_F2)
     {
         explainFold();
-        qDebug()<<"fold happen";
+        //qDebug()<<"fold happen";
     }
     if(e->key()==Qt::Key_F3)
     {
         explainUnfold();
-        qDebug()<<"unfold happen";
+        //qDebug()<<"unfold happen";
     }
 
     if (c && c->popup()->isVisible()) {
@@ -535,18 +535,18 @@ void Editor::insertCompletion(const QString& completion)
         return;
     QTextCursor tc = textCursor();
 
-    qDebug()<<completion.length();
-    qDebug()<<c->completionPrefix().length();
+    //qDebug()<<completion.length();
+    //qDebug()<<c->completionPrefix().length();
     int extra = completion.length()- c->completionPrefix().length();
 
-    qDebug()<<extra;
+    //qDebug()<<extra;
 
 #ifndef QT_NO_CURSOR
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 #endif
     tc.select(QTextCursor::WordUnderCursor);
-    qDebug()<<"selecte text: "+tc.selectedText ();
+    //qDebug()<<"selecte text: "+tc.selectedText ();
     tc.selectedText();
 
     tc.deleteChar();
@@ -757,7 +757,7 @@ void Editor::explainFold()
             {
                 block.setVisible(false);
                 block.setUserState((block.userState())|ExplainFold);
-                qDebug()<<block.userState()<<block.blockNumber()<<"fold";
+                //qDebug()<<block.userState()<<block.blockNumber()<<"fold";
             }
             else if(text.at(1)=="*")
             {
@@ -766,7 +766,7 @@ void Editor::explainFold()
                     text=block.text().simplified();
                     block.setVisible(false);
                     block.setUserState((block.userState())|ExplainFold);
-                    qDebug()<<block.userState()<<block.blockNumber()<<"fold";
+                    //qDebug()<<block.userState()<<block.blockNumber()<<"fold";
                     if(text.contains("*/")) break;
                     block=block.next();
                 }
@@ -786,7 +786,7 @@ void Editor::explainUnfold()
         {
             block.setVisible(true);
             block.setUserState((block.userState())&!ExplainFold);
-            qDebug()<<block.userState()<<block.blockNumber()<<"unfold";
+            //qDebug()<<block.userState()<<block.blockNumber()<<"unfold";
         }
         block=block.next();
     }

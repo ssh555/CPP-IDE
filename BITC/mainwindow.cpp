@@ -132,7 +132,6 @@ void MainWindow::OpenHistroyFile(){
     if(!settingList.isEmpty()){//不为空，就打开之前打开的文件
         for (int i =0; i<settingList.length();i++){
             QString filename = setting->value(settingList.at(i)).toString();
-
             if(filename.isEmpty())
                 return ;
             AddTextEditToEditArea(filename,TabTemp::Permanent);//非临时窗口
@@ -206,6 +205,7 @@ void MainWindow::AddTextEditToEditArea(QString filename,bool isTemp){
         openedFileNames->append(filename);
         ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->indexOf(TempWidget),QFileInfo(filename).fileName());
         //读入文件内容
+
         QFile file(filename);
         file.open(QIODevice::ReadOnly);
         QString str = QString(file.readAll());
@@ -238,7 +238,7 @@ void MainWindow::AddTextEditToEditArea(QString filename,bool isTemp){
     //AddFolderToGBox(GetCFolderName(openingFileName));
     //新建搜索框,并初始化各槽函数
     if(searchWindow==NULL){//创建搜索框
-        //workingEditor->isChanged=false;
+        //workingEditor->isChanged=true;
         searchWindow=new SearchWindow();
         ui->verticalLayout->addWidget(searchWindow);
         //设置editor,连接槽函数
@@ -248,7 +248,7 @@ void MainWindow::AddTextEditToEditArea(QString filename,bool isTemp){
             searchWindow->showWithText(workingEditor->textCursor().selectedText());
 
         }else searchWindow->show();
-        //workingEditor->isChanged=true;
+        //workingEditor->isChanged=false;
     }
 }
 
@@ -521,7 +521,7 @@ void MainWindow::Func_MenuBar(){
     connect(this,&MainWindow::SIGNAL_Run,this,[=](){
         if(openingFileName.isEmpty())
             return;
-        QFuture<void> ftr2 = QtConcurrent::run(this,&MainWindow::CompileC,openingFileName);
+        QFuture<void> ftr2 = QtConcurrent::run(this,&MainWindow::RunC,openingFileName);
         ftr2.waitForFinished();
         //RunC(openingFileName);
     });
@@ -764,11 +764,12 @@ QWidget* MainWindow::CreateEditText(QString filename){
     //ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
     //设置 是否保存对应标题的显示
     connect(editor,&QPlainTextEdit::textChanged,[=](){
+        //qDebug() << editor->isChanged;
         if(isReadingOrWriting)
             return ;
         //改变内容但没有保存则标题处标明
         if(!editor->isChanged){
-            ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()) + "(未保存)");
+            ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->indexOf(editor),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->indexOf(editor)) + "(未保存)");
             editor->isChanged = true;
         }
     });
