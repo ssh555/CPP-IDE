@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/down-arrow.png</file>
+        <file>img/left-arrow.png</file>
+        <file>img/right-arrow.png</file>
+        <file>img/Background.png</file>
+        <file>img/bit.png</file>
+        <file>img/gugu.png</file>
+        <file>img/Motto.png</file>
+    </qresource>
+</RCC>

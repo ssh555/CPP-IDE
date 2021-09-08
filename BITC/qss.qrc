@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qss/toolpage.qss</file>
+        <file>test.txt</file>
+        <file>qss/bitstyle.qss</file>
+        <file>qss/defaultstyle.qss</file>
+        <file>qss/purplestyle.qss</file>
+    </qresource>
+    <qresource prefix="/resources">
+        <file>wordlist.txt</file>
+        <file>config.ini</file>
+    </qresource>
+    <qresource prefix="/resources/completer">
+        <file>resources/completer/basic.txt</file>
+        <file>resources/completer/ctype.txt</file>
+        <file>resources/completer/math.txt</file>
+        <file>resources/completer/stdio.txt</file>
+        <file>resources/completer/stdlib.txt</file>
+        <file>resources/completer/string.txt</file>
+    </qresource>
+</RCC>

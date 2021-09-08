@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>674</width>
+    <height>505</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QTabWidget" name="tabWgtEditArea">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font:</string>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="movable">
+       <bool>false</bool>
+      </property>
+      <widget class="QWidget" name="tab_2">
+       <property name="font">
+        <font>
+         <italic>false</italic>
+        </font>
+       </property>
+       <attribute name="title">
+        <string>File1.txt</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QTabWidget" name="tabWgtResArea">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>200</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>300</height>
+       </size>
+      </property>
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <property name="movable">
+       <bool>false</bool>
+      </property>
+      <property name="tabBarAutoHide">
+       <bool>false</bool>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>查找</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string> 调试</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>编译日志</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QTextEdit" name="CompileLog">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="undoRedoEnabled">
+           <bool>false</bool>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>674</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="actionNewFile"/>
+    <addaction name="actionOpenFile"/>
+    <addaction name="actionOpenFolder"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="actionCloseAll"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>编辑</string>
+    </property>
+    <addaction name="actionRevocate"/>
+    <addaction name="actionRestore"/>
+    <addaction name="separator"/>
+    <addaction name="actionShear"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
+    <addaction name="separator"/>
+    <addaction name="actionFind"/>
+    <addaction name="actionReplace"/>
+    <addaction name="separator"/>
+    <addaction name="actionquickJump_2"/>
+   </widget>
+   <widget class="QMenu" name="menuSelect">
+    <property name="title">
+     <string>选择</string>
+    </property>
+    <addaction name="action_7"/>
+   </widget>
+   <widget class="QMenu" name="menuRun">
+    <property name="title">
+     <string>运行</string>
+    </property>
+    <addaction name="actionCompile"/>
+    <addaction name="actionRun"/>
+    <addaction name="actionCompileRun"/>
+    <addaction name="separator"/>
+    <addaction name="actionDebug"/>
+    <addaction name="action_9"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="actionHelp"/>
+   </widget>
+   <widget class="QMenu" name="menuSetting">
+    <property name="title">
+     <string>设置</string>
+    </property>
+    <addaction name="actioncodeStyle"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuSelect"/>
+   <addaction name="menuRun"/>
+   <addaction name="menuHelp"/>
+   <addaction name="menuSetting"/>
+  </widget>
+  <widget class="QDockWidget" name="gBoxFileMgr">
+   <property name="minimumSize">
+    <size>
+     <width>150</width>
+     <height>100</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>500</width>
+     <height>524287</height>
+    </size>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>资源管理器</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusbarTips">
+   <property name="styleSheet">
+    <string notr="true">border: 1px solid gray;</string>
+   </property>
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionRevocate"/>
+   <addaction name="actionRestore"/>
+   <addaction name="separator"/>
+   <addaction name="actionNewFile"/>
+   <addaction name="actionOpenFile"/>
+   <addaction name="actionOpenFolder"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionSaveAs"/>
+   <addaction name="separator"/>
+   <addaction name="actionCompile"/>
+   <addaction name="actionRun"/>
+   <addaction name="actionCompileRun"/>
+   <addaction name="separator"/>
+   <addaction name="actionDebug"/>
+   <addaction name="separator"/>
+   <addaction name="actionFind"/>
+   <addaction name="actionReplace"/>
+   <addaction name="separator"/>
+   <addaction name="actionCloseAll"/>
+  </widget>
+  <action name="actionNewFile">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/New.png</normaloff>:/resources/UIImages/New.png</iconset>
+   </property>
+   <property name="text">
+    <string>新建文件    CTRL+N</string>
+   </property>
+   <property name="iconText">
+    <string>新建文件</string>
+   </property>
+   <property name="toolTip">
+    <string>新建文件</string>
+   </property>
+  </action>
+  <action name="actionOpenFile">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/OpenFile.png</normaloff>:/resources/UIImages/OpenFile.png</iconset>
+   </property>
+   <property name="text">
+    <string>打开文件    CTRL+O</string>
+   </property>
+   <property name="iconText">
+    <string>打开文件</string>
+   </property>
+   <property name="toolTip">
+    <string>打开文件</string>
+   </property>
+  </action>
+  <action name="actionOpenFolder">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/OpenFolder.png</normaloff>:/resources/UIImages/OpenFolder.png</iconset>
+   </property>
+   <property name="text">
+    <string>打开文件夹 CTRL+ALT+O</string>
+   </property>
+   <property name="iconText">
+    <string>打开文件夹</string>
+   </property>
+   <property name="toolTip">
+    <string>打开文件夹</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/Save.png</normaloff>:/resources/UIImages/Save.png</iconset>
+   </property>
+   <property name="text">
+    <string>保存           CTRL+S</string>
+   </property>
+   <property name="iconText">
+    <string>保存</string>
+   </property>
+   <property name="toolTip">
+    <string>保存</string>
+   </property>
+  </action>
+  <action name="actionSaveAs">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/SaveAs.png</normaloff>:/resources/UIImages/SaveAs.png</iconset>
+   </property>
+   <property name="text">
+    <string>另存为        CTRL+SHIFT+S</string>
+   </property>
+   <property name="iconText">
+    <string>另存为</string>
+   </property>
+   <property name="toolTip">
+    <string>另存为</string>
+   </property>
+  </action>
+  <action name="actionCloseAll">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/CloseAllTab.png</normaloff>:/resources/UIImages/CloseAllTab.png</iconset>
+   </property>
+   <property name="text">
+    <string>关闭所有    CTRL+W</string>
+   </property>
+   <property name="iconText">
+    <string>关闭所有</string>
+   </property>
+   <property name="toolTip">
+    <string>关闭所有</string>
+   </property>
+  </action>
+  <action name="actionRevocate">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/Restore.png</normaloff>:/resources/UIImages/Restore.png</iconset>
+   </property>
+   <property name="text">
+    <string>撤销          CTRL+Z</string>
+   </property>
+   <property name="iconText">
+    <string>撤销</string>
+   </property>
+   <property name="toolTip">
+    <string>撤销</string>
+   </property>
+   <property name="statusTip">
+    <string extracomment=" "/>
+   </property>
+  </action>
+  <action name="actionRestore">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/Redo.png</normaloff>:/resources/UIImages/Redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>恢复          CTRL+Y</string>
+   </property>
+   <property name="iconText">
+    <string>恢复</string>
+   </property>
+   <property name="toolTip">
+    <string>恢复 </string>
+   </property>
+  </action>
+  <action name="actionShear">
+   <property name="text">
+    <string>剪切          CTRL+X</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>复制          CTRL+C</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="text">
+    <string>粘贴          CTRL+V</string>
+   </property>
+  </action>
+  <action name="actionFind">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/Find.png</normaloff>:/resources/UIImages/Find.png</iconset>
+   </property>
+   <property name="text">
+    <string>查找          CTRL+F</string>
+   </property>
+   <property name="iconText">
+    <string>查找</string>
+   </property>
+   <property name="toolTip">
+    <string>查找</string>
+   </property>
+  </action>
+  <action name="actionReplace">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/Replace.png</normaloff>:/resources/UIImages/Replace.png</iconset>
+   </property>
+   <property name="text">
+    <string>替换          CTRL+SHIFT+F</string>
+   </property>
+   <property name="iconText">
+    <string>替换</string>
+   </property>
+   <property name="toolTip">
+    <string>替换</string>
+   </property>
+  </action>
+  <action name="action_7">
+   <property name="text">
+    <string>...</string>
+   </property>
+  </action>
+  <action name="actionCompile">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/Compile.png</normaloff>:/resources/UIImages/Compile.png</iconset>
+   </property>
+   <property name="text">
+    <string>编译          CTRL+B</string>
+   </property>
+   <property name="iconText">
+    <string>编译</string>
+   </property>
+   <property name="toolTip">
+    <string>编译</string>
+   </property>
+  </action>
+  <action name="actionRun">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/Run.png</normaloff>:/resources/UIImages/Run.png</iconset>
+   </property>
+   <property name="text">
+    <string>运行          CTRL+R</string>
+   </property>
+   <property name="iconText">
+    <string>运行</string>
+   </property>
+   <property name="toolTip">
+    <string>运行</string>
+   </property>
+  </action>
+  <action name="actionCompileRun">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/ComplieRun.png</normaloff>:/resources/UIImages/ComplieRun.png</iconset>
+   </property>
+   <property name="text">
+    <string>编译运行   CTRL+ALT+N</string>
+   </property>
+   <property name="iconText">
+    <string>编译运行</string>
+   </property>
+   <property name="toolTip">
+    <string>编译运行</string>
+   </property>
+  </action>
+  <action name="actionDebug">
+   <property name="icon">
+    <iconset resource="UIImages.qrc">
+     <normaloff>:/resources/UIImages/Debug.png</normaloff>:/resources/UIImages/Debug.png</iconset>
+   </property>
+   <property name="text">
+    <string>调试</string>
+   </property>
+  </action>
+  <action name="action_9">
+   <property name="text">
+    <string>...</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>帮助文档</string>
+   </property>
+  </action>
+  <action name="actioncodeStyle">
+   <property name="text">
+    <string>整体设置</string>
+   </property>
+  </action>
+  <action name="actionquickJump">
+   <property name="text">
+    <string>快速跳转</string>
+   </property>
+  </action>
+  <action name="actionquickJump_2">
+   <property name="text">
+    <string>快速跳转</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="UIImages.qrc"/>
+ </resources>
+ <connections/>
+</ui>
