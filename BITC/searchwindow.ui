@@ -112,24 +112,6 @@ font:bold 13px;
      </item>
     </layout>
    </item>
-   <item row="0" column="1">
-    <widget class="QPushButton" name="btnCancel">
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
-                        font: bold 13px;
-                        }
- QPushButton:focus{ // 聚焦样式
-background-color:rgb(255, 128, 64);
-
-font:bold 13px;
-                        text-align: left;
-                        }</string>
-     </property>
-     <property name="text">
-      <string>取消</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0" rowspan="2">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
