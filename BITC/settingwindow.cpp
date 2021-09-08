@@ -2,6 +2,10 @@
 #include "ui_settingwindow.h"
 #include "config.h"
 #include "uiinterface.h"
+
+#include <QThread>
+#include <QtConcurrent>
+
 SettingWindow::SettingWindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SettingWindow)
@@ -34,7 +38,13 @@ void SettingWindow::on_CommitBtn_clicked()
     //num现在是记录选择的代码风格()
     int num=ui->SytleBox->currentIndex()+1;
     Config::GetInstance()->ChangeCodeStyle(num);
-    inf->ChangeCodeStyle();
+    MainWindow::isReadingOrWriting = true;
+    QFuture<void> ftr = QtConcurrent::run(inf,&UIInterface::ChangeCodeStyle);
+    while(ftr.isRunning())
+        continue;
+    //ftr.waitForFinished();
+    MainWindow::isReadingOrWriting = false;
+    //inf->ChangeCodeStyle();
 
     //字体设置
     QString fontfamily=ui->comboBox_5->currentText();

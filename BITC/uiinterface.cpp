@@ -55,9 +55,7 @@ void UIInterface::ChangeCodeStyle()
     for(int i=0;i<num;i++){
         //给每个标签页修改codestyle
         Editor *e=(Editor*)tabEditArea->widget(i);
-        e->isChanged = true;
         e->ChangeCodeStyle();
-        e->isChanged = false;
     }
 }
 //--------换风格

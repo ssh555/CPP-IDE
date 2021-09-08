@@ -136,7 +136,11 @@ void MainWindow::OpenHistroyFile(){
         }
     }
     //换回之前的主题设置
-    UIInterface::Instance()->ChangeCodeStyle();
+    isReadingOrWriting = true;
+    QFuture<void> ftr = QtConcurrent::run(UIInterface::Instance(),&UIInterface::ChangeCodeStyle);
+    ftr.waitForFinished();
+    isReadingOrWriting = false;
+    //UIInterface::Instance()->ChangeCodeStyle();
     setting->endGroup();
 }
 //窗口关闭时调用
@@ -355,8 +359,8 @@ void MainWindow::Func_MenuBar(){
         if(openingFileName.isEmpty())
             return;
         QFuture<void> ftr1 = QtConcurrent::run(this,&MainWindow::CompileC,openingFileName);
-        ftr1.waitForFinished();
         QFuture<void> ftr2 = QtConcurrent::run(this,&MainWindow::RunC,openingFileName);
+        ftr1.waitForFinished();
         ftr2.waitForFinished();
         //CompileC(openingFileName);
         //RunC(openingFileName);
@@ -762,6 +766,7 @@ QWidget* MainWindow::CreateEditText(QString filename){
     //ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
     //设置 是否保存对应标题的显示
     connect(editor,&QPlainTextEdit::textChanged,[=](){
+        //qDebug() << editor->isChanged;
         if(isReadingOrWriting)
             return ;
         //改变内容但没有保存则标题处标明
