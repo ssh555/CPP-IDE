@@ -15,13 +15,13 @@ void Config::printChild()
 int Config::init()
 {
     setting = new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
-    if (setting->value("HaveRead").toString()=="4")return 1;//这时候已经初始化好了
+    if (setting->value("HaveRead").toString()=="2")return 1;//这时候已经初始化好了
     if(!(readSetting=new QSettings(":/resources/config.ini",QSettings::IniFormat)))
     {
         return 0;//读取失败
     }else {
         //开始读取设置
-        setting->setValue("HaveRead",4);
+        setting->setValue("HaveRead",2);
         //支持中文
         setting->setIniCodec(QTextCodec::codecForName("utf-8"));
         //初始化行边颜色

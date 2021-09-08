@@ -43,13 +43,14 @@ void Editor::mouseDoubleClickEvent(QMouseEvent *){
         this->FoldCurrent();
     }
     else if(b.userState()&Debug){
-        b.setUserState(b.userState()&!Debug);//把debug状态去掉
-
+        BlockState t = Debug;
+        b.setUserState(b.userState()&!t);//把debug状态去掉
+        qDebug()<<b.userState();
     }
 
     else {
         b.setUserState(b.userState()|Debug);//把它的状态增加一个debug
-        //qDebug()<<b.userState();
+        qDebug()<<b.userState();
     }
 }
 void Editor::FoldCurrent(){
@@ -59,7 +60,8 @@ void Editor::FoldCurrent(){
     //qDebug()<<currentBlock.userState();
     if(currentBlock.userState()&Begin){
         state=1;//如果已折叠,将模式改为展开
-        currentBlock.setUserState(currentBlock.userState()&!Begin);//去掉begin标记
+        BlockState t = Begin;
+        currentBlock.setUserState(currentBlock.userState()&!t);//去掉begin标记
     }else{
         currentBlock.setUserState(currentBlock.userState()|Begin);//设置为折叠开头
     }
@@ -112,7 +114,8 @@ void Editor::FoldCurrent(){
             {
                 //qDebug()<<"i"<<i<<"blktext"<<blktemp.text()<<blktemp.userState();
                 blktemp.setVisible(true);
-                blktemp.setUserState((blktemp.userState())&!Folded);//去掉Folded标记
+                BlockState t = Folded;
+                blktemp.setUserState((blktemp.userState())&!t);//去掉Folded标记
             }
         }
     }
@@ -160,8 +163,7 @@ QVector<qint32> Editor::GetBreakPoints()
     QTextBlock b=document()->firstBlock();
     while(b.next().isValid()){
         if(b.userState()&Debug){
-            breakpoints->append(b.lineCount());
-            //qDebug()<<(b.lineCount());
+            breakpoints->append(b.blockNumber());
         }
         b=b.next();
     }
@@ -756,7 +758,7 @@ void Editor::explainFold()
             if(text.at(1)=="/")
             {
                 block.setVisible(false);
-                block.setUserState((block.userState())|ExplainFold);
+                block.setUserState(block.userState()|Nested);
                 //qDebug()<<block.userState()<<block.blockNumber()<<"fold";
             }
             else if(text.at(1)=="*")
@@ -765,8 +767,8 @@ void Editor::explainFold()
                 {
                     text=block.text().simplified();
                     block.setVisible(false);
-                    block.setUserState((block.userState())|ExplainFold);
-                    //qDebug()<<block.userState()<<block.blockNumber()<<"fold";
+                    block.setUserState(block.userState()|Nested);
+                    qDebug()<<block.userState()<<block.blockNumber()<<"fold";
                     if(text.contains("*/")) break;
                     block=block.next();
                 }
@@ -782,10 +784,11 @@ void Editor::explainUnfold()
     QTextBlock block=document()->firstBlock();
     for(;block.isValid();)
     {
-        if(block.userState()==ExplainFold)
+        if(block.userState()&Nested)
         {
             block.setVisible(true);
-            block.setUserState((block.userState())&!ExplainFold);
+            //qDebug()<<block.userState()<<"nestbefore";
+            block.setUserState(block.userState()&(~Nested));
             //qDebug()<<block.userState()<<block.blockNumber()<<"unfold";
         }
         block=block.next();

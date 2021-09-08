@@ -66,8 +66,6 @@ MainWindow::MainWindow(QWidget *parent)
             }
         }
         //保存打开的文件名
-
-
         openedFileNames->removeAll(GetTABFilePath(ui->tabWgtEditArea->widget(i),str));
         //如果为临时窗口
         if(TempWidget == ui->tabWgtEditArea->widget(i)){
@@ -138,7 +136,11 @@ void MainWindow::OpenHistroyFile(){
         }
     }
     //换回之前的主题设置
-    UIInterface::Instance()->ChangeCodeStyle();
+    isReadingOrWriting = true;
+    QFuture<void> ftr = QtConcurrent::run(UIInterface::Instance(),&UIInterface::ChangeCodeStyle);
+    ftr.waitForFinished();
+    isReadingOrWriting = false;
+    //UIInterface::Instance()->ChangeCodeStyle();
     setting->endGroup();
 }
 //窗口关闭时调用
@@ -357,8 +359,8 @@ void MainWindow::Func_MenuBar(){
         if(openingFileName.isEmpty())
             return;
         QFuture<void> ftr1 = QtConcurrent::run(this,&MainWindow::CompileC,openingFileName);
-        ftr1.waitForFinished();
         QFuture<void> ftr2 = QtConcurrent::run(this,&MainWindow::RunC,openingFileName);
+        ftr1.waitForFinished();
         ftr2.waitForFinished();
         //CompileC(openingFileName);
         //RunC(openingFileName);
@@ -802,13 +804,13 @@ void MainWindow::TempTabToPermTab(){
 }
 
 //设置自动保存信号
-void MainWindow::SetAutoSave(bool b){
+void MainWindow::SetAutoSave(bool b,int time){
     isAutoSave = b;
     //开启自动保存
     if(isAutoSave){
         //未开始则开始计时
         if(!autoSaveTimer->isActive())
-            autoSaveTimer->start(1000*60*3);//每3分钟自动保存一次
+            autoSaveTimer->start(time);//每3分钟自动保存一次
     }
     //关闭自动保存
     else{
@@ -848,5 +850,6 @@ QToolBar* MainWindow::GettoolBar(){
 }
 
 MainWindow* MainWindow::m_pInstance = NULL;
+bool MainWindow::isReadingOrWriting = false;
 
 

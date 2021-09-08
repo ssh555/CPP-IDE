@@ -2,6 +2,10 @@
 #include "ui_settingwindow.h"
 #include "config.h"
 #include "uiinterface.h"
+
+#include <QThread>
+#include <QtConcurrent>
+
 SettingWindow::SettingWindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SettingWindow)
@@ -22,6 +26,8 @@ void SettingWindow::Init()
     //初始化combobox,让它们指向默认选项
     ui->comboBox_5->setCurrentText(setting->value("CodeFont").toString());
     ui->comboBox->setCurrentText(setting->value("editorfontsize").toString());
+    ui->SytleBox->setCurrentText(QString::number(setting->value("styleflag").toUInt()));
+    ui->comboBox_4->setCurrentText("否");
 
 }
 SettingWindow::~SettingWindow()
@@ -34,7 +40,13 @@ void SettingWindow::on_CommitBtn_clicked()
     //num现在是记录选择的代码风格()
     int num=ui->SytleBox->currentIndex()+1;
     Config::GetInstance()->ChangeCodeStyle(num);
-    inf->ChangeCodeStyle();
+    MainWindow::isReadingOrWriting = true;
+    QFuture<void> ftr = QtConcurrent::run(inf,&UIInterface::ChangeCodeStyle);
+    while(ftr.isRunning())
+        continue;
+    //ftr.waitForFinished();
+    MainWindow::isReadingOrWriting = false;
+    //inf->ChangeCodeStyle();
 
     //字体设置
     QString fontfamily=ui->comboBox_5->currentText();
@@ -45,7 +57,6 @@ void SettingWindow::on_CommitBtn_clicked()
     //自动保存设置 是->自动保存(0位置)
     MainWindow::Instance()->SetAutoSave(ui->comboBox_4->currentIndex()==0);
     this->close();
-
 }
 
 void SettingWindow::on_pushButton_clicked()

@@ -52,7 +52,7 @@ public:
         Nested      = 16,    // 00010000
         Folded      = 32,    // 00100000
         ExplainFold = 33,    // 00100001
-        Error       = 64,    // 01000000
+        Error       = 64,     // 01000000
         Rehighlight = 128,   // 10000000
         //Bookmark    = 256, // 100000000
         Empty       = -1     // 1111....

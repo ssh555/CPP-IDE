@@ -55,9 +55,11 @@ public:
     //获取toolBar
     QToolBar* GettoolBar();
     //设置自动保存信号
-    void SetAutoSave(bool b);
+    void SetAutoSave(bool b,int time = 1000*60*3);//默认三分钟保存一次
     //打开历史文件
     void OpenHistroyFile();
+    //正在读入或写入文件内容时不会触发textchanged
+    static bool isReadingOrWriting;
 
 protected:
     void closeEvent(QCloseEvent *) override;
@@ -85,8 +87,7 @@ private:
     QString openingFileName;
     //记录已打开的文件
     QStringList *openedFileNames;
-    //正在读入或写入文件内容时不会触发textchanged
-    bool isReadingOrWriting = false;
+
 
     //当窗口大小改变时，其他控件等也跟着改变大小，用来适应窗口大小
     //void resizeEvent(QResizeEvent* event);
