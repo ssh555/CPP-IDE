@@ -762,7 +762,6 @@ QWidget* MainWindow::CreateEditText(QString filename){
     //ui->tabWgtEditArea->setTabText(ui->tabWgtEditArea->currentIndex(),ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)",""));
     //设置 是否保存对应标题的显示
     connect(editor,&QPlainTextEdit::textChanged,[=](){
-        //qDebug() << editor->isChanged;
         if(isReadingOrWriting)
             return ;
         //改变内容但没有保存则标题处标明
@@ -800,13 +799,13 @@ void MainWindow::TempTabToPermTab(){
 }
 
 //设置自动保存信号
-void MainWindow::SetAutoSave(bool b){
+void MainWindow::SetAutoSave(bool b,int time){
     isAutoSave = b;
     //开启自动保存
     if(isAutoSave){
         //未开始则开始计时
         if(!autoSaveTimer->isActive())
-            autoSaveTimer->start(1000*60*3);//每3分钟自动保存一次
+            autoSaveTimer->start(time);//每3分钟自动保存一次
     }
     //关闭自动保存
     else{

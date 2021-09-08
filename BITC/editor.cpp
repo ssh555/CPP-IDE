@@ -43,7 +43,8 @@ void Editor::mouseDoubleClickEvent(QMouseEvent *){
         this->FoldCurrent();
     }
     else if(b.userState()&Debug){
-        b.setUserState(b.userState()&!Debug);//把debug状态去掉
+        BlockState t = Debug;
+        b.setUserState(b.userState()&!t);//把debug状态去掉
 
     }
 
@@ -59,7 +60,8 @@ void Editor::FoldCurrent(){
     //qDebug()<<currentBlock.userState();
     if(currentBlock.userState()&Begin){
         state=1;//如果已折叠,将模式改为展开
-        currentBlock.setUserState(currentBlock.userState()&!Begin);//去掉begin标记
+        BlockState t = Begin;
+        currentBlock.setUserState(currentBlock.userState()&!t);//去掉begin标记
     }else{
         currentBlock.setUserState(currentBlock.userState()|Begin);//设置为折叠开头
     }
@@ -112,7 +114,8 @@ void Editor::FoldCurrent(){
             {
                 //qDebug()<<"i"<<i<<"blktext"<<blktemp.text()<<blktemp.userState();
                 blktemp.setVisible(true);
-                blktemp.setUserState((blktemp.userState())&!Folded);//去掉Folded标记
+                BlockState t = Folded;
+                blktemp.setUserState((blktemp.userState())&!t);//去掉Folded标记
             }
         }
     }
@@ -785,7 +788,8 @@ void Editor::explainUnfold()
         if(block.userState()==ExplainFold)
         {
             block.setVisible(true);
-            block.setUserState((block.userState())&!ExplainFold);
+            BlockState t = ExplainFold;
+            block.setUserState((block.userState())&!t);
             //qDebug()<<block.userState()<<block.blockNumber()<<"unfold";
         }
         block=block.next();

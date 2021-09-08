@@ -55,7 +55,7 @@ public:
     //获取toolBar
     QToolBar* GettoolBar();
     //设置自动保存信号
-    void SetAutoSave(bool b);
+    void SetAutoSave(bool b,int time = 1000*60*3);//默认三分钟保存一次
     //打开历史文件
     void OpenHistroyFile();
     //正在读入或写入文件内容时不会触发textchanged

@@ -45,7 +45,6 @@ void SettingWindow::on_CommitBtn_clicked()
     //自动保存设置 是->自动保存(0位置)
     MainWindow::Instance()->SetAutoSave(ui->comboBox_4->currentIndex()==0);
     this->close();
-
 }
 
 void SettingWindow::on_pushButton_clicked()
