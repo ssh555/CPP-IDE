@@ -686,7 +686,7 @@ void MainWindow::CompileC(QString filename){
             emit SIGNAL_AddMingw();
             return;
         }
-        str = str + "set path=" + setting->value(settingList.at(0)).toString() + "/bin && ";
+        str = str + "set path=" + setting->value(settingList.at(0)).toString() + "/mingw-w64/bin && ";
         //测试代码
         //setting->clear();
         //
