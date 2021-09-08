@@ -83,6 +83,7 @@ public slots:
     void FoldUnfoldAll(bool folding);//用于代码折叠
     void explainFold();
     void explainUnfold();
+    void SLOT_BracketMatch(); //括号匹配
 
     void SLOT_ChangeLineNum(int num);
 

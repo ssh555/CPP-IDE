@@ -23,7 +23,9 @@
 //传出：
 //	当前行号，以信号方式
 //有问题找我（史星蔚）
-//有大量无用代码，函数不一定有用
+
+QRegExp Debuger::lineNumber = QRegExp("^#.* at .*:.*");
+QRegExp Debuger::variable = QRegExp("[0-9]{1,4}: .* = .*");
 
 Debuger::Debuger(QWidget *parent, QString filename, QString filepath, QVector<qint32> breakPoints)
     : QWidget(parent)
@@ -32,13 +34,6 @@ Debuger::Debuger(QWidget *parent, QString filename, QString filepath, QVector<qi
     ui->setupUi(this);
     fileName = filename;
     filePath = filepath;
-
-    lineNumber = QRegExp("^#.* at .*:.*");
-    variable = QRegExp("[0-9]{1,4}: .* = .*");
-
-    logFile = new QFile(filePath+"/gdb.txt");
-    logFile->open(QIODevice::ReadOnly);
-    logStream = new QTextStream(logFile);
 
 #pragma region "Buttons" {
 
@@ -54,22 +49,18 @@ Debuger::Debuger(QWidget *parent, QString filename, QString filepath, QVector<qi
 
     connect(ui->StepInto, &QPushButton::clicked, this, [=]{
         LogWrite("step");
-//        ui->BreakView->append(QString::number(GetNowLine()));
     });
 
     connect(ui->StepOut, &QPushButton::clicked, this, [=]{
         LogWrite("finish");
-//        ui->BreakView->append(QString::number(GetNowLine()));
     });
 
     connect(ui->StepOver, &QPushButton::clicked, this, [=]{
         LogWrite("next");
-//        ui->BreakView->append(QString::number(GetNowLine()));
     });
 
     connect(ui->Continue, &QPushButton::clicked, this, [=]{
         LogWrite("continue");
-//        ui->BreakView->append(QString::number(GetNowLine()));
     });
 
     connect(ui->DisplayButton, &QPushButton::clicked, this, [=]{
@@ -86,7 +77,7 @@ Debuger::Debuger(QWidget *parent, QString filename, QString filepath, QVector<qi
         Write(ui->EnterLine->text());
         ui->EnterLine->clear();
     });
-#pragma endregion}
+#pragma endregion }
 
 
     debuger = new QProcess();
@@ -95,36 +86,26 @@ Debuger::Debuger(QWidget *parent, QString filename, QString filepath, QVector<qi
 
     Write(filePath.left(2));
     Write("cd "+filePath);
-    Write("gcc -g "+fileName+" -o main");
+    Write("g++ -g "+fileName+" -o main");
     Write("gdb main");
-    Write("set logging overwrite on");
     Write("set new-console on");
 
     //SetBreakPoints
-    qint32 b = 0;
-    foreach(b, breakPoints);
+    QVector<qint32>::iterator iter;
+    for (iter=breakPoints.begin();iter!=breakPoints.end();iter++)
     {
-        Write("break "+QString::number(b));
+        Write("break "+ QString::number(*iter));
     }
 
-    Write("run");
+//    Write("run");
 }
 
 Debuger::~Debuger()
 {
     delete ui;
     delete debuger;
-    logFile->close();
-    delete logFile;
-    delete logStream;
-
+    QFile::remove(filePath+"/main.exe");
 }
-void Debuger::ReadyToStart(){
-
-}
-
-
-
 
 void Debuger::Write(QString command)
 {
@@ -135,22 +116,15 @@ void Debuger::Write(QString command)
 
 void Debuger::LogWrite(QString command)
 {
-
-//    Write("set logging on");
     Write(command);
-//    Write("set logging off");
-//    debuger->waitForFinished(100);
-//    qDebug()<<"readReady";
-//    Write("set logging on");
     Write("frame");
-//    QString log = QString::fromLocal8Bit(logFile->readLine());
-//    qDebug()<<log;
-//    ReadLog();
 }
 
 void Debuger::Read()
 {
     QString log  = QString::fromLocal8Bit(debuger->readAll());
+    ui->Information->append(log);
+    ui->Information->update();
     log.replace("(gdb) ","");
     QStringList tempList = log.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
     foreach(QString string, tempList) {
@@ -182,66 +156,4 @@ void Debuger::Read()
             ui->DisplayView->setItem(id-1, 1, new QTableWidgetItem(value));
         }
     }
-    ui->Information->append(log);
-    ui->Information->update();
-}
-
-void Debuger::ReadLog()
-{
-    QString log = QString::fromLocal8Bit(logFile->readAll());
-    log.replace("(gdb) ", "");
-    QStringList tempList = log.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
-    if(tempList.isEmpty()){
-//        qDebug()<<"empty";
-        return;
-    }
-    foreach(QString string, tempList) {
-        if(QRegExp("^[0-9]").indexIn(string, 0)>=0) {
-            if(QRegExp(".*: .* = .*").indexIn(string, 0)>=0)
-            {
-//                qDebug()<<string<<" .*: .* = .*";
-//                ui->DisplayView->append(string);
-            }
-//            else {
-//                qDebug()<<string<<" ^[0-9]";
-//                ui->BreakView->append(string);
-//            }
-        }
-//        else
-//            qDebug()<<string<<"  false";
-    }
-}
-
-int Debuger::GetNowLine()
-{
-    LogWrite("frame");
-    QString log = QString::fromLocal8Bit(logFile->readLine());
-
-    if(log.isEmpty()){
-//        qDebug()<<"empty";
-        return -1;
-    }
-    int number = log.mid(log.lastIndexOf(':')+1).replace("\r\n", "").toInt();
-//    ui->BreakView->append(QString::number(number));
-    emit SIGNAL_NowLine(number+1);
-    return number;
-}
-
-void Debuger::SetBreak()
-{
-
-}
-
-void Debuger::SetBreakPoints(QVector<qint32> breakpoints)
-{
-    breakPoints = breakpoints;
-}
-
-void Debuger::SetFilePath(QString file)
-{
-    filePath = file;
-}
-void Debuger::SetFile(QString file)
-{
-    fileName=file;
 }

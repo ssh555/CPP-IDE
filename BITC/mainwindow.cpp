@@ -154,6 +154,7 @@ void MainWindow::closeEvent(QCloseEvent *){
 //获取C文件绝对路径的文件名.
 QString MainWindow::GetCFileName(QString filename){
     filename = filename.replace("(未保存)","");
+    QString a = filename.mid(filename.lastIndexOf("/")+1);
     return filename.mid(filename.lastIndexOf("/")+1);
 }
 //获取C文件绝对路径的文件夹名 不包括最后的/
@@ -518,6 +519,10 @@ void MainWindow::Func_MenuBar(){
         emit SIGNAL_Debug();
     });
     connect(this,&MainWindow::SIGNAL_Debug,this,[=](){
+        if(openingFileName.isEmpty()) {
+            qDebug()<<"Debug: empty file";
+            return;
+        }
         //存储正在准备调试的文件信息
         //        qDebug()<<openingFileName;
         //        qDebug()<<GetCFileName(openingFileName);
