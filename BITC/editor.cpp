@@ -69,14 +69,27 @@ void Editor::FoldCurrent(){
     int nextNum=0;
 
     texttemp=currentBlock.text();
-    foreach(QChar qc,texttemp)
-    {
-        if(qc=="{")
-            nextNum++;
-    }
-    //qDebug()<<"当前行"<<texttemp<<nextNum;
+    if(texttemp.contains("{")&&texttemp.contains("}"))
+        {
+
+            int firsttLeftBrace=texttemp.indexOf("{",0);
+            texttemp.remove(0,firsttLeftBrace);
+            foreach(QChar qc,texttemp)
+            {
+                if(qc=="{") nextNum++;
+                else if(qc=="}") nextNum--;
+            }
+        }
+        else
+        {
+            foreach(QChar qc,texttemp)
+            {
+                if(qc=="{") nextNum++;
+            }
+        }
+
     int quote=0;
-    while(currentBlock.next().isValid())
+    for(;currentBlock.next().isValid();)
     {
         texttemp=currentBlock.next().text(); //qDebug()<<texttemp;
         quote = texttemp.count("\"");
@@ -371,11 +384,13 @@ void Editor::keyPressEvent(QKeyEvent *e)
         }
         else if(e->text().right(1)=="(")
         {
-            insertCompletion(")");
+            insertPlainText(")");
+            this->moveCursor(QTextCursor::Left);
         }
         else if(e->text().right(1)=="[")
         {
-            insertCompletion("]");
+            insertPlainText("]");
+            this->moveCursor(QTextCursor::Left);
         }
         else if(e->text().right(1)=="\r")
         {
@@ -707,25 +722,43 @@ void Editor::explainUnfold()
 
 void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections)
 {
+    QTextCursor cursorQuote=textCursor();
+    int currentPosition=cursorQuote.positionInBlock();
+    cursorQuote.select(QTextCursor::LineUnderCursor);
+    QString texttemp=cursorQuote.selectedText();
+    int quote=0;
+    int quotePosition=0;
+    quote = texttemp.count("\"");
+    while(quote>0&&(quote%2==0))
+    {
+        int quoteLeft=texttemp.indexOf("\"",quotePosition);
+        int quoteRight=texttemp.indexOf("\"",quoteLeft+1);
+        if(currentPosition>quoteLeft&&currentPosition<quoteRight) return;
+        quote-=2;
+        quotePosition=quoteRight+1;
+    }
+
     //增减数组需要修改for循环的条件
     QChar brace[6]={'(','[','{',')',']','}'};
 
     QTextDocument *doc = this->document();
     QTextCursor cursor = textCursor();
+    cursor.clearSelection();
     int position = cursor.position();
 
-    //用于临时修改 匹配到的字符 的样式
 
     //可以修改 selection.format 以修改显示样式
     QTextEdit::ExtraSelection selection;
     selection.format.setBackground(Qt::green);
-    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+//    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
 
 
     QTextCursor cursorBegin;
     QTextCursor cursorEnd;
 
     QChar c, charBegin=' ', charEnd=' ';
+
+    bool whetherInQuote=false;
 
     //向后找
     //判断是否是需要匹配的字符
@@ -746,6 +779,19 @@ void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections
         int counter = 1;        //用于数左右括号的数量，为左括号则+1，为右括号则-1，counter为0则匹配成功
 
         while (!(c = doc->characterAt(position)).isNull()) {
+            if(c=="\"")
+            {
+                if(doc->characterAt(position-1)=="\\")
+                {
+                    whetherInQuote=!whetherInQuote;
+                }
+                whetherInQuote=!whetherInQuote;
+            }
+            if(whetherInQuote)
+            {
+                position++;
+                continue;
+            }
             if (c == charBegin) {
                 counter++;
             }
@@ -763,6 +809,7 @@ void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections
                         selection.cursor = cursorBegin;
                         extraSelections.append(selection);
                     }
+                    whetherInQuote=false;
                     break;
                 }
             }
@@ -787,6 +834,19 @@ void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections
         int counter = 0;
 
         while (!(c = doc->characterAt(position)).isNull()) {
+            if(c=="\"")
+            {
+                if(doc->characterAt(position-1)=="\\")
+                {
+                    whetherInQuote=!whetherInQuote;
+                }
+                whetherInQuote=!whetherInQuote;
+            }
+            if(whetherInQuote)
+            {
+                position--;
+                continue;
+            }
             if (c == charEnd) {
                 counter++;
             }
@@ -804,11 +864,12 @@ void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections
                         selection.cursor = cursorEnd;
                         extraSelections.append(selection);
                     }
+                    whetherInQuote=false;
                     break;
                 }
             }
             position--;
         }
     }
-//    setExtraSelections(extraSelections);
 }
+

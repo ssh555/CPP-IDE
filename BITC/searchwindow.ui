@@ -48,7 +48,7 @@ font:bold 13px;
                         }</string>
        </property>
        <property name="text">
-        <string>查找全文</string>
+        <string>从头查找</string>
        </property>
       </widget>
      </item>

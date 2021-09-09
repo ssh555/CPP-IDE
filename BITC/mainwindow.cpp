@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
         {
             searchWindow->setEditor((Editor *)ui->tabWgtEditArea->widget(index));
         }
+        workingEditor=(Editor *)ui->tabWgtEditArea->widget(index);
     });
     //编辑页的关闭事件
     connect(ui->tabWgtEditArea,&QTabWidget::tabCloseRequested,[=](int i){
