@@ -24,6 +24,7 @@
 #include "searchwindow.h"
 #include <QThread>
 #include <QtConcurrent>
+#include <QFuture>
 #include "debuger.h"
 #include <QElapsedTimer>
 #include "uiinterface.h"
@@ -358,9 +359,12 @@ void MainWindow::Func_MenuBar(){
     connect(this,&MainWindow::SIGNAL_CompileRun,this,[=](){
         if(openingFileName.isEmpty())
             return;
-        QFuture<void> ftr1 = QtConcurrent::run(this,&MainWindow::CompileC,openingFileName);
-        QFuture<void> ftr2 = QtConcurrent::run(this,&MainWindow::RunC,openingFileName);
+        QFuture<bool> ftr1 = QtConcurrent::run(this,&MainWindow::CompileC,openingFileName);
         ftr1.waitForFinished();
+        //编译失败
+        if(!ftr1.result())
+            return ;
+        QFuture<void> ftr2 = QtConcurrent::run(this,&MainWindow::RunC,openingFileName);
         ftr2.waitForFinished();
         //CompileC(openingFileName);
         //RunC(openingFileName);
@@ -660,20 +664,32 @@ void MainWindow::Func_MenuBar(){
 
 
 //-----编译C文件  参数为文件的完整绝对路径
-void MainWindow::CompileC(QString filename){
+bool MainWindow::CompileC(QString filename){
     //文件不存在
     if(!QFileInfo(filename).exists()){
         emit SIGNAL_NotExist();
-        return;
+        return false;
     }
     //文件不是C/C++
     QString suf = QFileInfo(filename).suffix();
     suf = suf.toLower();
     if(suf.compare("c") != 0 && suf.compare("c++") != 0 && suf.compare("cpp") != 0){
         emit SIGNAL_NotCorCpp();
-        return;
+        return false;
     }
+    //文件未保存
+    if(ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).lastIndexOf("(未保存)") != -1){
 
+        QMessageBox messageBox(QMessageBox::Question,"是否编译文件",ui->tabWgtEditArea->tabText(ui->tabWgtEditArea->currentIndex()).replace("(未保存)","") + " 文件未保存,选否则取消编译");
+        QPushButton *btnYes = messageBox.addButton(("是"), QMessageBox::YesRole);
+        messageBox.addButton(("否"), QMessageBox::NoRole);
+        messageBox.exec();
+        //保存
+        if ((QPushButton*)messageBox.clickedButton() == btnYes){
+            emit SIGNAL_SaveFile();
+        }
+        return false;
+    }
 
     //用指针形式
     QProcess *p = new QProcess;
@@ -689,7 +705,7 @@ void MainWindow::CompileC(QString filename){
         QStringList settingList=setting->childKeys();
         if(settingList.isEmpty()){
             emit SIGNAL_AddMingw();
-            return;
+            return false;
         }
         str = str + "set path=" + setting->value(settingList.at(0)).toString() + "/mingw-w64/bin && ";
         //测试代码
@@ -719,11 +735,13 @@ void MainWindow::CompileC(QString filename){
                                                    "  - 输出大小：%4 KB\n"
                                                    "  - 编译时间：%5 s"
                                                    ).arg(__TIME__).arg(filename).arg(str).arg(QFile(str).size()/1024.0).arg(t/1000.0));
+        return true;
     }
     //编译失败
     else{
         Instance()->ui->CompileLog->append(QString("  %1：Compile %2\n"
                                                    "  - 编译失败\n%3").arg(__TIME__).arg(filename).arg(cmdoutput));
+        return false;
     }
 
 
@@ -731,9 +749,9 @@ void MainWindow::CompileC(QString filename){
     //qDebug() << QString::fromLocal8Bit(p->readAllStandardOutput());
     if(!QFileInfo(str).exists()){
         emit SIGNAL_CompileError();
-        return;
+        return false;
     }
-
+    return true;
 }
 
 //运行C文件  参数为文件的完整绝对路径
