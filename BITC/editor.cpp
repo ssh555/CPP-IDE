@@ -35,11 +35,12 @@ void Editor::Init()
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(SLOT_UpdateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(SLOT_UpdateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_HighlightCurrentLine()));
+
 }
 void Editor::mouseDoubleClickEvent(QMouseEvent *){
     QTextBlock b=document()->findBlockByNumber(this->textCursor().blockNumber());
     //首先判断这次双击是不是为了折叠代码
-    if(b.text().contains('{')&&(b.userState()&Begin)){
+    if(b.text().contains('{')){
         this->FoldCurrent();
     }
     else if(b.userState()&Debug){
@@ -55,13 +56,13 @@ void Editor::mouseDoubleClickEvent(QMouseEvent *){
 }
 void Editor::FoldCurrent(){
 
-    QTextBlock currentBlock=document()->findBlockByLineNumber(this->textCursor().blockNumber());
+    QTextBlock currentBlock=document()->findBlockByNumber(this->textCursor().blockNumber());
     int state=0;//0->进行折叠,1->展开
     //qDebug()<<currentBlock.userState();
     if(currentBlock.userState()&Begin){
         state=1;//如果已折叠,将模式改为展开
         BlockState t = Begin;
-        currentBlock.setUserState(currentBlock.userState()&!t);//去掉begin标记
+        currentBlock.setUserState(currentBlock.userState()&~t);//去掉begin标记
     }else{
         currentBlock.setUserState(currentBlock.userState()|Begin);//设置为折叠开头
     }
@@ -110,12 +111,12 @@ void Editor::FoldCurrent(){
     }else{
         for(int i=begin+1;i<end;i++){
             blktemp=document()->findBlockByNumber(i);
-            if(blktemp.userState()==Folded)
+            if(blktemp.userState()&Folded)
             {
                 //qDebug()<<"i"<<i<<"blktext"<<blktemp.text()<<blktemp.userState();
                 blktemp.setVisible(true);
                 BlockState t = Folded;
-                blktemp.setUserState((blktemp.userState())&!t);//去掉Folded标记
+                blktemp.setUserState((blktemp.userState())&~t);//去掉Folded标记
             }
         }
     }
@@ -435,6 +436,7 @@ void Editor::keyPressEvent(QKeyEvent *e)
             }
             else
             {
+
                 autoIndent(true);
             }
         }
@@ -467,7 +469,8 @@ void Editor::keyPressEvent(QKeyEvent *e)
 Editor::Editor(QWidget *parent,QString foldername) : QPlainTextEdit(parent){
     FolderName = foldername;
     this->Init();
-}/*
+}
+/*
 void Editor::insertCompletion(const QString& completion)
 {
     if (c->widget() != this)
@@ -518,7 +521,7 @@ int Editor::lineNumberAreaWidth()
         ++digits;
     }
 
-    int space = 3 + fontMetrics().averageCharWidth() * digits;
+    int space = 3 + fontMetrics().averageCharWidth() * (digits+1);
 
     return space;
 }
@@ -586,16 +589,23 @@ void Editor::Line_Number_Area_Paint_Event(QPaintEvent *event)
     int bottom = top + (int) blockBoundingRect(block).height();
 
     while (block.isValid() && top <= event->rect().bottom()) {
-        if(block.userState()==Debug){
+        if(block.userState()&Debug and block.isVisible()){
             painter.setPen(Qt::red);
             painter.drawText(-2, top, lineNumberArea->width(), fontMetrics().height(),
                              Qt::AlignRight, QString::number(blockNumber + 1));
+            QPen *pen=new QPen();
+            pen->setWidth(fontMetrics().height()/2);
+                pen->setColor(Qt::red); // 设置画笔为黄色
+                painter.setPen(*pen); // 设置画笔
+                painter.drawPoint(0,(top+bottom)/2);
+
         }else
             if (block.isVisible() && bottom >= event->rect().top()) {
                 QString number = QString::number(blockNumber + 1);
                 painter.setPen(Qt::black);
                 painter.drawText(-2, top, lineNumberArea->width(), fontMetrics().height(),
                                  Qt::AlignRight, number);
+
 
             }
 
@@ -659,11 +669,28 @@ void Editor::autoIndent(bool temp)
     this->moveCursor(QTextCursor::StartOfLine);
     bool includeBraceLeft=previousRowText.contains("{");
     int spaceNumber=0;
+    bool tabisFirst=true;
     foreach(QChar qc,previousRowText)
     {
+        if(qc=="\x9"&&tabisFirst)
+        {
+            spaceNumber+=3;
+        }
+        else tabisFirst=false;
         if(qc==" ")
         {
             spaceNumber++;
+        }
+        else if(qc=="\x9")
+        {
+            if(tabisFirst)
+            {
+                continue;
+            }
+            else
+            {
+                spaceNumber+=2;
+            }
         }
         else break;
     }
