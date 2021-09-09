@@ -1,71 +1,184 @@
-QDockWidget{/*资源管理器*/
-    background-color:#ffdde1;
-    color: black;
+/*-------------------------以下为资源管理器样式-------------------------*/
+/*资源管理器标题*/
+QDockWidget{
+    font-family: "Microsoft YaHei";
+    font-size: 16px;
+    background-color: rgba(255,221,225,1);
 }
-.QDockWidget .QWidget{/*資源管理器下方*/
+
+/*资源管理器下面那块*/
+QDockWidget .QWidget{/*透明情况下没有出来*/
     background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1,
-    stop:0 #ffdde1, stop:1 #F1B1BA);
-}
-
-#pushButtonFold{/*文件夹名*/
-    background-color:rgb(78,78,78);
-    color: black;
-}
-FileLabel{/*文件名*/
-    color: black;
-}
-FileLabel[FileLabelState= "enter"]{/*用rgba模式會叠加透明度，導致程度變深*/
-    background-color:white;
-}
-FileLabel[FileLabelState="leave"]{
-    background-color:rgb(165,255,206);
-}
-
-
-#toolBar{
-    background-color:#F1B1BA;
-    color:black;
-}
-
-#tabWgtResArea{/*貌似只能改纯色*/
-    background-color:#F1B1BA;
-    color:black;
-}
-
-#tabWgtEditArea{/*貌似只能改纯色*/
-    background-color:#F1B1BA;
-    color:black;
-}
-
-
-
-
-QMenuBar{
-    /*菜单栏背景色*/
-    background-color:qlineargradient(x1:0, y1:0, x2:1, y2:0,
     stop:0 #ffdde1, stop:1 #ee9ca7);
-    color:black;
+
+}/*怎么我把这个注释掉，toolbar之类的也没了*/
+ToolBox{
+    background-color:rbga(0,0,0,0);
+}
+/*文件夹*/
+#pushButtonFold {
+    font-family: "Microsoft YaHei";
+    font-size: 16px;
+    text-align: left;
+    background-color: rgba(252,171,181,0);
+    border-radius: 0px;
+    padding-left: 5px;
+}
+#pushButtonFold:hover {
+    background-color: rgba(225,218,234,1);
+}
+#pushButtonFold:pressed {
+    background-color: rgba(225,218,234,1);
+    padding-left: 10px;
+    padding-top: 3px;
+}
+
+/*文件*/
+FileLabel {
+    font-family: "Microsoft YaHei";
+    font-size: 15px;
+    margin-left: 17px;
+    background-color: rgba(64, 192, 143,0);/*透明*/
+    border-color: seagreen;
+}
+FileLabel:hover {/*用rgba模式會叠加透明度，導致程度變深，酌情使用*/
+    background-color: rgb(225,218,234);
+}
+/*-------------------------以上为资源管理器样式-------------------------*/
+
+
+
+/*-------------------------以下为工具栏样式-------------------------*/
+/*工具栏*/
+#toolBar {
+    font-family: "Microsoft YaHei";
+    background-color: rgba(238, 156, 167, 1);
+}
+/*-------------------------以上为工具栏样式-------------------------*/
+
+
+
+/*-------------------------以下为QTabWiget样式-------------------------*/
+/*上方文本栏*/
+#tabWgtEditArea {
+    font-family: "Microsoft YaHei";
+    background-color: rgba(254,218,222, 1);
+}
+
+/*下方状态栏*/
+#tabWgtResArea {
+    font-family: "Microsoft YaHei";
+    background-color: rgba(254,218,222, 1);
+}
+
+/*tab*/
+QTabBar::tab {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    margin-left: 5px;
+    margin-top: 5px;
+    padding-top: 4px;
+    padding-bottom: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: rgba(255,255,221,0.8);
+    text-align: center;
+    color: black;
+}
+
+QTabBar::tab:selected {
+    background-color: rgba(255,255,221,1);
+    font-size: large;
+}
+QTabBar::tab:hover {
+    background-color: rgba(255,255,221,0.5);
+}
+/*--------------------QTabWiget式-------------------------*/
+
+
+
+/*-------------------------以下为QScrollBar样式-------------------------*/
+/*垂直滚动条*/
+QScrollBar {
+    background-image: none;
+}
+QScrollBar:vertical {
+    width: 17px;
+    margin: 0 0 0 0;
+    background-color: whitesmoke;
+    background-image: none;
+}
+
+/*垂直滚动条滑块*/
+QScrollBar::handle:vertical {
+    background-color: rgb(121, 172, 147);
+    min-height: 40px;
+    margin: 0 1px 0 2px;
+    border-radius: 7px;
+    border: seagreen;
+}
+QScrollBar::handle:vertical:hover {
+    background: rgb(32, 241, 140);
+}
+
+/*垂直滚动条包含上下箭头的区域*/
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+    background-color: whitesmoke;
+}
+
+/*垂直滚动条上下箭头*/
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    border: 1px solid grey;
+    width: 15px;
+    background-color: whitesmoke;
+}
+
+/*垂直滚动条滑块划过和未划过区域*/
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background-color: whitesmoke;
+}
+
+/*-------------------------以上为QScrollBar样式-------------------------*/
+
+
+
+/*-------------------------以下为菜单栏样式-------------------------*/
+/*请去掉searchwindow.ui的所有styleSheet*/
+/*请在searchwindow.cpp的构造器中加入以下代码：
+    ui->horizontalLayout_2->addStretch();
+    ui->horizontalLayout_2->setSpacing(0);
+*/
+
+ /*菜单栏*/
+QMenuBar {
+    font-family: "Microsoft YaHei";
+    background-color: rgba(238,156,167,0.5);
 }
 QMenuBar::item::selected {
-    /*菜单栏鼠标悬浮的选项颜色*/
-    background-color : rgba(68,114,196,0.5);
+    background-color : rgba(211,204,227,1);
 }
+
+/*下拉菜单*/
 QMenu {
-    border-radius:15px;
+    border-radius: 15px;
 }
 QMenu::item {
-    color: black;
-    /*下拉菜单背景色*/
-    background-color:#E9E4F0;
+    color: rgb(0,0,0);
+    background-color: rgba(233,228,240,1);
 }
 QMenu::item:selected {
-    /*下拉菜单鼠标悬浮的选项颜色*/
-    background-color : #ffd452;
+    background-color : rgb(255,212,82);
 }
 QMenu::separator {
-    background: rgba(235,235,236,1);
-    height:1px;
+    background: rgb(235,235,236);
 }
+/*-------------------------以上为菜单栏样式-------------------------*/
+
+
+
 /*----------------以下为“查找替换”样式----------------*/
 #btnFind, #btnReplace {/*查找、替换切换按钮*/
     width: 70px;
@@ -73,7 +186,7 @@ QMenu::separator {
     font-family: "Microsoft YaHei";
     font-weight: normal;
     font-size: 16px;
-    background-color:rgba(255,212,82,0.5);/*按钮背景颜色*/
+    background-color:rgba(238,156,167,0.5);/*按钮背景颜色*/
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 0;
@@ -82,12 +195,12 @@ QMenu::separator {
     border-color: rgba(218, 218, 218, 0.671);
 }
 #btnFind:pressed, #btnReplace:pressed {/*查找、替换切换按钮-按下状态*/
-    background-color:rgba(255,212,82, 0.8);/*按钮背景颜色*/
+    background-color:rgba(238,156,167, 0.8);/*按钮背景颜色*/
     padding-left:4px;
     padding-top:4px;
 }
 #btnFind:hover, #btnReplace:hover {/*按钮悬浮*/
-    background-color:rgba(255,212,82, 0.4);/*按钮背景颜色*/
+    background-color:rgba(238,156,167, 0.4);/*按钮背景颜色*/
 }
 
 #btnCancel, #btnFindPrivious, #btnFindWhole, #btnFindNext{

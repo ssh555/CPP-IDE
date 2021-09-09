@@ -22,7 +22,7 @@ void Editor::Init()
     this->setFont(QFont(fontname,fontsize));
     SLOT_UpdateLineNumberAreaWidth(0);
     int fontWidth = QFontMetrics(this->currentCharFormat().font()).averageCharWidth();
-    this->setTabStopDistance( 3 * fontWidth );
+    this->setTabStopDistance( 4 * fontWidth );
     Set_Mode(BROWSE);
     //设置高亮
     highlighter = new Highlighter(this->document());
@@ -40,7 +40,7 @@ void Editor::Init()
 void Editor::mouseDoubleClickEvent(QMouseEvent *){
     QTextBlock b=document()->findBlockByNumber(this->textCursor().blockNumber());
     //首先判断这次双击是不是为了折叠代码
-    if(b.text().contains('{')&&(b.userState()&Begin)){
+    if(b.text().contains('{')){
         this->FoldCurrent();
     }
     else if(b.userState()&Debug){
@@ -55,13 +55,13 @@ void Editor::mouseDoubleClickEvent(QMouseEvent *){
 }
 void Editor::FoldCurrent(){
 
-    QTextBlock currentBlock=document()->findBlockByLineNumber(this->textCursor().blockNumber());
+    QTextBlock currentBlock=document()->findBlockByNumber(this->textCursor().blockNumber());
     int state=0;//0->进行折叠,1->展开
     //qDebug()<<currentBlock.userState();
     if(currentBlock.userState()&Begin){
         state=1;//如果已折叠,将模式改为展开
         BlockState t = Begin;
-        currentBlock.setUserState(currentBlock.userState()&!t);//去掉begin标记
+        currentBlock.setUserState(currentBlock.userState()&~t);//去掉begin标记
     }else{
         currentBlock.setUserState(currentBlock.userState()|Begin);//设置为折叠开头
     }
@@ -74,21 +74,30 @@ void Editor::FoldCurrent(){
     foreach(QChar qc,texttemp)
     {
         if(qc=="{")
-        nextNum++;
+            nextNum++;
     }
     //qDebug()<<"当前行"<<texttemp<<nextNum;
-
+    int quote=0;
     while(currentBlock.next().isValid())
     {
         texttemp=currentBlock.next().text(); //qDebug()<<texttemp;
+        quote = texttemp.count("\"");
+        texttemp.replace("\\\"","");
+        while(quote>0&&(quote%2==0))
+        {
+            int quoteLeft=texttemp.indexOf("\"",0);
+            int quoteRight=texttemp.indexOf("\"",quoteLeft+1);
+            texttemp.remove(quoteLeft,quoteRight-quoteLeft+1);
+            quote-=2;
+        }
         if(texttemp.contains("{")||texttemp.contains("}"))
         {//判断该行是否匹配成功
             foreach(QChar qc,texttemp)
             {
                 if(qc=="{")
-                nextNum++;
+                    nextNum++;
                 if(qc=="}")
-                nextNum--;
+                    nextNum--;
                 if(nextNum==0) break;
             }
         }
@@ -110,12 +119,12 @@ void Editor::FoldCurrent(){
     }else{
         for(int i=begin+1;i<end;i++){
             blktemp=document()->findBlockByNumber(i);
-            if(blktemp.userState()==Folded)
+            if(blktemp.userState()&Folded)
             {
                 //qDebug()<<"i"<<i<<"blktext"<<blktemp.text()<<blktemp.userState();
                 blktemp.setVisible(true);
                 BlockState t = Folded;
-                blktemp.setUserState((blktemp.userState())&!t);//去掉Folded标记
+                blktemp.setUserState((blktemp.userState())&~t);//去掉Folded标记
             }
         }
     }
@@ -170,12 +179,12 @@ QVector<qint32> Editor::GetBreakPoints()
         b=b.next();
     }
 
-//    QVector<qint32>::iterator iter;
-//    qDebug();
-//    for (iter=breakpoints->begin();iter!=breakpoints->end();iter++)
-//    {
-//        qDebug()<<*iter;
-//    }
+    //    QVector<qint32>::iterator iter;
+    //    qDebug();
+    //    for (iter=breakpoints->begin();iter!=breakpoints->end();iter++)
+    //    {
+    //        qDebug()<<*iter;
+    //    }
     return *breakpoints;
 }
 //替换下一个
@@ -192,8 +201,6 @@ bool Editor::SLOT_ReplaceKeywords(QString findword,QString replaceword)//替换�
     cursor.beginEditBlock();
     cursor.insertText(replaceword);
     cursor.endEditBlock();
-
-
     return true;
 }
 bool Editor::SLOT_ReplacePrivious(QString findword,QString replaceword)//替换前一个
@@ -249,14 +256,11 @@ bool Editor::SLOT_FindPrivious(QString keyword)//寻找之前的
 
     //    qDebug()<<"Finding :"<<keyword<<" "<<this->find(keyword,QTextDocument::FindBackward);
     QTextCursor cursor = textCursor();
-
     cursor = document()->find(keyword, cursor,QTextDocument::FindBackward);
     if(cursor.isNull()){
         return false;
     }
-    //    if (!cursor.block().isVisible())
-    //        FoldUnfoldAll(false);
-    setTextCursor(cursor);
+    //    setTextCursor(cursor);
     return true;
 
 }
@@ -380,6 +384,7 @@ void Editor::keyPressEvent(QKeyEvent *e)
             }
             else
             {
+
                 autoIndent(true);
             }
         }
@@ -412,7 +417,8 @@ void Editor::keyPressEvent(QKeyEvent *e)
 Editor::Editor(QWidget *parent,QString foldername) : QPlainTextEdit(parent){
     FolderName = foldername;
     this->Init();
-}/*
+}
+/*
 void Editor::insertCompletion(const QString& completion)
 {
     if (c->widget() != this)
@@ -463,7 +469,7 @@ int Editor::lineNumberAreaWidth()
         ++digits;
     }
 
-    int space = 3 + fontMetrics().averageCharWidth() * digits;
+    int space = 3 + fontMetrics().averageCharWidth() * (digits+1);
 
     return space;
 }
@@ -531,16 +537,23 @@ void Editor::Line_Number_Area_Paint_Event(QPaintEvent *event)
     int bottom = top + (int) blockBoundingRect(block).height();
 
     while (block.isValid() && top <= event->rect().bottom()) {
-        if(block.userState()==Debug){
+        if(block.userState()&Debug and block.isVisible()){
             painter.setPen(Qt::red);
             painter.drawText(-2, top, lineNumberArea->width(), fontMetrics().height(),
                              Qt::AlignRight, QString::number(blockNumber + 1));
+            QPen *pen=new QPen();
+            pen->setWidth(fontMetrics().height()/2);
+            pen->setColor(Qt::red); // 设置画笔为黄色
+            painter.setPen(*pen); // 设置画笔
+            painter.drawPoint(0,(top+bottom)/2);
+
         }else
             if (block.isVisible() && bottom >= event->rect().top()) {
                 QString number = QString::number(blockNumber + 1);
                 painter.setPen(Qt::black);
                 painter.drawText(-2, top, lineNumberArea->width(), fontMetrics().height(),
                                  Qt::AlignRight, number);
+
 
             }
 
@@ -604,28 +617,19 @@ void Editor::autoIndent(bool temp)
         this->moveCursor(QTextCursor::StartOfLine);
         bool includeBraceLeft=previousRowText.contains("{");
         int spaceNumber=0;
-        bool tabisFirst=true;
+        int beforeTabSpace=0;
         foreach(QChar qc,previousRowText)
         {
-            if(qc=="\x9"&&tabisFirst)
-            {
-                spaceNumber+=3;
-            }
-            else tabisFirst=false;
             if(qc==" ")
             {
                 spaceNumber++;
+                beforeTabSpace++;
+                if(beforeTabSpace==4) beforeTabSpace==0;
             }
             else if(qc=="\x9")
             {
-                if(tabisFirst)
-                {
-                    continue;
-                }
-                else
-                {
-                    spaceNumber+=2;
-                }
+                spaceNumber+=4-beforeTabSpace;
+                beforeTabSpace=0;
             }
             else break;
         }
@@ -638,6 +642,7 @@ void Editor::autoIndent(bool temp)
             this->insertPlainText(" ");
         }
 }
+
 //添加右括号
 void Editor::addBraceRight()
 {

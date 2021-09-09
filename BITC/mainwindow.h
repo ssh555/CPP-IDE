@@ -97,7 +97,7 @@ private:
     //键盘按下响应事件，添加快捷键
     void keyPressEvent(QKeyEvent  *event) override;
     //编译C文件
-    void CompileC(QString filename);
+    bool CompileC(QString filename);
     //运行C文件
     void RunC(QString filename);
     //获取C文件绝对路径的文件名

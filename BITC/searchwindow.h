@@ -34,6 +34,7 @@ public:
     QHBoxLayout *replacelayoutH=NULL;
     QVBoxLayout *replacelayoutV=NULL;
     void on_btnReplace_clicked();
+    void Focus();
 signals:
     void SIGNAL_FindNext(QString findtext);
     void SIGNAL_FindPrivious(QString findtext);

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>799</width>
-    <height>600</height>
+    <width>931</width>
+    <height>398</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,14 +16,11 @@
   <widget class="QPushButton" name="EnterButton">
    <property name="geometry">
     <rect>
-     <x>680</x>
-     <y>270</y>
-     <width>112</width>
+     <x>830</x>
+     <y>40</y>
+     <width>81</width>
      <height>34</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
    </property>
    <property name="text">
     <string>Enter</string>
@@ -35,24 +32,21 @@
   <widget class="QTextBrowser" name="Information">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>781</width>
-     <height>251</height>
+     <x>350</x>
+     <y>80</y>
+     <width>561</width>
+     <height>171</height>
     </rect>
    </property>
   </widget>
   <widget class="QPushButton" name="Continue">
    <property name="geometry">
     <rect>
-     <x>660</x>
-     <y>420</y>
+     <x>120</x>
+     <y>340</y>
      <width>131</width>
      <height>34</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
    </property>
    <property name="text">
     <string>Continue</string>
@@ -62,26 +56,23 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>560</y>
-     <width>221</width>
+     <y>260</y>
+     <width>151</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string/>
+    <string>a</string>
    </property>
   </widget>
   <widget class="QPushButton" name="StepOut">
    <property name="geometry">
     <rect>
-     <x>471</x>
-     <y>420</y>
-     <width>141</width>
+     <x>10</x>
+     <y>340</y>
+     <width>101</width>
      <height>34</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
    </property>
    <property name="text">
     <string>StepOut</string>
@@ -90,14 +81,11 @@
   <widget class="QPushButton" name="StepInto">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>380</y>
-     <width>141</width>
+     <x>170</x>
+     <y>300</y>
+     <width>71</width>
      <height>34</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
    </property>
    <property name="text">
     <string>StepInto</string>
@@ -106,22 +94,22 @@
   <widget class="QLineEdit" name="BreakLine">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>560</y>
-     <width>111</width>
+     <x>470</x>
+     <y>300</y>
+     <width>51</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string/>
+    <string>8</string>
    </property>
   </widget>
   <widget class="QPushButton" name="DisplayButton">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>560</y>
-     <width>161</width>
+     <x>170</x>
+     <y>260</y>
+     <width>151</width>
      <height>34</height>
     </rect>
    </property>
@@ -132,14 +120,11 @@
   <widget class="QPushButton" name="Stop">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>330</y>
-     <width>141</width>
+     <x>90</x>
+     <y>300</y>
+     <width>71</width>
      <height>34</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
    </property>
    <property name="text">
     <string>停止调试</string>
@@ -148,14 +133,11 @@
   <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>280</y>
+     <x>350</x>
+     <y>10</y>
      <width>81</width>
      <height>18</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 10pt &quot;Consolas&quot;;</string>
    </property>
    <property name="text">
     <string>Commands</string>
@@ -165,7 +147,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>540</y>
+     <y>230</y>
      <width>141</width>
      <height>20</height>
     </rect>
@@ -177,14 +159,11 @@
   <widget class="QPushButton" name="StepOver">
    <property name="geometry">
     <rect>
-     <x>660</x>
-     <y>380</y>
-     <width>131</width>
+     <x>250</x>
+     <y>300</y>
+     <width>71</width>
      <height>34</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
    </property>
    <property name="text">
     <string>StepOver</string>
@@ -193,8 +172,8 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>330</y>
+     <x>20</x>
+     <y>10</y>
      <width>101</width>
      <height>18</height>
     </rect>
@@ -206,9 +185,9 @@
   <widget class="QLineEdit" name="EnterLine">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>270</y>
-     <width>561</width>
+     <x>350</x>
+     <y>40</y>
+     <width>471</width>
      <height>31</height>
     </rect>
    </property>
@@ -216,8 +195,8 @@
   <widget class="QPushButton" name="BreakButton">
    <property name="geometry">
     <rect>
-     <x>711</x>
-     <y>560</y>
+     <x>530</x>
+     <y>300</y>
      <width>81</width>
      <height>34</height>
     </rect>
@@ -229,9 +208,9 @@
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>540</y>
-     <width>141</width>
+     <x>370</x>
+     <y>310</y>
+     <width>101</width>
      <height>18</height>
     </rect>
    </property>
@@ -243,8 +222,8 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>350</y>
-     <width>391</width>
+     <y>40</y>
+     <width>311</width>
      <height>181</height>
     </rect>
    </property>
@@ -255,7 +234,7 @@
     <number>2</number>
    </property>
    <attribute name="horizontalHeaderVisible">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
    <attribute name="horizontalHeaderCascadingSectionResizes">
     <bool>false</bool>
@@ -283,9 +262,9 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>570</y>
-     <width>131</width>
+     <x>370</x>
+     <y>350</y>
+     <width>111</width>
      <height>18</height>
     </rect>
    </property>
@@ -296,8 +275,8 @@
   <widget class="QLabel" name="label_6">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>490</y>
+     <x>370</x>
+     <y>270</y>
      <width>91</width>
      <height>18</height>
     </rect>
@@ -309,8 +288,8 @@
   <widget class="QLabel" name="NowLineNumber">
    <property name="geometry">
     <rect>
-     <x>560</x>
-     <y>490</y>
+     <x>470</x>
+     <y>270</y>
      <width>221</width>
      <height>18</height>
     </rect>
@@ -322,14 +301,11 @@
   <widget class="QPushButton" name="Start">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>330</y>
-     <width>151</width>
+     <x>10</x>
+     <y>300</y>
+     <width>71</width>
      <height>34</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
    </property>
    <property name="text">
     <string>开始调试</string>
