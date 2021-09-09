@@ -87,7 +87,7 @@ void SearchWindow::setEditor(Editor *editor_far)//设置editor,连接槽函数
     if(this->editor!=NULL){
         disconnect(this,&SearchWindow::SIGNAL_FindNext,editor_far,&Editor::SLOT_FindKeywords);
         disconnect(this,&SearchWindow::SIGNAL_FindWhole,editor_far,&Editor::SLOT_FindWhole);
-        disconnect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::SLOT_FindPrivious);
+        disconnect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::findPrivious);
         disconnect(this,&SearchWindow::SIGNAL_ReplaceNext,editor_far,&Editor::SLOT_ReplaceKeywords);
         disconnect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
         disconnect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);
@@ -97,7 +97,7 @@ void SearchWindow::setEditor(Editor *editor_far)//设置editor,连接槽函数
     //connect(this,&SearchWindow::on_btnFindNext_clicked,this,&SearchWindow::BtnFindNextClicked);//this->editor,&Editor::SLOT_FindKeywords
     connect(this,&SearchWindow::SIGNAL_FindNext,editor_far,&Editor::SLOT_FindKeywords);
     connect(this,&SearchWindow::SIGNAL_FindWhole,editor_far,&Editor::SLOT_FindWhole);
-    connect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::SLOT_FindPrivious);
+    connect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::findPrivious);
     connect(this,&SearchWindow::SIGNAL_ReplaceNext,editor_far,&Editor::SLOT_ReplaceKeywords);
     connect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
     connect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);

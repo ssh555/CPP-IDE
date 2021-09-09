@@ -13,8 +13,6 @@ Editor::Editor(QWidget *parent) : QPlainTextEdit(parent)
 }
 void Editor::Init()
 {
-
-
     //改了个可爱的字体
     setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
     int fontsize=setting->value("editorfontsize").toUInt();
@@ -157,6 +155,12 @@ void Editor::wheelEvent(QWheelEvent *e)
         //this->setTextCursor(cursor);
     }
 }
+void Editor::findPrivious(QString findword)
+{
+    this->isChanged=true;
+    SLOT_ReplacePrivious(findword,findword);
+    this->isChanged=false;
+}
 //全部替换函数
 void Editor::SLOT_ReplaceWhole(QString findword,QString replaceword)
 {
@@ -260,7 +264,7 @@ bool Editor::SLOT_FindPrivious(QString keyword)//寻找之前的
     if(cursor.isNull()){
         return false;
     }
-    //    setTextCursor(cursor);
+        setTextCursor(cursor);
     return true;
 
 }
@@ -513,7 +517,7 @@ void Editor::SLOT_HighlightCurrentLine()
         selection.cursor.clearSelection();
         extraSelections.append(selection);
     }
-
+    SLOT_BracketMatch(extraSelections);
     setExtraSelections(extraSelections);
 }
 //更改光标位置(响应debuger)
@@ -701,7 +705,7 @@ void Editor::explainUnfold()
     resizeEvent(new QResizeEvent(QSize(0, 0), size()));
 }
 
-void Editor::SLOT_BracketMatch()
+void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections)
 {
     //增减数组需要修改for循环的条件
     QChar brace[6]={'(','[','{',')',']','}'};
@@ -711,7 +715,6 @@ void Editor::SLOT_BracketMatch()
     int position = cursor.position();
 
     //用于临时修改 匹配到的字符 的样式
-    QList<QTextEdit::ExtraSelection> extraSelections;
 
     //可以修改 selection.format 以修改显示样式
     QTextEdit::ExtraSelection selection;
@@ -807,5 +810,5 @@ void Editor::SLOT_BracketMatch()
             position--;
         }
     }
-    setExtraSelections(extraSelections);
+//    setExtraSelections(extraSelections);
 }
