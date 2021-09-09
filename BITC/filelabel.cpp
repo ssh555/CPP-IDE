@@ -28,15 +28,7 @@ void FileLabel::Init(){
     //this->setStyleSheet("background:rgba(0,255,255,10)");//设置背景颜色
 }
 
-//鼠标移入更改背景颜色
-void FileLabel::enterEvent(QEvent *){
-    this->setStyleSheet("background:rgba(0,255,255,100)");
-}
 
-//鼠标移出更改背景颜色
-void  FileLabel::leaveEvent(QEvent *){
-    this->setStyleSheet("background:rgba(255,255,255,0)");
-}
 
 //鼠标单击打开临时TAB页面
 void FileLabel::mousePressEvent(QMouseEvent *){

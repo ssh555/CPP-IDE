@@ -10,10 +10,27 @@ SearchWindow::SearchWindow(QWidget *parent) :
     ui->setupUi(this);
     //移动到该去的地方
     this->move(200,0);
+    ui->horizontalLayout_2->addStretch();
+    ui->horizontalLayout_2->setSpacing(0);
 
 //    this->setStyleSheet("border: 20px lightGray;");
     //让窗口其他部件消失
+    QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+
+    QString fontname=setting->value("CodeFont").toString();
     setWindowFlags(Qt::FramelessWindowHint);
+    ui->lineEdit->setStyleSheet("QLineEdit {"
+                               " border: 1px solid rgb(41, 57, 85);"
+                               " border-radius: 3px; "
+                               " background: white; "
+                               " selection-background-color: green; "
+                               " font-size: 14px ;"
+                            "}"
+
+                           " QLineEdit:hover {"
+                               " border: 1px solid blue;"
+                            "}");
+
     //连接槽函数
     connect(ui->btnFindWhole,&QPushButton::clicked,this,&SearchWindow::on_btnFindWhole_clicked);
     connect(ui->btnFindPrivious,&QPushButton::clicked,this,&SearchWindow::on_btnFindPrivious_clicked);
@@ -25,6 +42,9 @@ SearchWindow::~SearchWindow()
 {
     delete ui;
     this->destroy();
+}
+void SearchWindow::Focus(){
+    this->ui->lineEdit->setFocus();
 }
 void SearchWindow::on_btnFind_clicked()
 {
@@ -67,17 +87,18 @@ void SearchWindow::setEditor(Editor *editor_far)//设置editor,连接槽函数
     if(this->editor!=NULL){
         disconnect(this,&SearchWindow::SIGNAL_FindNext,editor_far,&Editor::SLOT_FindKeywords);
         disconnect(this,&SearchWindow::SIGNAL_FindWhole,editor_far,&Editor::SLOT_FindWhole);
-        disconnect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::SLOT_FindPrivious);
+        disconnect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::findPrivious);
         disconnect(this,&SearchWindow::SIGNAL_ReplaceNext,editor_far,&Editor::SLOT_ReplaceKeywords);
         disconnect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
         disconnect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);
         disconnect(ui->btnReplace,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
+        qDebug()<<"notnull";
     }
     this->editor=editor_far;
     //connect(this,&SearchWindow::on_btnFindNext_clicked,this,&SearchWindow::BtnFindNextClicked);//this->editor,&Editor::SLOT_FindKeywords
     connect(this,&SearchWindow::SIGNAL_FindNext,editor_far,&Editor::SLOT_FindKeywords);
     connect(this,&SearchWindow::SIGNAL_FindWhole,editor_far,&Editor::SLOT_FindWhole);
-    connect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::SLOT_FindPrivious);
+    connect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::findPrivious);
     connect(this,&SearchWindow::SIGNAL_ReplaceNext,editor_far,&Editor::SLOT_ReplaceKeywords);
     connect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
     connect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);

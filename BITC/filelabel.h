@@ -14,8 +14,7 @@ public:
     void SetFilePath(QString path);
 
 protected:
-    void enterEvent(QEvent *) override;
-    void leaveEvent(QEvent *) override;
+
     void mousePressEvent(QMouseEvent *ev) override;
     void mouseDoubleClickEvent(QMouseEvent*) override;
 

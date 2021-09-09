@@ -46,7 +46,7 @@ Debuger::Debuger(QWidget *parent, QString filename, QString filepath, QVector<qi
     QString qssfilename="";
     switch(setting->value("styleflag").toUInt()){
     case 1: qssfilename=":/qss/bitDebuger.qss";break;
-    case 2: qssfilename=":/qss/purpletDebuger.qss";break;
+    case 2: qssfilename=":/qss/purpleDebuger.qss";break;
     case 3: qssfilename=":/qss/defaultDebuger.qss";break;
     default: break;
     }

@@ -1,77 +1,241 @@
-#gBoxFileMgr{/*资源管理器*/
-    background-color:rgba(37,37,38,1);
-    color: white;
-}
-#dockWidgetContents{
-    background-color:rgba(37,37,38,1);
-}
-
-#pushButtonFold{/*文件夹名*/
-    background-color:rgba(37,37,38,1);
-    color: white;
-}
-#widgetContent{/*文件名*/
-    background-color:rgba(37,37,38,1);
+/*-------------------------以下为资源管理器样式-------------------------*/
+/*资源管理器标题*/
+#gBoxFileMgr {
+    font-family: "Microsoft YaHei";
+    font-size: 16px;
+    background-color: rgb(78,78,78);
     color: white;
 }
 
+/*资源管理器下面那块*/
+.QDockWidget .QWidget {
+    background-color: rgb(78,78,78);
+    color: white;
+}
+#widgetContent {
+    border: 1px solid gray;
+    border-top: 0px;
+}
 
-#toolBar{
-    background-color:rgba(51,51,51,1);
+/*文件夹*/
+#pushButtonFold {
+    font-family: "Microsoft YaHei";
+    font-size: 16px;
+    color: white;    
+    text-align: left;
+    background-color:rgb(138, 138, 138);
+    border: 1px solid gray;
+    border-radius: 0px;
+    padding-left: 5px;
+}
+#pushButtonFold:hover {
+    background-color: rgb(180, 180, 180);
+}
+#pushButtonFold:pressed {
+    background-color: rgb(128, 128, 128);  
+    padding-left: 10px;
+    padding-top: 3px;
+}
+
+/*文件*/
+FileLabel {
+    font-family: "Microsoft YaHei";
+    font-size: 15px;
+    margin-left: 17px;
+    color: white;
+    background-color: rgb(78,78,78);
+}
+FileLabel:hover {/*用rgba模式會叠加透明度，導致程度變深*/
+    background-color: rgb(55,55,61);
+}
+/*-------------------------以上为资源管理器样式-------------------------*/
+
+
+
+/*-------------------------以下为工具栏样式-------------------------*/
+/*工具栏*/
+#toolBar {
+    font-family: "Microsoft YaHei";
+    background-color: rgba(51,51,51,1);
     color:white;
 }
+/*-------------------------以上为工具栏样式-------------------------*/
 
-#tabWgtResArea{
-    background-color:rgba(51,51,51,1);
-    color:white;
+
+
+/*-------------------------以下为QTabWiget样式-------------------------*/
+/*上方文本栏*/
+#tabWgtEditArea {
+    background-color: rgba(51,51,51,1);
+    color: white;
 }
 
-#tabWgtEditArea{
-    background-color:rgba(37,37,38,1);
-    color:white;
-}
-
-/*----------------以下为菜单栏样式----------------*/
-QMenuBar{
-    /*菜单栏背景色*/
-   background-color:rgba(60,60,60,1);
-   color:white;
-}
-QMenuBar::item::selected {
-    /*菜单栏鼠标悬浮的选项颜色*/
-    background-color : rgba(161,63,61,1);
-}
-QMenu {
-    border-radius:15px;
-}
-QMenu::item {
-    color: rgb(0,0,0);
-    /*下拉菜单背景色*/
-    background-color:rgba(161,63,61,0);
+/*下方状态栏*/
+#tabWgtResArea {
+    font-family: "Microsoft YaHei";
+    background-color: rgba(37,37,38,0.8);
+    color: white;
 
 }
-QMenu::item:selected {
-    /*下拉菜单鼠标悬浮的选项颜色*/
-    background-color : rgba(161,63,61,1);
-}
-QMenu::separator {
-    background: rgba(235,235,236,1);
-}
-/*----------------以上为菜单栏样式----------------*/
 
-/*----------------以下为“查找替换”样式----------------*/
+
+
+/*tab*/
+QTabBar::tab {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    margin-left: 5px;
+    margin-top: 5px;
+    padding-top: 4px;
+    padding-bottom: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: rgb(121, 124, 123);  
+    text-align: center; 
+    color: white;
+}
+
+QTabBar::tab:selected {
+    background-color: rgb(175, 175, 175);  
+    font-size: large; 
+}
+QTabBar::tab:hover {
+    background-color: rgb(175, 175, 175);   
+}
+/*--------------------QTabWiget式-------------------------*/
+
+
+
+/*-------------------------以下为QScrollBar样式-------------------------*/
+/*垂直滚动条*/
+QScrollBar:vertical {
+    width: 17px;
+    margin: 0 0 0 0;
+    background-color: whitesmoke;
+    background-image: none;
+}
+
+/*垂直滚动条滑块*/
+QScrollBar::handle:vertical {
+    background-color: rgb(57, 74, 92);
+    min-height: 40px;
+    margin: 0 1px 0 2px;
+    border-radius: 7px;
+}
+QScrollBar::handle:vertical:hover {
+    background: rgb(115, 148, 184);
+}
+
+/*垂直滚动条包含上下箭头的区域*/
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+    background-color: whitesmoke;
+}
+
+/*垂直滚动条上下箭头*/
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    border: 1px solid grey;
+    width: 15px;
+    background-color: whitesmoke;
+}
+
+/*垂直滚动条滑块划过和未划过区域*/
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+
+/*水平滚动条*/
+QScrollBar:horizontal {
+    height: 15px;
+    margin: 0 0 0 0;
+    background-color: whitesmoke;
+    background-image: none;
+}
+
+/*水平滚动条滑块*/
+QScrollBar::handle:horizontal {
+    background-color: rgb(57, 74, 92);
+    min-width: 40px;
+    margin: 0 1px 0 2px;
+    border-radius: 7px;
+}
+QScrollBar::handle:horizontal:hover {
+    background: rgb(115, 148, 184;
+}
+
+/*水平滚动条包含上下箭头的区域*/
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+    background-color: whitesmoke;
+}
+
+/*水平滚动条上下箭头*/
+QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal {
+    border: 1px solid grey;
+    height: 15px;
+    background-color: whitesmoke;
+}
+
+/*水平滚动条滑块划过和未划过区域*/
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background-color: whitesmoke;
+}
+/*-------------------------以上为QScrollBar样式-------------------------*/
+
+
+
+/*-------------------------以下为菜单栏样式-------------------------*/
 /*请去掉searchwindow.ui的所有styleSheet*/
 /*请在searchwindow.cpp的构造器中加入以下代码：
     ui->horizontalLayout_2->addStretch();
     ui->horizontalLayout_2->setSpacing(0);
 */
-#btnFind, #btnReplace {/*查找、替换切换按钮*/
+
+ /*菜单栏*/
+QMenuBar {
+    font-family: "Microsoft YaHei";
+    background-color: rgb(60,60,60);
+    color: white;
+}
+QMenuBar::item::selected {
+    background-color : rgb(55,55,61);
+    color: white;
+}
+
+/*下拉菜单*/
+QMenu {
+    border-radius: 15px;
+}
+QMenu::item {
+    color: white;
+    background-color:rgb(37,37,38);
+}
+QMenu::item:selected {
+    background-color : rgb(68,114,196);
+}
+QMenu::separator {
+    background: rgb(235,235,236);
+}
+/*-------------------------以上为菜单栏样式-------------------------*/
+
+
+
+/*-------------------------以下为“查找替换”样式-------------------------*/
+/*查找、替换切换按钮*/
+#btnFind, #btnReplace {
     width: 70px;
     height: 25px;
-    font-family: "Microsoft YaHei";       
+    font-family: "Microsoft YaHei";
     font-weight: normal;
     font-size: 16px;
-    background-color:rgba(105, 120, 185, 0.781); /*按钮背景颜色*/
+    font-weight: bold;
+    color: white;
+    background-color:rgba(45, 63, 82, 0.945); 
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 0;
@@ -80,89 +244,97 @@ QMenu::separator {
     border-color: rgba(218, 218, 218, 0.671);
 }
 #btnFind:pressed, #btnReplace:pressed {
-    background-color:rgba(105, 120, 185, 0.8); /*按钮背景颜色*/
-    padding-left:4px;  
-    padding-top:4px; 
+    background-color:rgb(45, 63, 82);
+    padding-left: 3px;
+    padding-top: 3px;
 }
 #btnFind:hover, #btnReplace:hover {
-    background-color:rgba(105, 120, 185, 0.4);/*按钮背景颜色*/
+    background-color:rgba(45, 63, 82, 0.623);
 }
 
+/*“取消”、“上一个”、“全部”、“下一个”按钮*/
 #btnCancel, #btnFindPrivious, #btnFindWhole, #btnFindNext{
-    width: 90px;
-    height: 30px;
-    font-family: "Microsoft YaHei"; 
+    width: 100px;
+    height: 35px;
+    font-family: "Microsoft YaHei";
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
     border-radius: 5px;
     border: 2px solid;
     border-color: rgba(218, 218, 218, 0.671);
-    color: rgb(0, 0, 0);
 }
 
-#btnCancel {/*“取消”按钮*/
-    background-color:rgba(128, 128, 128, 0.8); /*按钮背景颜色*/    
+/*“取消”按钮*/
+#btnCancel {
+    background-color: rgba(179, 179, 179, 0.8);
 }
-#btnCancel:hover {/*“取消”按钮-悬浮*/
-    background-color:rgba(128, 128, 128, 0.5); /*按钮背景颜色*/   
+#btnCancel:hover {
+    background-color: rgba(179, 179, 179, 0.5);
 }
-#btnCancel:pressed {/*“取消”按钮-按下*/
-    background-color:rgba(128, 128, 128, 1); /*按钮背景颜色*/
-    padding-left:5px;  
-    padding-top:5px; 
+#btnCancel:pressed {
+    background-color: rgba(179, 179, 179, 1);
+    padding-left: 5px;/*按下动效*/
+    padding-top: 5px;
 }
 
-
-#btnFindPrivious {/*“前一个”按钮*/
-    background-color: rgba(96, 96, 96, 0.8);/*按钮背景颜色*/
+/*“前一个”按钮*/
+#btnFindPrivious {
+    background-color: rgba(125, 125, 125, 0.8);
 }
 #btnFindPrivious:hover {
-    background-color:rgba(96, 96, 96, 0.5);/*按钮背景颜色*/    
+    background-color: rgba(125, 125, 125, 0.5);
 }
 #btnFindPrivious:pressed {
-    background-color:rgba(96, 96, 96, 1);/*按钮背景颜色*/ 
-    padding-left:5px;  
-    padding-top:5px; 
+    background-color: rgba(125, 125, 125, 1);
+    padding-left: 5px;
+    padding-top: 5px;
 }
 
-
-#btnFindWhole {/*“查找全部”按钮*/
-    background-color: rgba(83, 83, 83, 0.8);/*按钮背景颜色*/    
+/*“全部”按钮*/
+#btnFindWhole {
+    background-color: rgba(75, 75, 75, 0.8);
 }
 #btnFindWhole:hover {
-    background-color:rgba(83, 83, 83, 0.5);/*按钮背景颜色*/     
+    background-color: rgba(75, 75, 75, 0.5);
 }
 #btnFindWhole:pressed {
-    background-color:rgba(83, 83, 83, 1);/*按钮背景颜色*/ 
-    padding-left:5px;  
-    padding-top:5px; 
+    background-color: rgba(75, 75, 75, 1);
+    padding-left: 5px;
+    padding-top: 5px;
 }
 
-
-#btnFindNext {/*“下一个”按钮*/
-    background-color: rgba(69, 69, 69, 0.8);/*按钮背景颜色*/
+/*“下一个”按钮*/
+#btnFindNext {
+    background-color: rgba(32, 32, 32, 0.8);
 }
 #btnFindNext:hover {
-    background-color:rgba(69, 69, 69, 0.5);/*按钮背景颜色*/     
+    background-color: rgba(32, 32, 32, 0.5);
 }
 #btnFindNext:pressed {
-    background-color:rgba(69, 69, 69, 1);/*按钮背景颜色*/ 
-    padding-left:5px;  
-    padding-top:5px; 
+    background-color: rgba(32, 32, 32, 1);
+    padding-left: 5px;
+    padding-top: 5px;
 }
-/*----------------以上为“查找替换”样式----------------*/
+/*-------------------------以上为“查找输入”样式-------------------------*/
 
-/*----------------以下为输入框样式----------------*/
+
+
+/*-------------------------以下为输入框样式-------------------------*/
+/*输入框*/
 QLineEdit {
-	border: 1px solid #A0A0A0;
-	border-radius: 3px;
-	padding-left: 5px;
-	background-color: #F2F2F2;
-	color: #165eb1;
-	font-size: 10pt;
+    border: 1px solid #A0A0A0;
+    border-radius: 3px;
+    padding-left: 5px;
+    background-color: #F2F2F2;
+    color: #165eb1;
+    font-size: 10pt;
     font-family: "Microsoft YaHei";
 }
 QLineEdit:hover {
-	border: 1px solid #0f7fff;
+    border: 1px solid #0f7fff;
     color: #68afff;
     background-color: #F2F2F2;
 }
-/*----------------以上为输入框样式----------------*/
+/*-------------------------以上为输入框样式-------------------------*/
+

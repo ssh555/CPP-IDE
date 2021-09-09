@@ -28,7 +28,7 @@ void SettingWindow::Init()
     ui->comboBox->setCurrentText(setting->value("editorfontsize").toString());
     ui->SytleBox->setCurrentIndex(setting->value("styleflag").toUInt()-1);
     ui->comboBox_4->setCurrentIndex(!(setting->value("autosave").toUInt()));
-
+    ui->comboBox_3->setCurrentText(setting->value("autosavetime").toString());
 }
 SettingWindow::~SettingWindow()
 {
@@ -39,6 +39,8 @@ void SettingWindow::on_CommitBtn_clicked()
 {
     //num现在是记录选择的代码风格()
     int num=ui->SytleBox->currentIndex()+1;
+//    QFuture<void> ftr1 = QtConcurrent::run(Config::GetInstance(),&Config::ChangeCodeStyle,num);
+//    ftr1.waitForFinished();
     Config::GetInstance()->ChangeCodeStyle(num);
     MainWindow::isReadingOrWriting = true;
     QFuture<void> ftr = QtConcurrent::run(inf,&UIInterface::ChangeCodeStyle);
@@ -55,9 +57,25 @@ void SettingWindow::on_CommitBtn_clicked()
     num=(ui->comboBox->currentText()).toUInt();
     inf->ChangeCodeFont(num);
     //自动保存设置 是->自动保存(0位置)
-    MainWindow::Instance()->SetAutoSave(ui->comboBox_4->currentIndex()==0);
+    //获取自动保存时间
+    QString autosavetime=ui->comboBox_3->currentText();
+    if (autosavetime=="半分钟"){
+        MainWindow::Instance()->SetAutoSave(ui->comboBox_4->currentIndex()==0,30*1000);
+    } else {
+        QString temp;
+        for(int i=0;i<autosavetime.length();i++){
+            if(autosavetime.at(i)> '0' && autosavetime.at(i)< '9')
+                 temp.append(autosavetime.at(i));
+        }
+        int savetime=autosavetime.toUInt();
+        //qDebug()<<savetime;
+        MainWindow::Instance()->SetAutoSave(ui->comboBox_4->currentIndex()==0,60*1000*savetime);
+    }
+
     setting->setValue("autosave",ui->comboBox_4->currentIndex()==0);
+    setting->setValue("autosavetime",autosavetime);
     this->close();
+    MainWindow::Instance()->update();
 }
 
 void SettingWindow::on_pushButton_clicked()

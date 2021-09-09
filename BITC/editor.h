@@ -79,11 +79,12 @@ public slots:
     bool SLOT_ReplaceKeywords(QString keyword,QString replaceword);
     void SLOT_ReplaceWhole(QString keyword,QString replaceword);
     bool SLOT_ReplacePrivious(QString keyword,QString replaceword);
+    void findPrivious(QString keyword);
     void SLOT_SearchEnd();//搜索结束
 
     void explainFold();
     void explainUnfold();
-    void SLOT_BracketMatch(); //括号匹配
+    void SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections); //括号匹配
 
     void SLOT_ChangeLineNum(int num);
 

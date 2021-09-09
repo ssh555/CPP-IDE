@@ -72,11 +72,7 @@ void UIInterface::SetStyletoDefault(){
 void UIInterface::SetStyletoBIT(){
     mainWindow->GettabWgtResArea()->setAttribute(Qt::WA_StyledBackground);
     mainWindow->GettabWgtEditArea()->setAttribute(Qt::WA_StyledBackground);
-    //不要妄想把下面这行修改到qss里面去
-    mainWindow->GettabWgtEditArea()->setStyleSheet("QWidget{background-image: url(:/img/Background.png)};"
-                                                   "background-repeat: no repeat;"
-                                                   "background-position: center;"
-                                                   "background-attachment: fixed;");
+
 
     QString filename= ":/qss/bitstyle.qss";
     QFile file(filename);

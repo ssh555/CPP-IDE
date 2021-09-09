@@ -20,7 +20,7 @@ public:
     void setEditor(Editor *editor_far);
     QLineEdit *ReplaceLineEdit=NULL;
     QLabel *replaceLabel=NULL;
-    Editor *editor;
+    Editor *editor=NULL;
     explicit SearchWindow(QWidget *parent = nullptr);
     ~SearchWindow();
     QString searchtext;//查询语句
@@ -34,6 +34,8 @@ public:
     QHBoxLayout *replacelayoutH=NULL;
     QVBoxLayout *replacelayoutV=NULL;
     void on_btnReplace_clicked();
+    void on_btnFind_clicked();
+    void Focus();
 signals:
     void SIGNAL_FindNext(QString findtext);
     void SIGNAL_FindPrivious(QString findtext);
@@ -53,7 +55,7 @@ private slots:
 
 
 
-    void on_btnFind_clicked();
+
 private:
     int mode=0;//0--find,1--replace
     Ui::SearchWindow *ui;
