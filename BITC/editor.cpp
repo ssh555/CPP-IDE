@@ -22,7 +22,7 @@ void Editor::Init()
     this->setFont(QFont(fontname,fontsize));
     SLOT_UpdateLineNumberAreaWidth(0);
     int fontWidth = QFontMetrics(this->currentCharFormat().font()).averageCharWidth();
-    this->setTabStopDistance( 3 * fontWidth );
+    this->setTabStopDistance( 4 * fontWidth );
     Set_Mode(BROWSE);
     //设置高亮
     highlighter = new Highlighter(this->document());
@@ -35,7 +35,7 @@ void Editor::Init()
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(SLOT_UpdateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(SLOT_UpdateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_HighlightCurrentLine()));
-    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_BracketMatch()));
+//    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_BracketMatch()));
 }
 void Editor::mouseDoubleClickEvent(QMouseEvent *){
     QTextBlock b=document()->findBlockByNumber(this->textCursor().blockNumber());
@@ -170,12 +170,12 @@ QVector<qint32> Editor::GetBreakPoints()
         b=b.next();
     }
 
-//    QVector<qint32>::iterator iter;
-//    qDebug();
-//    for (iter=breakpoints->begin();iter!=breakpoints->end();iter++)
-//    {
-//        qDebug()<<*iter;
-//    }
+    QVector<qint32>::iterator iter;
+    qDebug();
+    for (iter=breakpoints->begin();iter!=breakpoints->end();iter++)
+    {
+        qDebug()<<*iter;
+    }
     return *breakpoints;
 }
 //替换下一个
@@ -363,11 +363,13 @@ void Editor::keyPressEvent(QKeyEvent *e)
         }
         else if(e->text().right(1)=="(")
         {
-            insertCompletion(")");
+            insertPlainText(")");
+            this->moveCursor(QTextCursor::Left);
         }
         else if(e->text().right(1)=="[")
         {
-            insertCompletion("]");
+            insertPlainText("]");
+            this->moveCursor(QTextCursor::Left);
         }
         else if(e->text().right(1)=="\r")
         {
@@ -380,6 +382,7 @@ void Editor::keyPressEvent(QKeyEvent *e)
             }
             else
             {
+
                 autoIndent(true);
             }
         }
@@ -508,7 +511,9 @@ void Editor::SLOT_HighlightCurrentLine()
         extraSelections.append(selection);
     }
 
+    SLOT_BracketMatch(extraSelections);
     setExtraSelections(extraSelections);
+
 }
 //更改光标位置(响应debuger)
 void Editor::SLOT_ChangeLineNum(int num){
@@ -696,28 +701,45 @@ void Editor::explainUnfold()
     resizeEvent(new QResizeEvent(QSize(0, 0), size()));
 }
 
-void Editor::SLOT_BracketMatch()
+void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections)
 {
+    QTextCursor cursorQuote=textCursor();
+    int currentPosition=cursorQuote.positionInBlock();
+    cursorQuote.select(QTextCursor::LineUnderCursor);
+    QString texttemp=cursorQuote.selectedText();
+    int quote=0;
+    int quotePosition=0;
+    quote = texttemp.count("\"");
+    while(quote>0&&(quote%2==0))
+    {
+        int quoteLeft=texttemp.indexOf("\"",quotePosition);
+        int quoteRight=texttemp.indexOf("\"",quoteLeft+1);
+        if(currentPosition>quoteLeft&&currentPosition<quoteRight) return;
+        quote-=2;
+        quotePosition=quoteRight+1;
+    }
+
     //增减数组需要修改for循环的条件
     QChar brace[6]={'(','[','{',')',']','}'};
 
     QTextDocument *doc = this->document();
     QTextCursor cursor = textCursor();
+    cursor.clearSelection();
     int position = cursor.position();
 
-    //用于临时修改 匹配到的字符 的样式
-    QList<QTextEdit::ExtraSelection> extraSelections;
 
     //可以修改 selection.format 以修改显示样式
     QTextEdit::ExtraSelection selection;
     selection.format.setBackground(Qt::green);
-    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+//    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
 
 
     QTextCursor cursorBegin;
     QTextCursor cursorEnd;
 
     QChar c, charBegin=' ', charEnd=' ';
+
+    bool whetherInQuote=false;
 
     //向后找
     //判断是否是需要匹配的字符
@@ -738,6 +760,19 @@ void Editor::SLOT_BracketMatch()
         int counter = 1;        //用于数左右括号的数量，为左括号则+1，为右括号则-1，counter为0则匹配成功
 
         while (!(c = doc->characterAt(position)).isNull()) {
+            if(c=="\"")
+            {
+                if(doc->characterAt(position-1)=="\\")
+                {
+                    whetherInQuote=!whetherInQuote;
+                }
+                whetherInQuote=!whetherInQuote;
+            }
+            if(whetherInQuote)
+            {
+                position++;
+                continue;
+            }
             if (c == charBegin) {
                 counter++;
             }
@@ -750,28 +785,31 @@ void Editor::SLOT_BracketMatch()
 
                     if (!isReadOnly()) {
                         selection.cursor = cursorEnd;
+//                        qDebug()<<cursorEnd.position();
                         extraSelections.append(selection);
 
                         selection.cursor = cursorBegin;
+//                        qDebug()<<cursorBegin.position();
                         extraSelections.append(selection);
                     }
+                    whetherInQuote=false;
                     break;
                 }
             }
             position++;
         }
     }
-
     //向前找，原理与 向后找 一样
     charBegin=' ', charEnd=' ';
-    position = cursor.position();
+    position = cursor.position()-1;
     for(int i=3;i<6;i++) {
-        if(doc->characterAt(position-1) == brace[i]) {
+        if(doc->characterAt(position) == brace[i]) {
             charBegin = brace[i-3];
             charEnd = brace[i];
             break;
         }
     }
+
     if (!cursor.atBlockStart() && charEnd!=' ') {
         cursorEnd = QTextCursor(cursor);
         cursorEnd.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
@@ -779,6 +817,20 @@ void Editor::SLOT_BracketMatch()
         int counter = 0;
 
         while (!(c = doc->characterAt(position)).isNull()) {
+//            qDebug()<<c<<" "<<position<<" "<<counter;
+            if(c=="\"")
+            {
+                if(doc->characterAt(position)=="\\")
+                {
+                    whetherInQuote=!whetherInQuote;
+                }
+                whetherInQuote=!whetherInQuote;
+            }
+            if(whetherInQuote)
+            {
+                position--;
+                continue;
+            }
             if (c == charEnd) {
                 counter++;
             }
@@ -791,16 +843,18 @@ void Editor::SLOT_BracketMatch()
 
                     if (!isReadOnly()) {
                         selection.cursor = cursorBegin;
+//                        qDebug()<<cursorBegin.position();
                         extraSelections.append(selection);
 
                         selection.cursor = cursorEnd;
+//                        qDebug()<<cursorEnd.position();
                         extraSelections.append(selection);
                     }
+                    whetherInQuote=false;
                     break;
                 }
             }
             position--;
         }
     }
-    setExtraSelections(extraSelections);
 }

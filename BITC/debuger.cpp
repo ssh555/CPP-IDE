@@ -27,28 +27,20 @@
 QRegExp Debuger::lineNumber = QRegExp("^#.* at .*:.*");
 QRegExp Debuger::variable = QRegExp("[0-9]{1,4}: .* = .*");
 
-Debuger::Debuger(QWidget *parent, QString filename, QString filepath, QVector<qint32> breakPoints)
+Debuger::Debuger(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Debuger)
 {
     ui->setupUi(this);
-    fileName = filename;
-    filePath = filepath;
 
-    lineNumber = QRegExp("^#.* at .*:.*");
-    variable = QRegExp("[0-9]{1,4}: .* = .*");
-
-    logFile = new QFile(filePath+"/gdb.txt");
-    logFile->open(QIODevice::ReadOnly);
-    logStream = new QTextStream(logFile);
     //风格
     QSettings *setting =new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
     QString qssfilename="";
     switch(setting->value("styleflag").toUInt()){
-    case 1: qssfilename=":/qss/bitDebuger.qss";break;
-    case 2: qssfilename=":/qss/purpletDebuger.qss";break;
-    case 3: qssfilename=":/qss/defaultDebuger.qss";break;
-    default: break;
+        case 1: qssfilename=":/qss/bitDebuger.qss";break;
+        case 2: qssfilename=":/qss/purpletDebuger.qss";break;
+        case 3: qssfilename=":/qss/defaultDebuger.qss";break;
+        default: break;
     }
     QFile file(qssfilename);
     if(file.open(QFile::ReadOnly)){
@@ -58,13 +50,12 @@ Debuger::Debuger(QWidget *parent, QString filename, QString filepath, QVector<qi
     }
 
     connect(ui->Start, &QPushButton::clicked, this, [=]{
-        Write("run");
+       emit SIGNAL_DebugerRun();
     });
 
     connect(ui->Stop, &QPushButton::clicked, this, [=]{
         Write("q");
         Write("y");
-        close();
     });
 
     connect(ui->StepInto, &QPushButton::clicked, this, [=]{
@@ -88,40 +79,15 @@ Debuger::Debuger(QWidget *parent, QString filename, QString filepath, QVector<qi
         ui->DisplayLine->clear();
     });
 
-    connect(ui->BreakButton, &QPushButton::clicked, this, [=]{
-        Write("break "+ui->BreakLine->text());
-        ui->BreakLine->clear();
-    });
-
-    connect(ui->EnterButton, &QPushButton::clicked, this, [=]{
-        Write(ui->EnterLine->text());
-        ui->EnterLine->clear();
-    });
-
-
     debuger = new QProcess();
     debuger->start("cmd.exe");
     connect(debuger, &QProcess::readyRead, this, &Debuger::Read);
-
-    Write(filePath.left(2));
-    Write("cd "+filePath);
-    Write("g++ -g "+fileName+" -o main");
-    Write("gdb main");
-    Write("set new-console on");
-
-    //SetBreakPoints
-    QVector<qint32>::iterator iter;
-    for (iter=breakPoints.begin();iter!=breakPoints.end();iter++)
-    {
-        Write("break "+ QString::number(*iter));
-    }
-
-//    Write("run");
 }
 
 Debuger::~Debuger()
 {
     delete ui;
+    debuger->close();
     delete debuger;
     QFile::remove(filePath+"/main.exe");
 }
@@ -142,18 +108,20 @@ void Debuger::LogWrite(QString command)
 void Debuger::Read()
 {
     QString log  = QString::fromLocal8Bit(debuger->readAll());
-    ui->Information->append(log);
-    ui->Information->update();
+//    ui->Information->append(log);
+//    ui->Information->update();
     log.replace("(gdb) ","");
     QStringList tempList = log.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
     foreach(QString string, tempList) {
+//            qDebug()<<string;
         int temp = -1;
 
         //判断是否含有行号字符串
         temp = lineNumber.indexIn(string);
         if(temp>=0) {
             int number = string.mid(string.lastIndexOf(':')+1).replace("\r\n", "").toInt();
-            ui->NowLineNumber->setText(QString::number(number));
+//            ui->NowLineNumber->setText(QString::number(number));
+            qDebug()<<number;
             emit SIGNAL_NowLine(number);
         }
 
@@ -175,4 +143,30 @@ void Debuger::Read()
             ui->DisplayView->setItem(id-1, 1, new QTableWidgetItem(value));
         }
     }
+}
+
+void Debuger::Run(Editor *workingeditor, QString filepath, QString filename) {
+    if(workingEditor!=nullptr) {
+        disconnect(this, &Debuger::SIGNAL_NowLine, workingEditor, &Editor::SLOT_ChangeLineNum);
+    }
+    workingEditor = workingeditor;
+    connect(this, &Debuger::SIGNAL_NowLine, workingEditor, &Editor::SLOT_ChangeLineNum);
+
+    filePath = filepath;
+    fileName = filename;
+
+    Write(filePath.left(2));
+    Write("cd "+filePath);
+    Write("g++ -g "+fileName+" -o main");
+    Write("gdb main");
+    Write("set new-console on");
+
+    QVector<qint32>::iterator iter;
+    QVector<qint32> breakPoints = workingEditor->GetBreakPoints();
+    for (iter=breakPoints.begin();iter!=breakPoints.end();iter++)
+    {
+        Write("break "+ QString::number(*iter));
+    }
+
+    LogWrite("run");
 }

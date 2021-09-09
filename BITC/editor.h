@@ -83,7 +83,7 @@ public slots:
 
     void explainFold();
     void explainUnfold();
-    void SLOT_BracketMatch(); //括号匹配
+    void SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections); //括号匹配
 
     void SLOT_ChangeLineNum(int num);
 

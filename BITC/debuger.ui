@@ -6,335 +6,161 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>799</width>
-    <height>600</height>
+    <width>801</width>
+    <height>301</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="EnterButton">
-   <property name="geometry">
-    <rect>
-     <x>680</x>
-     <y>270</y>
-     <width>112</width>
-     <height>34</height>
-    </rect>
+  <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,0">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetDefaultConstraint</enum>
    </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
-   </property>
-   <property name="text">
-    <string>Enter</string>
-   </property>
-   <property name="shortcut">
-    <string>Return</string>
-   </property>
-  </widget>
-  <widget class="QTextBrowser" name="Information">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>781</width>
-     <height>251</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Continue">
-   <property name="geometry">
-    <rect>
-     <x>660</x>
-     <y>420</y>
-     <width>131</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
-   </property>
-   <property name="text">
-    <string>Continue</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="DisplayLine">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>560</y>
-     <width>221</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="StepOut">
-   <property name="geometry">
-    <rect>
-     <x>471</x>
-     <y>420</y>
-     <width>141</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
-   </property>
-   <property name="text">
-    <string>StepOut</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="StepInto">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>380</y>
-     <width>141</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
-   </property>
-   <property name="text">
-    <string>StepInto</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="BreakLine">
-   <property name="geometry">
-    <rect>
-     <x>600</x>
-     <y>560</y>
-     <width>111</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="DisplayButton">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>560</y>
-     <width>161</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>添加变量/表达式</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Stop">
-   <property name="geometry">
-    <rect>
-     <x>650</x>
-     <y>330</y>
-     <width>141</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
-   </property>
-   <property name="text">
-    <string>停止调试</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_5">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>280</y>
-     <width>81</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 10pt &quot;Consolas&quot;;</string>
-   </property>
-   <property name="text">
-    <string>Commands</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_3">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>540</y>
-     <width>141</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>变量/表达式添加</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="StepOver">
-   <property name="geometry">
-    <rect>
-     <x>660</x>
-     <y>380</y>
-     <width>131</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
-   </property>
-   <property name="text">
-    <string>StepOver</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>330</y>
-     <width>101</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>变量/表达式</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="EnterLine">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>270</y>
-     <width>561</width>
-     <height>31</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="BreakButton">
-   <property name="geometry">
-    <rect>
-     <x>711</x>
-     <y>560</y>
-     <width>81</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>设置断点</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_4">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>540</y>
-     <width>141</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>断点设置</string>
-   </property>
-  </widget>
-  <widget class="QTableWidget" name="DisplayView">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>350</y>
-     <width>391</width>
-     <height>181</height>
-    </rect>
-   </property>
-   <property name="rowCount">
-    <number>0</number>
-   </property>
-   <property name="columnCount">
-    <number>2</number>
-   </property>
-   <attribute name="horizontalHeaderVisible">
-    <bool>true</bool>
-   </attribute>
-   <attribute name="horizontalHeaderCascadingSectionResizes">
-    <bool>false</bool>
-   </attribute>
-   <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-    <bool>false</bool>
-   </attribute>
-   <attribute name="horizontalHeaderStretchLastSection">
-    <bool>true</bool>
-   </attribute>
-   <attribute name="verticalHeaderVisible">
-    <bool>false</bool>
-   </attribute>
-   <column>
-    <property name="text">
-     <string>名称</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>值</string>
-    </property>
-   </column>
-  </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>570</y>
-     <width>131</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>断点行号/其他：</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_6">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>490</y>
-     <width>91</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>当前行号：</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="NowLineNumber">
-   <property name="geometry">
-    <rect>
-     <x>560</x>
-     <y>490</y>
-     <width>221</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>-1</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Start">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>330</y>
-     <width>151</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
-   </property>
-   <property name="text">
-    <string>开始调试</string>
-   </property>
-  </widget>
+   <item>
+    <layout class="QVBoxLayout" name="Display">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>变量/表达式</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="DisplayView">
+         <property name="rowCount">
+          <number>0</number>
+         </property>
+         <property name="columnCount">
+          <number>2</number>
+         </property>
+         <attribute name="horizontalHeaderVisible">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>名称</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>值</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLineEdit" name="DisplayLine">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="DisplayButton">
+           <property name="text">
+            <string>添加变量/表达式</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="Buttons">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMinimumSize</enum>
+     </property>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QPushButton" name="Start">
+           <property name="styleSheet">
+            <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
+           </property>
+           <property name="text">
+            <string>开始调试</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="Stop">
+           <property name="styleSheet">
+            <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
+           </property>
+           <property name="text">
+            <string>停止调试</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QPushButton" name="StepInto">
+         <property name="styleSheet">
+          <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
+         </property>
+         <property name="text">
+          <string>StepInto</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="StepOut">
+         <property name="styleSheet">
+          <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
+         </property>
+         <property name="text">
+          <string>StepOut</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="StepOver">
+         <property name="styleSheet">
+          <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
+         </property>
+         <property name="text">
+          <string>StepOver</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="Continue">
+         <property name="styleSheet">
+          <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Continue</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
