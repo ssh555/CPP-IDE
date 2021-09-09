@@ -20,7 +20,9 @@ return str;
 
 int main(int argc,char *argv[]) 
 {
-    int n = system(U2G(argv[1]));
+    string str = U2G(argv[1]);
+    str = "\"" + str + "\"";
+    int n = system(str.data());
     cout << "_____________________________________" << endl;
     cout << "Process exited with return value : ";
 	cout << n << endl;

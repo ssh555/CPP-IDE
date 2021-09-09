@@ -731,7 +731,7 @@ bool MainWindow::CompileC(QString filename){
         setting->endGroup();
 
     }
-    str = str + " g++ -o " + filename.mid(0,filename.lastIndexOf(".")) + ".exe " + filename;
+    str = str + " g++ -o " + filename.mid(0,filename.lastIndexOf(".")) + ".exe " + filename + "";
     //qDebug() << str;
     p->start("cmd.exe", QStringList()<<"/c"<<str);
     QElapsedTimer time;
@@ -781,7 +781,7 @@ void MainWindow::RunC(QString filename){
     }
 
     //用系统默认的打开方式打开指定文件
-    system(QString("Run.exe " + filename).toUtf8().data());
+    system(QString("Run.exe \"" + filename + "\"").toUtf8().data());
     //QDesktopServices::openUrl(QUrl::fromLocalFile(filename));
 
 }
