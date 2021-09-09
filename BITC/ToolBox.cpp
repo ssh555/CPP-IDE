@@ -49,9 +49,3 @@ void ToolBox::addWidget(const QString &title, QWidget *widget)
     m_pContentVBoxLayout->addWidget(page);
 
 }
-
-//void ToolBox::Size_Changed(){
-//    this->setGeometry(0,10,myParent->width(),myParent->height()-10);
-//}
-
-

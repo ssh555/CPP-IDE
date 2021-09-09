@@ -11,12 +11,13 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTableWidget>
-#include <QtWidgets/QTextBrowser>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -24,81 +25,41 @@ QT_BEGIN_NAMESPACE
 class Ui_Debuger
 {
 public:
-    QPushButton *EnterButton;
-    QTextBrowser *Information;
-    QPushButton *Continue;
-    QLineEdit *DisplayLine;
-    QPushButton *StepOut;
-    QPushButton *StepInto;
-    QLineEdit *BreakLine;
-    QPushButton *DisplayButton;
-    QPushButton *Stop;
-    QLabel *label_5;
-    QLabel *label_3;
-    QPushButton *StepOver;
+    QHBoxLayout *horizontalLayout_4;
+    QVBoxLayout *Display;
+    QVBoxLayout *verticalLayout_2;
     QLabel *label;
-    QLineEdit *EnterLine;
-    QPushButton *BreakButton;
-    QLabel *label_4;
     QTableWidget *DisplayView;
-    QLabel *label_2;
-    QLabel *label_6;
-    QLabel *NowLineNumber;
+    QHBoxLayout *horizontalLayout;
+    QLineEdit *DisplayLine;
+    QPushButton *DisplayButton;
+    QVBoxLayout *Buttons;
+    QVBoxLayout *verticalLayout_5;
+    QHBoxLayout *horizontalLayout_3;
     QPushButton *Start;
+    QPushButton *Stop;
+    QPushButton *StepInto;
+    QPushButton *StepOut;
+    QPushButton *StepOver;
+    QPushButton *Continue;
 
     void setupUi(QWidget *Debuger)
     {
         if (Debuger->objectName().isEmpty())
             Debuger->setObjectName(QString::fromUtf8("Debuger"));
-        Debuger->resize(931, 398);
-        EnterButton = new QPushButton(Debuger);
-        EnterButton->setObjectName(QString::fromUtf8("EnterButton"));
-        EnterButton->setGeometry(QRect(830, 40, 81, 34));
-        Information = new QTextBrowser(Debuger);
-        Information->setObjectName(QString::fromUtf8("Information"));
-        Information->setGeometry(QRect(350, 80, 561, 171));
-        Continue = new QPushButton(Debuger);
-        Continue->setObjectName(QString::fromUtf8("Continue"));
-        Continue->setGeometry(QRect(120, 340, 131, 34));
-        DisplayLine = new QLineEdit(Debuger);
-        DisplayLine->setObjectName(QString::fromUtf8("DisplayLine"));
-        DisplayLine->setGeometry(QRect(10, 260, 151, 31));
-        StepOut = new QPushButton(Debuger);
-        StepOut->setObjectName(QString::fromUtf8("StepOut"));
-        StepOut->setGeometry(QRect(10, 340, 101, 34));
-        StepInto = new QPushButton(Debuger);
-        StepInto->setObjectName(QString::fromUtf8("StepInto"));
-        StepInto->setGeometry(QRect(170, 300, 71, 34));
-        BreakLine = new QLineEdit(Debuger);
-        BreakLine->setObjectName(QString::fromUtf8("BreakLine"));
-        BreakLine->setGeometry(QRect(470, 300, 51, 31));
-        DisplayButton = new QPushButton(Debuger);
-        DisplayButton->setObjectName(QString::fromUtf8("DisplayButton"));
-        DisplayButton->setGeometry(QRect(170, 260, 151, 34));
-        Stop = new QPushButton(Debuger);
-        Stop->setObjectName(QString::fromUtf8("Stop"));
-        Stop->setGeometry(QRect(90, 300, 71, 34));
-        label_5 = new QLabel(Debuger);
-        label_5->setObjectName(QString::fromUtf8("label_5"));
-        label_5->setGeometry(QRect(350, 10, 81, 18));
-        label_3 = new QLabel(Debuger);
-        label_3->setObjectName(QString::fromUtf8("label_3"));
-        label_3->setGeometry(QRect(10, 230, 141, 20));
-        StepOver = new QPushButton(Debuger);
-        StepOver->setObjectName(QString::fromUtf8("StepOver"));
-        StepOver->setGeometry(QRect(250, 300, 71, 34));
+        Debuger->resize(801, 301);
+        horizontalLayout_4 = new QHBoxLayout(Debuger);
+        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        horizontalLayout_4->setSizeConstraint(QLayout::SetDefaultConstraint);
+        Display = new QVBoxLayout();
+        Display->setObjectName(QString::fromUtf8("Display"));
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         label = new QLabel(Debuger);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(20, 10, 101, 18));
-        EnterLine = new QLineEdit(Debuger);
-        EnterLine->setObjectName(QString::fromUtf8("EnterLine"));
-        EnterLine->setGeometry(QRect(350, 40, 471, 31));
-        BreakButton = new QPushButton(Debuger);
-        BreakButton->setObjectName(QString::fromUtf8("BreakButton"));
-        BreakButton->setGeometry(QRect(530, 300, 81, 34));
-        label_4 = new QLabel(Debuger);
-        label_4->setObjectName(QString::fromUtf8("label_4"));
-        label_4->setGeometry(QRect(370, 310, 101, 18));
+
+        verticalLayout_2->addWidget(label);
+
         DisplayView = new QTableWidget(Debuger);
         if (DisplayView->columnCount() < 2)
             DisplayView->setColumnCount(2);
@@ -107,26 +68,89 @@ public:
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
         DisplayView->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         DisplayView->setObjectName(QString::fromUtf8("DisplayView"));
-        DisplayView->setGeometry(QRect(10, 40, 311, 181));
         DisplayView->setRowCount(0);
         DisplayView->setColumnCount(2);
-        DisplayView->horizontalHeader()->setVisible(false);
+        DisplayView->horizontalHeader()->setVisible(true);
         DisplayView->horizontalHeader()->setCascadingSectionResizes(false);
         DisplayView->horizontalHeader()->setProperty("showSortIndicator", QVariant(false));
         DisplayView->horizontalHeader()->setStretchLastSection(true);
         DisplayView->verticalHeader()->setVisible(false);
-        label_2 = new QLabel(Debuger);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(370, 350, 111, 18));
-        label_6 = new QLabel(Debuger);
-        label_6->setObjectName(QString::fromUtf8("label_6"));
-        label_6->setGeometry(QRect(370, 270, 91, 18));
-        NowLineNumber = new QLabel(Debuger);
-        NowLineNumber->setObjectName(QString::fromUtf8("NowLineNumber"));
-        NowLineNumber->setGeometry(QRect(470, 270, 221, 18));
+
+        verticalLayout_2->addWidget(DisplayView);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        DisplayLine = new QLineEdit(Debuger);
+        DisplayLine->setObjectName(QString::fromUtf8("DisplayLine"));
+
+        horizontalLayout->addWidget(DisplayLine);
+
+        DisplayButton = new QPushButton(Debuger);
+        DisplayButton->setObjectName(QString::fromUtf8("DisplayButton"));
+
+        horizontalLayout->addWidget(DisplayButton);
+
+
+        verticalLayout_2->addLayout(horizontalLayout);
+
+
+        Display->addLayout(verticalLayout_2);
+
+
+        horizontalLayout_4->addLayout(Display);
+
+        Buttons = new QVBoxLayout();
+        Buttons->setObjectName(QString::fromUtf8("Buttons"));
+        Buttons->setSizeConstraint(QLayout::SetMinimumSize);
+        verticalLayout_5 = new QVBoxLayout();
+        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
         Start = new QPushButton(Debuger);
         Start->setObjectName(QString::fromUtf8("Start"));
-        Start->setGeometry(QRect(10, 300, 71, 34));
+        Start->setStyleSheet(QString::fromUtf8("font: 75 14pt \"Consolas\";"));
+
+        horizontalLayout_3->addWidget(Start);
+
+        Stop = new QPushButton(Debuger);
+        Stop->setObjectName(QString::fromUtf8("Stop"));
+        Stop->setStyleSheet(QString::fromUtf8("font: 75 14pt \"Consolas\";"));
+
+        horizontalLayout_3->addWidget(Stop);
+
+
+        verticalLayout_5->addLayout(horizontalLayout_3);
+
+        StepInto = new QPushButton(Debuger);
+        StepInto->setObjectName(QString::fromUtf8("StepInto"));
+        StepInto->setStyleSheet(QString::fromUtf8("font: 75 14pt \"Consolas\";"));
+
+        verticalLayout_5->addWidget(StepInto);
+
+        StepOut = new QPushButton(Debuger);
+        StepOut->setObjectName(QString::fromUtf8("StepOut"));
+        StepOut->setStyleSheet(QString::fromUtf8("font: 75 14pt \"Consolas\";"));
+
+        verticalLayout_5->addWidget(StepOut);
+
+        StepOver = new QPushButton(Debuger);
+        StepOver->setObjectName(QString::fromUtf8("StepOver"));
+        StepOver->setStyleSheet(QString::fromUtf8("font: 75 14pt \"Consolas\";"));
+
+        verticalLayout_5->addWidget(StepOver);
+
+        Continue = new QPushButton(Debuger);
+        Continue->setObjectName(QString::fromUtf8("Continue"));
+        Continue->setStyleSheet(QString::fromUtf8("font: 75 14pt \"Consolas\";"));
+
+        verticalLayout_5->addWidget(Continue);
+
+
+        Buttons->addLayout(verticalLayout_5);
+
+
+        horizontalLayout_4->addLayout(Buttons);
+
 
         retranslateUi(Debuger);
 
@@ -136,31 +160,19 @@ public:
     void retranslateUi(QWidget *Debuger)
     {
         Debuger->setWindowTitle(QCoreApplication::translate("Debuger", "Form", nullptr));
-        EnterButton->setText(QCoreApplication::translate("Debuger", "Enter", nullptr));
-#if QT_CONFIG(shortcut)
-        EnterButton->setShortcut(QCoreApplication::translate("Debuger", "Return", nullptr));
-#endif // QT_CONFIG(shortcut)
-        Continue->setText(QCoreApplication::translate("Debuger", "Continue", nullptr));
-        DisplayLine->setText(QCoreApplication::translate("Debuger", "a", nullptr));
-        StepOut->setText(QCoreApplication::translate("Debuger", "StepOut", nullptr));
-        StepInto->setText(QCoreApplication::translate("Debuger", "StepInto", nullptr));
-        BreakLine->setText(QCoreApplication::translate("Debuger", "8", nullptr));
-        DisplayButton->setText(QCoreApplication::translate("Debuger", "\346\267\273\345\212\240\345\217\230\351\207\217/\350\241\250\350\276\276\345\274\217", nullptr));
-        Stop->setText(QCoreApplication::translate("Debuger", "\345\201\234\346\255\242\350\260\203\350\257\225", nullptr));
-        label_5->setText(QCoreApplication::translate("Debuger", "Commands", nullptr));
-        label_3->setText(QCoreApplication::translate("Debuger", "\345\217\230\351\207\217/\350\241\250\350\276\276\345\274\217\346\267\273\345\212\240", nullptr));
-        StepOver->setText(QCoreApplication::translate("Debuger", "StepOver", nullptr));
         label->setText(QCoreApplication::translate("Debuger", "\345\217\230\351\207\217/\350\241\250\350\276\276\345\274\217", nullptr));
-        BreakButton->setText(QCoreApplication::translate("Debuger", "\350\256\276\347\275\256\346\226\255\347\202\271", nullptr));
-        label_4->setText(QCoreApplication::translate("Debuger", "\346\226\255\347\202\271\350\256\276\347\275\256", nullptr));
         QTableWidgetItem *___qtablewidgetitem = DisplayView->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("Debuger", "\345\220\215\347\247\260", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = DisplayView->horizontalHeaderItem(1);
         ___qtablewidgetitem1->setText(QCoreApplication::translate("Debuger", "\345\200\274", nullptr));
-        label_2->setText(QCoreApplication::translate("Debuger", "\346\226\255\347\202\271\350\241\214\345\217\267/\345\205\266\344\273\226\357\274\232", nullptr));
-        label_6->setText(QCoreApplication::translate("Debuger", "\345\275\223\345\211\215\350\241\214\345\217\267\357\274\232", nullptr));
-        NowLineNumber->setText(QCoreApplication::translate("Debuger", "-1", nullptr));
+        DisplayLine->setText(QString());
+        DisplayButton->setText(QCoreApplication::translate("Debuger", "\346\267\273\345\212\240\345\217\230\351\207\217/\350\241\250\350\276\276\345\274\217", nullptr));
         Start->setText(QCoreApplication::translate("Debuger", "\345\274\200\345\247\213\350\260\203\350\257\225", nullptr));
+        Stop->setText(QCoreApplication::translate("Debuger", "\345\201\234\346\255\242\350\260\203\350\257\225", nullptr));
+        StepInto->setText(QCoreApplication::translate("Debuger", "StepInto", nullptr));
+        StepOut->setText(QCoreApplication::translate("Debuger", "StepOut", nullptr));
+        StepOver->setText(QCoreApplication::translate("Debuger", "StepOver", nullptr));
+        Continue->setText(QCoreApplication::translate("Debuger", "Continue", nullptr));
     } // retranslateUi
 
 };

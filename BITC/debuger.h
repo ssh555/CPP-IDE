@@ -5,6 +5,7 @@
 #include <QProcess>
 #include <QFile>
 #include <QTextStream>
+#include "editor.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Debuger; }
@@ -15,24 +16,26 @@ class Debuger : public QWidget
     Q_OBJECT
 
 public:
-    Debuger(QWidget *parent, QString filename, QString filepath, QVector<qint32> breakpoints);
+    Debuger(QWidget *parent);
     ~Debuger();
+//    void SetBreakPoints(QVector<qint32> breakPoints);
+//    void SetFile(QString filePath, QString fileName);
+    void Run(Editor *workingeditor, QString filePath, QString fileName);
 
 public slots:
     void Read();
 
 private:
     QProcess *debuger;
-    QVector<qint32> breakPoints;
     QString filePath, fileName;
+    Editor *workingEditor=nullptr;
     static QRegExp lineNumber, variable;
     void Write(QString command);
     void LogWrite(QString command);
-    QFile *logFile;
-    QTextStream *logStream;
 
 signals:
     void SIGNAL_NowLine(int lineNumber);
+    void SIGNAL_DebugerRun();
 
 private:
     Ui::Debuger *ui;

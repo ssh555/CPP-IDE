@@ -1664,6 +1664,11 @@ moc_mainwindow.cpp: ../BITC/mainwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qlayoutitem.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qgridlayout.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QVBoxLayout \
+		../BITC/debuger.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QProcess \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qprocess.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFile \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTextStream \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QCloseEvent \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTimer \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qtimer.h \
@@ -1995,6 +2000,11 @@ moc_settingwindow.cpp: ../BITC/settingwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qlayoutitem.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qgridlayout.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QVBoxLayout \
+		../BITC/debuger.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QProcess \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qprocess.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFile \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTextStream \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QCloseEvent \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTimer \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qtimer.h \
@@ -2396,6 +2406,11 @@ moc_uiinterface.cpp: ../BITC/uiinterface.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qlayoutitem.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qgridlayout.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QVBoxLayout \
+		../BITC/debuger.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QProcess \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qprocess.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFile \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTextStream \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QCloseEvent \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTimer \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qtimer.h \
@@ -2514,6 +2529,38 @@ moc_debuger.cpp: ../BITC/debuger.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qprocess.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFile \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTextStream \
+		../BITC/editor.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QPlainTextEdit \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qplaintextedit.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qtextedit.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qabstractscrollarea.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qframe.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qtextdocument.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qtextoption.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qtextcursor.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qtextformat.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qpen.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qabstracttextdocumentlayout.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qtextlayout.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qglyphrun.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qrawfont.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qfontdatabase.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QObject \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QPaintEvent \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QResizeEvent \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QSize \
+		../BITC/type.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QSyntaxHighlighter \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qsyntaxhighlighter.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qtextobject.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QCompleter \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qcompleter.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qabstractitemmodel.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QSettings \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qsettings.h \
+		../BITC/highlighter.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QTextCharFormat \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QTextDocument \
 		moc_predefs.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/bin/moc.exe
 	C:\Qt\Qt5.14.1\5.14.1\mingw73_64\bin\moc.exe $(DEFINES) --include C:/Users/Projects/EditText/build-BITC-unknown-Debug/moc_predefs.h -IC:/Qt/Qt5.14.1/5.14.1/mingw73_64/mkspecs/win32-g++ -IC:/Users/Projects/EditText/BITC -IC:/Qt/Qt5.14.1/5.14.1/mingw73_64/include -IC:/Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets -IC:/Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui -IC:/Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtANGLE -IC:/Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtConcurrent -IC:/Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore -I. -IC:/Users/20994/AppData/Local/Programs/x86_64-8.1.0-release-posix-seh-rt_v6-rev0/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++ -IC:/Users/20994/AppData/Local/Programs/x86_64-8.1.0-release-posix-seh-rt_v6-rev0/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32 -IC:/Users/20994/AppData/Local/Programs/x86_64-8.1.0-release-posix-seh-rt_v6-rev0/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward -IC:/Users/20994/AppData/Local/Programs/x86_64-8.1.0-release-posix-seh-rt_v6-rev0/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include -IC:/Users/20994/AppData/Local/Programs/x86_64-8.1.0-release-posix-seh-rt_v6-rev0/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed -IC:/Users/20994/AppData/Local/Programs/x86_64-8.1.0-release-posix-seh-rt_v6-rev0/mingw64/x86_64-w64-mingw32/include ..\BITC\debuger.h -o moc_debuger.cpp
@@ -3771,6 +3818,10 @@ editor.o: ../BITC/editor.cpp ../BITC/editor.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QLabel \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QHBoxLayout \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QVBoxLayout \
+		../BITC/debuger.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QProcess \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFile \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTextStream \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QCloseEvent \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTimer
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o editor.o ..\BITC\editor.cpp
@@ -3937,6 +3988,11 @@ filelabel.o: ../BITC/filelabel.cpp ../BITC/filelabel.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qlayoutitem.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qgridlayout.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QVBoxLayout \
+		../BITC/debuger.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QProcess \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qprocess.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFile \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTextStream \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QCloseEvent \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTimer \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qtimer.h \
@@ -4579,6 +4635,11 @@ main.o: ../BITC/main.cpp ../BITC/mainwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qlayoutitem.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qgridlayout.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QVBoxLayout \
+		../BITC/debuger.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QProcess \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qprocess.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFile \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTextStream \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QCloseEvent \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTimer \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qtimer.h \
@@ -4665,7 +4726,6 @@ main.o: ../BITC/main.cpp ../BITC/mainwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qplugin.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qpointer.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qpluginloader.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qprocess.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qpropertyanimation.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qvariantanimation.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qqueue.h \
@@ -4959,6 +5019,11 @@ mainwindow.o: ../BITC/mainwindow.cpp ../BITC/mainwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qlayoutitem.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qgridlayout.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QVBoxLayout \
+		../BITC/debuger.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QProcess \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qprocess.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFile \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTextStream \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QCloseEvent \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTimer \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qtimer.h \
@@ -4967,7 +5032,6 @@ mainwindow.o: ../BITC/mainwindow.cpp ../BITC/mainwindow.h \
 		ui_mainwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QTabWidget \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QKeyEvent \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qprocess.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qdesktopservices.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qstandardpaths.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFileInfo \
@@ -5120,10 +5184,7 @@ mainwindow.o: ../BITC/mainwindow.cpp ../BITC/mainwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtConcurrent/qtconcurrentrunbase.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtConcurrent/qtconcurrentstoredfunctioncall.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtConcurrent/qtconcurrentversion.h \
-		../BITC/debuger.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QProcess \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFile \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTextStream \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFuture \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QElapsedTimer \
 		../BITC/uiinterface.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QMenuBar \
@@ -5136,7 +5197,8 @@ mainwindow.o: ../BITC/mainwindow.cpp ../BITC/mainwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QStatusBar \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qstatusbar.h \
 		../BITC/settingwindow.h \
-		../BITC/jumpwindow.h
+		../BITC/jumpwindow.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QDateTime
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ..\BITC\mainwindow.cpp
 
 searchwindow.o: ../BITC/searchwindow.cpp ../BITC/searchwindow.h \
@@ -5287,16 +5349,33 @@ searchwindow.o: ../BITC/searchwindow.cpp ../BITC/searchwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qgridlayout.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QVBoxLayout \
 		ui_searchwindow.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QVariant \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QApplication \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qapplication.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qcoreapplication.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qeventloop.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qdesktopwidget.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qguiapplication.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qinputmethod.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QGridLayout \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QPushButton \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qpushbutton.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qabstractbutton.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qicon.h \
 		../BITC/mainwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QMainWindow \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qmainwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qtabwidget.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qicon.h \
 		../BITC/toolbox.h \
 		../BITC/FileMgr.h \
 		../BITC/toolboxchild.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFileSystemWatcher \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qfilesystemwatcher.h \
+		../BITC/debuger.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QProcess \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qprocess.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFile \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTextStream \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QCloseEvent \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTimer \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qtimer.h \
@@ -5476,12 +5555,41 @@ settingwindow.o: ../BITC/settingwindow.cpp ../BITC/settingwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qlayoutitem.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qgridlayout.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QVBoxLayout \
+		../BITC/debuger.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QProcess \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qprocess.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFile \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTextStream \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QCloseEvent \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTimer \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qtimer.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qbasictimer.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QDebug \
 		ui_settingwindow.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QVariant \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QApplication \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qapplication.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qcoreapplication.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qeventloop.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qdesktopwidget.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qguiapplication.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qinputmethod.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QComboBox \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qcombobox.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qabstractitemdelegate.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qstyleoption.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qabstractspinbox.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qvalidator.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qregularexpression.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qslider.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qabstractslider.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qstyle.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qtabbar.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qrubberband.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QGridLayout \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QPushButton \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qpushbutton.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qabstractbutton.h \
 		../BITC/config.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QtGui \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QtGuiDepends \
@@ -5489,7 +5597,6 @@ settingwindow.o: ../BITC/settingwindow.cpp ../BITC/settingwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QtCoreDepends \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qabstractanimation.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qabstracteventdispatcher.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qeventloop.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qabstractnativeeventfilter.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qabstractproxymodel.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qabstractstate.h \
@@ -5506,7 +5613,6 @@ settingwindow.o: ../BITC/settingwindow.cpp ../BITC/settingwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qcborvalue.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qdatetime.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qcborcommon.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qregularexpression.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/quuid.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qcbormap.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qcborstream.h \
@@ -5514,7 +5620,6 @@ settingwindow.o: ../BITC/settingwindow.cpp ../BITC/settingwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qcollator.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qcommandlineoption.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qcommandlineparser.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qcoreapplication.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qconcatenatetablesproxymodel.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qcryptographichash.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qdeadlinetimer.h \
@@ -5563,7 +5668,6 @@ settingwindow.o: ../BITC/settingwindow.cpp ../BITC/settingwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qplugin.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qpointer.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qpluginloader.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qprocess.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qpropertyanimation.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qvariantanimation.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qqueue.h \
@@ -5623,8 +5727,6 @@ settingwindow.o: ../BITC/settingwindow.cpp ../BITC/settingwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qgenericmatrix.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qgenericplugin.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qgenericpluginfactory.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qguiapplication.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qinputmethod.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qiconengine.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qiconengineplugin.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qimageiohandler.h \
@@ -5693,7 +5795,6 @@ settingwindow.o: ../BITC/settingwindow.cpp ../BITC/settingwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qtextdocumentwriter.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qtextlist.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qtexttable.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qvalidator.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qtguiversion.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QThread \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtConcurrent/QtConcurrent \
@@ -6112,6 +6213,11 @@ uiinterface.o: ../BITC/uiinterface.cpp ../BITC/uiinterface.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qlayoutitem.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qgridlayout.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QVBoxLayout \
+		../BITC/debuger.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QProcess \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qprocess.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFile \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTextStream \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QCloseEvent \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTimer \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qtimer.h \
@@ -6235,22 +6341,6 @@ debuger.o: ../BITC/debuger.cpp ../BITC/debuger.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qprocess.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFile \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QTextStream \
-		ui_debuger.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QDebug \
-		../BITC/mainwindow.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QMainWindow \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qmainwindow.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qtabwidget.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qicon.h \
-		../BITC/toolbox.h \
-		../BITC/FileMgr.h \
-		../BITC/toolboxchild.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QObject \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFileSystemWatcher \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qfilesystemwatcher.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QCompleter \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qcompleter.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qabstractitemmodel.h \
 		../BITC/editor.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QPlainTextEdit \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qplaintextedit.h \
@@ -6267,6 +6357,7 @@ debuger.o: ../BITC/debuger.cpp ../BITC/debuger.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qglyphrun.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qrawfont.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qfontdatabase.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QObject \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QPaintEvent \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QResizeEvent \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QSize \
@@ -6274,16 +6365,61 @@ debuger.o: ../BITC/debuger.cpp ../BITC/debuger.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QSyntaxHighlighter \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qsyntaxhighlighter.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qtextobject.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QCompleter \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qcompleter.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qabstractitemmodel.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QSettings \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qsettings.h \
 		../BITC/highlighter.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QTextCharFormat \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/QTextDocument \
-		../BITC/searchwindow.h \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QLineEdit \
-		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qlineedit.h \
+		ui_debuger.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QVariant \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QApplication \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qapplication.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qcoreapplication.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qeventloop.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qdesktopwidget.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qguiapplication.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qinputmethod.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QHeaderView \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qheaderview.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qabstractitemview.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qitemselectionmodel.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qabstractitemdelegate.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qstyleoption.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qabstractspinbox.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qvalidator.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qregularexpression.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtGui/qicon.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qslider.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qabstractslider.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qstyle.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qtabbar.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qtabwidget.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qrubberband.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QLabel \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qlabel.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QLineEdit \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qlineedit.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QPushButton \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qpushbutton.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qabstractbutton.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QTableWidget \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qtablewidget.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qtableview.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QTextBrowser \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qtextbrowser.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QDebug \
+		../BITC/mainwindow.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QMainWindow \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qmainwindow.h \
+		../BITC/toolbox.h \
+		../BITC/FileMgr.h \
+		../BITC/toolboxchild.h \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/QFileSystemWatcher \
+		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtCore/qfilesystemwatcher.h \
+		../BITC/searchwindow.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/QHBoxLayout \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qboxlayout.h \
 		../../../../Qt/Qt5.14.1/5.14.1/mingw73_64/include/QtWidgets/qlayout.h \

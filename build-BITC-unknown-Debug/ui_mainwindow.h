@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDockWidget>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -55,16 +56,18 @@ public:
     QAction *actioncommitUnFold;
     QWidget *centralwidget;
     QGridLayout *gridLayout;
-    QTabWidget *tabWgtEditArea;
-    QWidget *tab_2;
     QTabWidget *tabWgtResArea;
     QWidget *tab;
     QVBoxLayout *verticalLayout_3;
     QVBoxLayout *verticalLayout;
     QWidget *tab_3;
+    QVBoxLayout *verticalLayout_11;
+    QHBoxLayout *hlayoutDebuger;
     QWidget *tab_4;
     QVBoxLayout *verticalLayout_2;
     QTextEdit *CompileLog;
+    QTabWidget *tabWgtEditArea;
+    QWidget *tab_2;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuEdit;
@@ -178,27 +181,11 @@ public:
         gridLayout->setSpacing(0);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
-        tabWgtEditArea = new QTabWidget(centralwidget);
-        tabWgtEditArea->setObjectName(QString::fromUtf8("tabWgtEditArea"));
+        tabWgtResArea = new QTabWidget(centralwidget);
+        tabWgtResArea->setObjectName(QString::fromUtf8("tabWgtResArea"));
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(tabWgtEditArea->sizePolicy().hasHeightForWidth());
-        tabWgtEditArea->setSizePolicy(sizePolicy);
-        tabWgtEditArea->setStyleSheet(QString::fromUtf8("font:"));
-        tabWgtEditArea->setTabsClosable(true);
-        tabWgtEditArea->setMovable(false);
-        tab_2 = new QWidget();
-        tab_2->setObjectName(QString::fromUtf8("tab_2"));
-        QFont font;
-        font.setItalic(false);
-        tab_2->setFont(font);
-        tabWgtEditArea->addTab(tab_2, QString());
-
-        gridLayout->addWidget(tabWgtEditArea, 0, 0, 1, 1);
-
-        tabWgtResArea = new QTabWidget(centralwidget);
-        tabWgtResArea->setObjectName(QString::fromUtf8("tabWgtResArea"));
         sizePolicy.setHeightForWidth(tabWgtResArea->sizePolicy().hasHeightForWidth());
         tabWgtResArea->setSizePolicy(sizePolicy);
         tabWgtResArea->setMinimumSize(QSize(0, 200));
@@ -217,6 +204,14 @@ public:
         tabWgtResArea->addTab(tab, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QString::fromUtf8("tab_3"));
+        tab_3->setEnabled(true);
+        verticalLayout_11 = new QVBoxLayout(tab_3);
+        verticalLayout_11->setObjectName(QString::fromUtf8("verticalLayout_11"));
+        hlayoutDebuger = new QHBoxLayout();
+        hlayoutDebuger->setObjectName(QString::fromUtf8("hlayoutDebuger"));
+
+        verticalLayout_11->addLayout(hlayoutDebuger);
+
         tabWgtResArea->addTab(tab_3, QString());
         tab_4 = new QWidget();
         tab_4->setObjectName(QString::fromUtf8("tab_4"));
@@ -234,10 +229,26 @@ public:
 
         gridLayout->addWidget(tabWgtResArea, 1, 0, 1, 1);
 
+        tabWgtEditArea = new QTabWidget(centralwidget);
+        tabWgtEditArea->setObjectName(QString::fromUtf8("tabWgtEditArea"));
+        sizePolicy.setHeightForWidth(tabWgtEditArea->sizePolicy().hasHeightForWidth());
+        tabWgtEditArea->setSizePolicy(sizePolicy);
+        tabWgtEditArea->setStyleSheet(QString::fromUtf8("font:"));
+        tabWgtEditArea->setTabsClosable(true);
+        tabWgtEditArea->setMovable(false);
+        tab_2 = new QWidget();
+        tab_2->setObjectName(QString::fromUtf8("tab_2"));
+        QFont font;
+        font.setItalic(false);
+        tab_2->setFont(font);
+        tabWgtEditArea->addTab(tab_2, QString());
+
+        gridLayout->addWidget(tabWgtEditArea, 0, 0, 1, 1);
+
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 674, 24));
+        menubar->setGeometry(QRect(0, 0, 674, 29));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuEdit = new QMenu(menubar);
@@ -332,8 +343,8 @@ public:
 
         retranslateUi(MainWindow);
 
+        tabWgtResArea->setCurrentIndex(1);
         tabWgtEditArea->setCurrentIndex(0);
-        tabWgtResArea->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -421,10 +432,10 @@ public:
         actionquickJump->setText(QCoreApplication::translate("MainWindow", "\345\277\253\351\200\237\350\267\263\350\275\254", nullptr));
         actionquickJump_2->setText(QCoreApplication::translate("MainWindow", "\345\277\253\351\200\237\350\267\263\350\275\254", nullptr));
         actioncommitUnFold->setText(QCoreApplication::translate("MainWindow", "\345\261\225\345\274\200\346\263\250\351\207\212", nullptr));
-        tabWgtEditArea->setTabText(tabWgtEditArea->indexOf(tab_2), QCoreApplication::translate("MainWindow", "File1.txt", nullptr));
         tabWgtResArea->setTabText(tabWgtResArea->indexOf(tab), QCoreApplication::translate("MainWindow", "\346\237\245\346\211\276", nullptr));
         tabWgtResArea->setTabText(tabWgtResArea->indexOf(tab_3), QCoreApplication::translate("MainWindow", " \350\260\203\350\257\225", nullptr));
         tabWgtResArea->setTabText(tabWgtResArea->indexOf(tab_4), QCoreApplication::translate("MainWindow", "\347\274\226\350\257\221\346\227\245\345\277\227", nullptr));
+        tabWgtEditArea->setTabText(tabWgtEditArea->indexOf(tab_2), QCoreApplication::translate("MainWindow", "File1.txt", nullptr));
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "\346\226\207\344\273\266", nullptr));
         menuEdit->setTitle(QCoreApplication::translate("MainWindow", "\347\274\226\350\276\221", nullptr));
         menuSelect->setTitle(QCoreApplication::translate("MainWindow", "\351\200\211\346\213\251", nullptr));

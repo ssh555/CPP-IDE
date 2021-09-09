@@ -7,6 +7,7 @@
 #include <QCompleter>
 #include "editor.h"
 #include "searchwindow.h"
+#include "debuger.h"
 
 #include <QCloseEvent>
 #include <QTimer>
@@ -75,6 +76,7 @@ private:
     //临时窗口，只有一个
     QWidget *TempWidget;
     SearchWindow *searchWindow=NULL;
+    Debuger *debuger = nullptr;
     static MainWindow* m_pInstance;
 
     Ui::MainWindow *ui;

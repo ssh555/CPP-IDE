@@ -33,7 +33,7 @@ void Editor::Init()
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(SLOT_UpdateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(SLOT_UpdateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_HighlightCurrentLine()));
-    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_BracketMatch()));
+//    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_BracketMatch()));
 }
 void Editor::mouseDoubleClickEvent(QMouseEvent *){
     QTextBlock b=document()->findBlockByNumber(this->textCursor().blockNumber());
@@ -196,12 +196,6 @@ QVector<qint32> Editor::GetBreakPoints()
         b=b.next();
     }
 
-    //    QVector<qint32>::iterator iter;
-    //    qDebug();
-    //    for (iter=breakpoints->begin();iter!=breakpoints->end();iter++)
-    //    {
-    //        qDebug()<<*iter;
-    //    }
     return *breakpoints;
 }
 //替换下一个
@@ -534,6 +528,7 @@ void Editor::SLOT_HighlightCurrentLine()
     }
     SLOT_BracketMatch(extraSelections);
     setExtraSelections(extraSelections);
+
 }
 //更改光标位置(响应debuger)
 void Editor::SLOT_ChangeLineNum(int num){
@@ -643,7 +638,7 @@ void Editor::autoIndent(bool temp)
             {
                 spaceNumber++;
                 beforeTabSpace++;
-                if(beforeTabSpace==4) beforeTabSpace==0;
+                if(beforeTabSpace==4) beforeTabSpace=0;
             }
             else if(qc=="\x9")
             {
@@ -804,9 +799,11 @@ void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections
 
                     if (!isReadOnly()) {
                         selection.cursor = cursorEnd;
+//                        qDebug()<<cursorEnd.position();
                         extraSelections.append(selection);
 
                         selection.cursor = cursorBegin;
+//                        qDebug()<<cursorBegin.position();
                         extraSelections.append(selection);
                     }
                     whetherInQuote=false;
@@ -816,17 +813,17 @@ void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections
             position++;
         }
     }
-
     //向前找，原理与 向后找 一样
     charBegin=' ', charEnd=' ';
-    position = cursor.position();
+    position = cursor.position()-1;
     for(int i=3;i<6;i++) {
-        if(doc->characterAt(position-1) == brace[i]) {
+        if(doc->characterAt(position) == brace[i]) {
             charBegin = brace[i-3];
             charEnd = brace[i];
             break;
         }
     }
+
     if (!cursor.atBlockStart() && charEnd!=' ') {
         cursorEnd = QTextCursor(cursor);
         cursorEnd.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
@@ -836,7 +833,7 @@ void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections
         while (!(c = doc->characterAt(position)).isNull()) {
             if(c=="\"")
             {
-                if(doc->characterAt(position-1)=="\\")
+                if(doc->characterAt(position)=="\\")
                 {
                     whetherInQuote=!whetherInQuote;
                 }
@@ -859,9 +856,11 @@ void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections
 
                     if (!isReadOnly()) {
                         selection.cursor = cursorBegin;
+//                        qDebug()<<cursorBegin.position();
                         extraSelections.append(selection);
 
                         selection.cursor = cursorEnd;
+//                        qDebug()<<cursorEnd.position();
                         extraSelections.append(selection);
                     }
                     whetherInQuote=false;

@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
         if(searchWindow!=NULL)
         {
             searchWindow->setEditor((Editor *)ui->tabWgtEditArea->widget(index));
+
         }
         workingEditor=(Editor *)ui->tabWgtEditArea->widget(index);
     });
@@ -153,6 +154,7 @@ void MainWindow::closeEvent(QCloseEvent *){
     for(int i = 0;i < num; ++i){
         emit ui->tabWgtEditArea->tabCloseRequested(0);
     }
+
 }
 
 //获取C文件绝对路径的文件名.
@@ -254,6 +256,20 @@ void MainWindow::AddTextEditToEditArea(QString filename,bool isTemp){
 
         }else searchWindow->show();
         //workingEditor->isChanged=false;
+    }
+
+    if(debuger==nullptr) {
+        debuger = new Debuger(nullptr);
+        ui->hlayoutDebuger->addWidget(debuger);
+        connect(debuger, &Debuger::SIGNAL_DebugerRun, this, [=]{
+            if(openingFileName.isEmpty()) {
+                qDebug()<<"Debug: empty file";
+                return;
+            }
+            qDebug()<<workingEditor->GetBreakPoints();
+            debuger->Run(workingEditor, GetCFolderName(openingFileName), GetCFileName(openingFileName));
+        });
+        debuger->show();
     }
 }
 
@@ -484,26 +500,9 @@ void MainWindow::Func_MenuBar(){
     });
     //调试
     connect(ui->actionDebug,&QAction::triggered,this,[=](){
-        emit SIGNAL_Debug();
+        emit debuger->SIGNAL_DebugerRun();
     });
-    connect(this,&MainWindow::SIGNAL_Debug,this,[=](){
-        if(openingFileName.isEmpty()) {
-            //qDebug()<<"Debug: empty file";
-            return;
-        }
-        //存储正在准备调试的文件信息
-        //        qDebug()<<openingFileName;
-        //        qDebug()<<GetCFileName(openingFileName);
-        //        qDebug()<<GetCFolderName(openingFileName);
-        Debuger *debuger=new Debuger(nullptr, GetCFileName(openingFileName), GetCFolderName(openingFileName), workingEditor->GetBreakPoints());
-        connect(debuger,&Debuger::SIGNAL_NowLine,workingEditor,&Editor::SLOT_ChangeLineNum);
-        //初始化设置
-        //        debuger->SetFile(GetCFileName(openingFileName));
-        //        debuger->SetFilePath(GetCFolderName(openingFileName));
-        //        debuger->SetBreakPoints(workingEditor->GetBreakPoints());
-        //        debuger->ReadyToStart();
-        debuger->show();
-    });
+
     //关闭所有文件
     connect(ui->actionCloseAll, &QAction::triggered, this, [=](){
         emit SIGNAL_CloseAll();
