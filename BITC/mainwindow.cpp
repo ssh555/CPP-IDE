@@ -415,7 +415,6 @@ void MainWindow::Func_MenuBar(){
     });
     connect(this,&MainWindow::SIGNAL_OpenFile,this,[=](){
         QString filename = QFileDialog::getOpenFileName(this,"打开文件",".",tr("C(*.c *.c++ *.cpp)"));
-
         if(filename.isEmpty())
             return ;
         AddTextEditToEditArea(filename,TabTemp::Permanent);//非临时窗口
@@ -481,7 +480,7 @@ void MainWindow::Func_MenuBar(){
     });
     connect(this,&MainWindow::SIGNAL_Debug,this,[=](){
         if(openingFileName.isEmpty()) {
-            qDebug()<<"Debug: empty file";
+            //qDebug()<<"Debug: empty file";
             return;
         }
         //存储正在准备调试的文件信息
@@ -612,7 +611,7 @@ void MainWindow::Func_MenuBar(){
         if(!isAutoSave){
             return ;
         }
-        qDebug() << "aaa";
+        //qDebug() << "aaa";
         emit SIGNAL_AutoSave();
     });
     connect(this,&MainWindow::SIGNAL_AutoSave,this,[=](){
@@ -700,7 +699,7 @@ void MainWindow::CompileC(QString filename){
 
     }
     str = str + " g++ -o " + filename.mid(0,filename.lastIndexOf(".")) + ".exe " + filename;
-    qDebug() << str;
+    //qDebug() << str;
     p->start("cmd.exe", QStringList()<<"/c"<<str);
     QElapsedTimer time;
     time.start();
@@ -747,7 +746,8 @@ void MainWindow::RunC(QString filename){
     }
 
     //用系统默认的打开方式打开指定文件
-    QDesktopServices::openUrl(QUrl::fromLocalFile(filename));
+    system(QString("Run.exe " + filename).toUtf8().data());
+    //QDesktopServices::openUrl(QUrl::fromLocalFile(filename));
 
 }
 
