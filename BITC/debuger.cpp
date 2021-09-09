@@ -121,7 +121,7 @@ void Debuger::Read()
         if(temp>=0) {
             int number = string.mid(string.lastIndexOf(':')+1).replace("\r\n", "").toInt();
 //            ui->NowLineNumber->setText(QString::number(number));
-            qDebug()<<number;
+            //qDebug()<<number;
             emit SIGNAL_NowLine(number);
         }
 
@@ -147,10 +147,10 @@ void Debuger::Read()
 
 void Debuger::Run(Editor *workingeditor, QString filepath, QString filename) {
     if(workingEditor!=nullptr) {
-        disconnect(this, &Debuger::SIGNAL_NowLine, workingEditor, &Editor::SLOT_ChangeLineNum);
+        disconnect(connectionLineNumber);
     }
     workingEditor = workingeditor;
-    connect(this, &Debuger::SIGNAL_NowLine, workingEditor, &Editor::SLOT_ChangeLineNum);
+    connectionLineNumber = connect(this, &Debuger::SIGNAL_NowLine, workingEditor, &Editor::SLOT_ChangeLineNum);
 
     filePath = filepath;
     fileName = filename;

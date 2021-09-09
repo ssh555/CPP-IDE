@@ -23,8 +23,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Editor_t {
-    QByteArrayData data[28];
-    char stringdata0[455];
+    QByteArrayData data[29];
+    char stringdata0[469];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -60,7 +60,8 @@ QT_MOC_LITERAL(23, 347, 10), // "completion"
 QT_MOC_LITERAL(24, 358, 30), // "SLOT_UpdateLineNumberAreaWidth"
 QT_MOC_LITERAL(25, 389, 13), // "newBlockCount"
 QT_MOC_LITERAL(26, 403, 25), // "SLOT_HighlightCurrentLine"
-QT_MOC_LITERAL(27, 429, 25) // "SLOT_UpdateLineNumberArea"
+QT_MOC_LITERAL(27, 429, 25), // "SLOT_UpdateLineNumberArea"
+QT_MOC_LITERAL(28, 455, 13) // "explainIsFold"
 
     },
     "Editor\0SIGNAL_ChangeCodeStyle\0\0"
@@ -75,7 +76,7 @@ QT_MOC_LITERAL(27, 429, 25) // "SLOT_UpdateLineNumberArea"
     "num\0insertCompletion\0completion\0"
     "SLOT_UpdateLineNumberAreaWidth\0"
     "newBlockCount\0SLOT_HighlightCurrentLine\0"
-    "SLOT_UpdateLineNumberArea"
+    "SLOT_UpdateLineNumberArea\0explainIsFold"
 };
 #undef QT_MOC_LITERAL
 
@@ -85,7 +86,7 @@ static const uint qt_meta_data_Editor[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      18,   14, // methods
+      19,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -93,26 +94,27 @@ static const uint qt_meta_data_Editor[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,  104,    2, 0x06 /* Public */,
-       3,    1,  105,    2, 0x06 /* Public */,
+       1,    0,  109,    2, 0x06 /* Public */,
+       3,    1,  110,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       5,    1,  108,    2, 0x0a /* Public */,
-       7,    1,  111,    2, 0x0a /* Public */,
-       8,    1,  114,    2, 0x0a /* Public */,
-       9,    2,  117,    2, 0x0a /* Public */,
-      11,    2,  122,    2, 0x0a /* Public */,
-      12,    2,  127,    2, 0x0a /* Public */,
-      13,    1,  132,    2, 0x0a /* Public */,
-      14,    0,  135,    2, 0x0a /* Public */,
-      15,    0,  136,    2, 0x0a /* Public */,
-      16,    0,  137,    2, 0x0a /* Public */,
-      17,    1,  138,    2, 0x0a /* Public */,
-      20,    1,  141,    2, 0x0a /* Public */,
-      22,    1,  144,    2, 0x08 /* Private */,
-      24,    1,  147,    2, 0x08 /* Private */,
-      26,    0,  150,    2, 0x08 /* Private */,
-      27,    2,  151,    2, 0x08 /* Private */,
+       5,    1,  113,    2, 0x0a /* Public */,
+       7,    1,  116,    2, 0x0a /* Public */,
+       8,    1,  119,    2, 0x0a /* Public */,
+       9,    2,  122,    2, 0x0a /* Public */,
+      11,    2,  127,    2, 0x0a /* Public */,
+      12,    2,  132,    2, 0x0a /* Public */,
+      13,    1,  137,    2, 0x0a /* Public */,
+      14,    0,  140,    2, 0x0a /* Public */,
+      15,    0,  141,    2, 0x0a /* Public */,
+      16,    0,  142,    2, 0x0a /* Public */,
+      17,    1,  143,    2, 0x0a /* Public */,
+      20,    1,  146,    2, 0x0a /* Public */,
+      22,    1,  149,    2, 0x08 /* Private */,
+      24,    1,  152,    2, 0x08 /* Private */,
+      26,    0,  155,    2, 0x08 /* Private */,
+      27,    2,  156,    2, 0x08 /* Private */,
+      28,    0,  161,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -135,6 +137,7 @@ static const uint qt_meta_data_Editor[] = {
     QMetaType::Void, QMetaType::Int,   25,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QRect, QMetaType::Int,    2,    2,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -168,6 +171,7 @@ void Editor::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 15: _t->SLOT_UpdateLineNumberAreaWidth((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 16: _t->SLOT_HighlightCurrentLine(); break;
         case 17: _t->SLOT_UpdateLineNumberArea((*reinterpret_cast< const QRect(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 18: _t->explainIsFold(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -218,13 +222,13 @@ int Editor::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 18)
+        if (_id < 19)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 18;
+        _id -= 19;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 18)
+        if (_id < 19)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 18;
+        _id -= 19;
     }
     return _id;
 }

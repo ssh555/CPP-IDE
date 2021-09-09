@@ -30,6 +30,7 @@ private:
     QString filePath, fileName;
     Editor *workingEditor=nullptr;
     static QRegExp lineNumber, variable;
+    QMetaObject::Connection connectionLineNumber;
     void Write(QString command);
     void LogWrite(QString command);
 

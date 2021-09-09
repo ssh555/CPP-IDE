@@ -33,6 +33,7 @@ void Editor::Init()
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(SLOT_UpdateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(SLOT_UpdateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_HighlightCurrentLine()));
+    connect(this, &QPlainTextEdit::blockCountChanged, this,&Editor::explainIsFold);
     //    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_BracketMatch()));
 }
 void Editor::mouseDoubleClickEvent(QMouseEvent *){
@@ -671,6 +672,13 @@ void Editor::addBraceRight()
     this->moveCursor(QTextCursor::Up);
     this->moveCursor(QTextCursor::EndOfLine);
 }
+
+void Editor::explainIsFold()
+{
+    if(explainWhetherFold) explainFold();
+    else return;
+}
+
 //注释折叠
 void Editor::explainFold()
 {
@@ -702,6 +710,7 @@ void Editor::explainFold()
         }
         block=block.next();
     }
+    explainWhetherFold=true;
     resizeEvent(new QResizeEvent(QSize(0, 0), size()));
 }
 //注释展开
@@ -717,6 +726,7 @@ void Editor::explainUnfold()
         }
         block=block.next();
     }
+    explainWhetherFold=false;
     resizeEvent(new QResizeEvent(QSize(0, 0), size()));
 }
 

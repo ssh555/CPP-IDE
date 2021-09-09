@@ -262,10 +262,10 @@ void MainWindow::AddTextEditToEditArea(QString filename,bool isTemp){
         ui->hlayoutDebuger->addWidget(debuger);
         connect(debuger, &Debuger::SIGNAL_DebugerRun, this, [=]{
             if(openingFileName.isEmpty()) {
-                qDebug()<<"Debug: empty file";
+                //qDebug()<<"Debug: empty file";
                 return;
             }
-            qDebug()<<workingEditor->GetBreakPoints();
+            //qDebug()<<workingEditor->GetBreakPoints();
             debuger->Run(workingEditor, GetCFolderName(openingFileName), GetCFileName(openingFileName));
         });
         debuger->show();
@@ -637,10 +637,10 @@ void MainWindow::Func_MenuBar(){
                 dir.mkdir(dirName);
             }
             QString name = QFileInfo(filename).fileName();
-            QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm_");
+            QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss_");
             filename = dirName + "/" + time + name;
             //filename += QDateTime::currentDateTime().toString("_yyyy-MM-dd_hh:mm");
-            qDebug() << filename;
+            //qDebug() << filename;
             QFile file(filename);
             file.open(QIODevice::WriteOnly | QIODevice::Text);
             file.write(t->toPlainText().toUtf8().data());

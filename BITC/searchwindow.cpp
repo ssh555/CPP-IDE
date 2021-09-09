@@ -100,7 +100,7 @@ void SearchWindow::setEditor(Editor *editor_far)//设置editor,连接槽函数
         disconnect(connect5);
         disconnect(connect6);
         disconnect(connect7);
-        qDebug()<<"notnull";
+        //qDebug()<<"notnull";
     }
     this->editor=editor_far;
     //connect(this,&SearchWindow::on_btnFindNext_clicked,this,&SearchWindow::BtnFindNextClicked);//this->editor,&Editor::SLOT_FindKeywords

@@ -94,10 +94,11 @@ private slots:
     void SLOT_UpdateLineNumberAreaWidth(int newBlockCount);
     void SLOT_HighlightCurrentLine();
     void SLOT_UpdateLineNumberArea(const QRect &, int);
+    void explainIsFold();
 
 private:
     QString textUnderCursor() const;
-
+    bool explainWhetherFold=false;
     QWidget *lineNumberArea;
 };
 
