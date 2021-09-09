@@ -1,7 +1,7 @@
 .QDockWidget{background-color:rgba(144,68,35,0.5)}
 
 .QDockWidget .QWidget{/*资源管理器下面那块*/
-    background-color:rgba(144,68,35,0.5);
+    background-color:rgba(144,68,35,1)
 }
 
 #toolBar{
@@ -21,6 +21,12 @@ background-color:rgba(2,105,55,0.3);
     background-color:rgba(144,68,35,0.3);
 }
 
+/*----------------以下为菜单栏样式----------------*/
+/*请去掉searchwindow.ui的所有styleSheet*/
+/*请在searchwindow.cpp的构造器中加入以下代码：
+    ui->horizontalLayout_2->addStretch();
+    ui->horizontalLayout_2->setSpacing(0);
+*/
 QMenuBar {
     /*菜单栏背景色*/
    background-image: url(:/img/gugu.png);
@@ -47,3 +53,107 @@ QMenu::item:selected {
 QMenu::separator {
     background: rgb(235,235,236);
 }
+/*----------------以上为菜单栏样式----------------*/
+
+/*----------------以下为“查找替换”样式----------------*/
+#btnFind, #btnReplace {/*查找、替换切换按钮*/
+    width: 70px;
+    height: 25px;
+    font-family: "Microsoft YaHei";
+    font-weight: normal;
+    font-size: 16px;
+    background-color:rgba(194, 57, 33, 0.7);/*按钮背景颜色*/
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border: 2px solid;
+    border-color: rgba(218, 218, 218, 0.671);
+}
+#btnFind:pressed, #btnReplace:pressed {/*查找、替换切换按钮-按下状态*/
+    background-color:rgba(194, 57, 33, 0.8);/*按钮背景颜色*/
+    padding-left:4px;
+    padding-top:4px;
+}
+#btnFind:hover, #btnReplace:hover {/*按钮悬浮*/
+    background-color:rgba(194, 57, 33, 0.4);/*按钮背景颜色*/
+}
+
+#btnCancel, #btnFindPrivious, #btnFindWhole, #btnFindNext{
+    width: 90px;
+    height: 30px;
+    font-family: "Microsoft YaHei";
+    border-radius: 5px;
+    border: 2px solid;
+    border-color: rgba(218, 218, 218, 0.671);
+}
+
+#btnCancel {/*“取消”按钮*/
+    background-color:rgba(0, 219, 135, 0.8);/*按钮背景颜色*/
+}
+#btnCancel:hover {/*悬浮*/
+    background-color:rgba(0, 219, 135, 0.5);/*按钮背景颜色*/
+}
+#btnCancel:pressed {/*按下*/
+    background-color:rgba(0, 219, 135, 1);/*按钮背景颜色*/
+    padding-left:5px;/*按下动效*/
+    padding-top:5px;
+}
+
+
+#btnFindPrivious {/*“前一个”按钮*/
+    background-color: rgba(0, 188, 116, 0.8);/*按钮背景颜色*/
+}
+#btnFindPrivious:hover {
+    background-color:rgba(0, 188, 116, 0.5);/*按钮背景颜色*/
+}
+#btnFindPrivious:pressed {
+    background-color:rgba(0, 188, 116, 1);/*按钮背景颜色*/
+    padding-left:5px;
+    padding-top:5px;
+}
+
+
+#btnFindWhole {/*“查找全部”按钮*/
+    background-color: rgba(0, 156, 96, 0.8);/*按钮背景颜色*/
+}
+#btnFindWhole:hover {
+    background-color:rgba(0, 156, 96, 0.5);/*按钮背景颜色*/
+}
+#btnFindWhole:pressed {
+    background-color:rgba(0, 156, 96, 1);/*按钮背景颜色*/
+    padding-left:5px;
+    padding-top:5px;
+}
+
+
+#btnFindNext {/*“下一个”按钮*/
+    background-color: rgb(0, 125, 77, 0.8);/*按钮背景颜色*/
+}
+#btnFindNext:hover {
+    background-color:rgba(0, 125, 77, 0.5);/*按钮背景颜色*/
+}
+#btnFindNext:pressed {
+    background-color:rgba(0, 125, 77, 1);/*按钮背景颜色*/
+    padding-left:5px;
+    padding-top:5px;
+}
+/*----------------以上为“查找输入”样式----------------*/
+
+/*----------------以下为输入框样式----------------*/
+QLineEdit {/*输入框*/
+        border: 1px solid #A0A0A0;
+        border-radius: 3px;
+        padding-left: 5px;
+        background-color: #F2F2F2;
+        color: #165eb1;
+        font-size: 10pt;
+    font-family: "Microsoft YaHei";
+}
+QLineEdit:hover {
+        border: 1px solid #0f7fff;
+    color: #68afff;
+    background-color: #F2F2F2;
+}
+/*----------------以上为输入框样式----------------*/
+

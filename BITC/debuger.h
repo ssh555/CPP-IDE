@@ -28,6 +28,8 @@ private:
     static QRegExp lineNumber, variable;
     void Write(QString command);
     void LogWrite(QString command);
+    QFile *logFile;
+    QTextStream *logStream;
 
 signals:
     void SIGNAL_NowLine(int lineNumber);

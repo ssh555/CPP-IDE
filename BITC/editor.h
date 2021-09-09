@@ -52,7 +52,7 @@ public:
         Nested      = 16,    // 00010000
         Folded      = 32,    // 00100000
         ExplainFold = 33,    // 00100001
-        Error       = 64,    // 01000000
+        Error       = 64,     // 01000000
         Rehighlight = 128,   // 10000000
         //Bookmark    = 256, // 100000000
         Empty       = -1     // 1111....
@@ -64,7 +64,7 @@ public :signals:
     void SIGNAL_ChangeFont(bool flag);
 protected:
     void wheelEvent(QWheelEvent *e) override;
-    void FoldUnfold(QTextBlock &block);
+
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     void Refresh_Text();
     void keyPressEvent(QKeyEvent *e) override;
@@ -80,7 +80,7 @@ public slots:
     void SLOT_ReplaceWhole(QString keyword,QString replaceword);
     bool SLOT_ReplacePrivious(QString keyword,QString replaceword);
     void SLOT_SearchEnd();//搜索结束
-    void FoldUnfoldAll(bool folding);//用于代码折叠
+
     void explainFold();
     void explainUnfold();
     void SLOT_BracketMatch(); //括号匹配

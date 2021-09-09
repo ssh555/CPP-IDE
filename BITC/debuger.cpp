@@ -35,6 +35,28 @@ Debuger::Debuger(QWidget *parent, QString filename, QString filepath, QVector<qi
     fileName = filename;
     filePath = filepath;
 
+    lineNumber = QRegExp("^#.* at .*:.*");
+    variable = QRegExp("[0-9]{1,4}: .* = .*");
+
+    logFile = new QFile(filePath+"/gdb.txt");
+    logFile->open(QIODevice::ReadOnly);
+    logStream = new QTextStream(logFile);
+    //风格
+    QSettings *setting =new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    QString qssfilename="";
+    switch(setting->value("styleflag").toUInt()){
+    case 1: qssfilename=":/qss/bitDebuger.qss";break;
+    case 2: qssfilename=":/qss/purpletDebuger.qss";break;
+    case 3: qssfilename=":/qss/defaultDebuger.qss";break;
+    default: break;
+    }
+    QFile file(qssfilename);
+    if(file.open(QFile::ReadOnly)){
+        QString styleSheet = tr(file.readAll());
+        this->setStyleSheet(styleSheet);
+        file.close();
+    }
+
     connect(ui->Start, &QPushButton::clicked, this, [=]{
         Write("run");
     });

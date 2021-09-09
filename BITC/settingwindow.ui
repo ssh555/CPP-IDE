@@ -95,28 +95,6 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="3">
-     <widget class="QComboBox" name="SytleBox">
-      <item>
-       <property name="text">
-        <string>北理风格</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>少女风格</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>直男风格</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QComboBox" name="comboBox_3"/>
-    </item>
     <item row="2" column="1">
      <widget class="QComboBox" name="comboBox_5"/>
     </item>
@@ -218,6 +196,28 @@
        </property>
       </item>
      </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QComboBox" name="SytleBox">
+      <item>
+       <property name="text">
+        <string>北理风格</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>少女风格</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>直男风格</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QComboBox" name="comboBox_3"/>
     </item>
    </layout>
   </widget>

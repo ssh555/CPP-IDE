@@ -46,7 +46,6 @@ void Editor::mouseDoubleClickEvent(QMouseEvent *){
     else if(b.userState()&Debug){
         BlockState t = Debug;
         b.setUserState(b.userState()&!t);//把debug状态去掉
-
     }
 
     else {
@@ -149,6 +148,7 @@ void Editor::wheelEvent(QWheelEvent *e)
         //this->setTextCursor(cursor);
     }
 }
+//全部替换函数
 void Editor::SLOT_ReplaceWhole(QString findword,QString replaceword)
 {
     QTextCursor cursor = textCursor();
@@ -158,14 +158,14 @@ void Editor::SLOT_ReplaceWhole(QString findword,QString replaceword)
 
     while (SLOT_ReplaceKeywords(findword, replaceword));
 }
+//获取所有的断点,传出一个qvector的值
 QVector<qint32> Editor::GetBreakPoints()
 {
     QVector<qint32> *breakpoints=new QVector<qint32>;
     QTextBlock b=document()->firstBlock();
     while(b.next().isValid()){
         if(b.userState()&Debug){
-            breakpoints->append(b.lineCount());
-            //qDebug()<<(b.lineCount());
+            breakpoints->append(b.blockNumber());
         }
         b=b.next();
     }
@@ -178,6 +178,8 @@ QVector<qint32> Editor::GetBreakPoints()
 //    }
     return *breakpoints;
 }
+//替换下一个
+
 bool Editor::SLOT_ReplaceKeywords(QString findword,QString replaceword)//替换下一个
 {
     QTextCursor cursor = textCursor();
@@ -232,25 +234,7 @@ void Editor::SLOT_SearchEnd()
     //    }
 
 }
-void Editor::FoldUnfoldAll(bool folding)//折叠代码
-{
-    QTextBlock block = document()->firstBlock();
-    int blockcount=0;
-    do {
-        int state = block.userState();
-        blockcount++;
-        //如果该block可见、错误、嵌套、已经折叠且folding为true、未折叠且folding为false，就跳过这个block
-        if (!block.isVisible() || state & Error || state & Nested ||
-                (state & Folded && folding) || (!(state & Folded) && !folding))
-            continue;
-        //反过来就不可见且正确并且未嵌套，同时折叠情况和folding有且仅有一个为true
-        //进行FoldUnfold
-        FoldUnfold(block);
-    } while ((block = block.next()).isValid());
 
-    ensureCursorVisible();
-
-}
 
 void Editor::ChangeCodeStyle(){
     highlighter = new Highlighter(this->document());
@@ -259,53 +243,7 @@ void Editor::ChangeCodeStyle(){
     //qDebug()<<setting->value("LineColor").toString();
 }
 
-void Editor::FoldUnfold(QTextBlock &block)
-{
-    int state = block.userState();
-    //如果该代码块错误或已经到结尾或document的最后一个代码块为该代码块
-    if (state & Error || state & End || !(state & Begin) ||
-            document()->lastBlock() == block)
-        return;
-    //unfolding为否（未折叠)
-    bool unfolding = state & Folded;
 
-    if (unfolding)//如果已折叠
-    {
-        block.setUserState(block.userState() & ~Folded);
-        //qDebug()<<"block.userState() & ~Folded"<<(block.userState() & ~Folded);
-    }
-    else{
-        block.setUserState(block.userState() | Folded);
-
-    }
-
-    int previousBlockState = block.previous().userState();
-    int endBraceDepth = previousBlockState & Error ? 0 : previousBlockState >> StateShift;
-
-    int braceDepth;
-    int skipDepth = 0;
-
-    while ((block = block.next()).isValid()) {
-        int state = block.userState();
-        braceDepth = state >> StateShift;
-
-        if (unfolding){//如果状态同时为begin和Folded
-            if (state & Begin && !skipDepth && state & Folded) {
-                skipDepth = block.previous().userState() >> StateShift;
-            } else if (skipDepth) {
-                if (braceDepth == skipDepth)
-                    skipDepth = 0;
-
-                continue;
-            }
-        }
-
-        block.setVisible(unfolding);
-
-        if (braceDepth <= endBraceDepth)
-            break;
-    }
-}
 bool Editor::SLOT_FindPrivious(QString keyword)//寻找之前的
 {
 
@@ -367,7 +305,7 @@ void Editor::insertCompletion(const QString &completion)
     tc.insertText(completion.right(extra));
     setTextCursor(tc);
 }
-
+//获取指针选中的文字
 QString Editor::textUnderCursor() const
 {
     QTextCursor tc = textCursor();
@@ -381,7 +319,7 @@ void Editor::focusInEvent(QFocusEvent *e)
         c->setWidget(this);
     QPlainTextEdit::focusInEvent(e);
 }
-
+//按键响应事件,F2折叠注释,F3展开注释
 void Editor::keyPressEvent(QKeyEvent *e)
 {
     //
@@ -414,8 +352,6 @@ void Editor::keyPressEvent(QKeyEvent *e)
     const bool isShortcut = (e->modifiers().testFlag(Qt::ControlModifier) && e->key() == Qt::Key_E); // CTRL+E
     if (!c || !isShortcut) // do not process the shortcut when we have a completer
         QPlainTextEdit::keyPressEvent(e);
-    //! [7]
-
     QTextCursor completionText;
     completionText=textCursor();
     completionText.select(QTextCursor::LineUnderCursor);
@@ -449,7 +385,6 @@ void Editor::keyPressEvent(QKeyEvent *e)
         }
     }
 
-    //! [8]
     const bool ctrlOrShift = e->modifiers().testFlag(Qt::ControlModifier) ||
             e->modifiers().testFlag(Qt::ShiftModifier);
     if (!c || (ctrlOrShift && e->text().isEmpty()))
@@ -518,6 +453,7 @@ void Editor::Refresh_Text()
 {
 
 }
+//计算行号大小
 int Editor::lineNumberAreaWidth()
 {
     int digits = 1;
@@ -531,12 +467,12 @@ int Editor::lineNumberAreaWidth()
 
     return space;
 }
-
+//更新行号大小
 void Editor::SLOT_UpdateLineNumberAreaWidth(int /* newBlockCount */)
 {
     setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 }
-
+//更新行号
 void Editor::SLOT_UpdateLineNumberArea(const QRect &rect, int dy)
 {
     if (dy)
@@ -547,7 +483,7 @@ void Editor::SLOT_UpdateLineNumberArea(const QRect &rect, int dy)
     if (rect.contains(viewport()->rect()))
         SLOT_UpdateLineNumberAreaWidth(0);
 }
-
+//重新安排大小
 void Editor::resizeEvent(QResizeEvent *e)
 {
     QPlainTextEdit::resizeEvent(e);
@@ -555,7 +491,7 @@ void Editor::resizeEvent(QResizeEvent *e)
     QRect cr = contentsRect();
     lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
-
+//当前行高亮
 void Editor::SLOT_HighlightCurrentLine()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
@@ -574,10 +510,12 @@ void Editor::SLOT_HighlightCurrentLine()
 
     setExtraSelections(extraSelections);
 }
+//更改光标位置(响应debuger)
 void Editor::SLOT_ChangeLineNum(int num){
     this->setTextCursor(QTextCursor(document()->findBlockByNumber(num-1)));
 }
 
+//行号绘制
 
 void Editor::Line_Number_Area_Paint_Event(QPaintEvent *event)
 {
@@ -638,7 +576,7 @@ void Editor::toggleComment()
 }
 
 
-
+//设置编辑模式
 void Editor::Set_Mode(editorMode mode)
 {
     if(mode == BROWSE)
@@ -655,7 +593,7 @@ void Editor::Set_Mode(editorMode mode)
     }
 }
 
-
+//自动缩进
 void Editor::autoIndent(bool temp)
 {
     this->moveCursor(QTextCursor::Up);
@@ -700,7 +638,7 @@ void Editor::autoIndent(bool temp)
             this->insertPlainText(" ");
         }
 }
-
+//添加右括号
 void Editor::addBraceRight()
 {
     this->insertPlainText("\n");
@@ -709,7 +647,7 @@ void Editor::addBraceRight()
     this->moveCursor(QTextCursor::Up);
     this->moveCursor(QTextCursor::EndOfLine);
 }
-
+//注释折叠
 void Editor::explainFold()
 {
     QTextBlock block=document()->firstBlock();
@@ -722,7 +660,7 @@ void Editor::explainFold()
             if(text.at(1)=="/")
             {
                 block.setVisible(false);
-                block.setUserState((block.userState())|ExplainFold);
+                block.setUserState(block.userState()|Nested);
                 //qDebug()<<block.userState()<<block.blockNumber()<<"fold";
             }
             else if(text.at(1)=="*")
@@ -731,7 +669,7 @@ void Editor::explainFold()
                 {
                     text=block.text().simplified();
                     block.setVisible(false);
-                    block.setUserState((block.userState())|ExplainFold);
+                    block.setUserState(block.userState()|Nested);
                     //qDebug()<<block.userState()<<block.blockNumber()<<"fold";
                     if(text.contains("*/")) break;
                     block=block.next();
@@ -742,18 +680,16 @@ void Editor::explainFold()
     }
     resizeEvent(new QResizeEvent(QSize(0, 0), size()));
 }
-
+//注释展开
 void Editor::explainUnfold()
 {
     QTextBlock block=document()->firstBlock();
     for(;block.isValid();)
     {
-        if(block.userState()==ExplainFold)
+        if(block.userState()&Nested)
         {
             block.setVisible(true);
-            BlockState t = ExplainFold;
-            block.setUserState((block.userState())&!t);
-            //qDebug()<<block.userState()<<block.blockNumber()<<"unfold";
+            block.setUserState(block.userState()&(~Nested));
         }
         block=block.next();
     }

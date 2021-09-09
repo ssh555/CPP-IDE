@@ -5,6 +5,9 @@
         <file>qss/bitstyle.qss</file>
         <file>qss/defaultstyle.qss</file>
         <file>qss/purplestyle.qss</file>
+        <file>qss/bitDebuger.qss</file>
+        <file>qss/defaultDebuger.qss</file>
+        <file>qss/purpleDebuger.qss</file>
     </qresource>
     <qresource prefix="/resources">
         <file>wordlist.txt</file>

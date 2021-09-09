@@ -639,8 +639,7 @@ void MainWindow::Func_MenuBar(){
         j->Init(workingEditor);
         j->show();
     });
-}
-connect(this,&MainWindow::SIGNAL_AddMingw,this,[=](){
+    connect(this,&MainWindow::SIGNAL_AddMingw,this,[=](){
         QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
         setting->beginGroup("gcccheck");
         QString local=QFileDialog::getExistingDirectory(this,"mingw安装地址");
@@ -658,6 +657,8 @@ connect(this,&MainWindow::SIGNAL_AddMingw,this,[=](){
         emit SIGNAL_Compile();
     });
 }
+
+
 
 //-----编译C文件  参数为文件的完整绝对路径
 void MainWindow::CompileC(QString filename){

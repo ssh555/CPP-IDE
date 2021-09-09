@@ -42,7 +42,7 @@ public:
     QAction *actionPaste;
     QAction *actionFind;
     QAction *actionReplace;
-    QAction *action_7;
+    QAction *actioncommitFold;
     QAction *actionCompile;
     QAction *actionRun;
     QAction *actionCompileRun;
@@ -52,6 +52,7 @@ public:
     QAction *actioncodeStyle;
     QAction *actionquickJump;
     QAction *actionquickJump_2;
+    QAction *actioncommitUnFold;
     QWidget *centralwidget;
     QGridLayout *gridLayout;
     QTabWidget *tabWgtEditArea;
@@ -137,8 +138,8 @@ public:
         QIcon icon9;
         icon9.addFile(QString::fromUtf8(":/resources/UIImages/Replace.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionReplace->setIcon(icon9);
-        action_7 = new QAction(MainWindow);
-        action_7->setObjectName(QString::fromUtf8("action_7"));
+        actioncommitFold = new QAction(MainWindow);
+        actioncommitFold->setObjectName(QString::fromUtf8("actioncommitFold"));
         actionCompile = new QAction(MainWindow);
         actionCompile->setObjectName(QString::fromUtf8("actionCompile"));
         QIcon icon10;
@@ -169,6 +170,8 @@ public:
         actionquickJump->setObjectName(QString::fromUtf8("actionquickJump"));
         actionquickJump_2 = new QAction(MainWindow);
         actionquickJump_2->setObjectName(QString::fromUtf8("actionquickJump_2"));
+        actioncommitUnFold = new QAction(MainWindow);
+        actioncommitUnFold->setObjectName(QString::fromUtf8("actioncommitUnFold"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         gridLayout = new QGridLayout(centralwidget);
@@ -234,7 +237,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 674, 29));
+        menubar->setGeometry(QRect(0, 0, 674, 24));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuEdit = new QMenu(menubar);
@@ -298,7 +301,7 @@ public:
         menuEdit->addAction(actionReplace);
         menuEdit->addSeparator();
         menuEdit->addAction(actionquickJump_2);
-        menuSelect->addAction(action_7);
+        menuSelect->addAction(actioncommitFold);
         menuRun->addAction(actionCompile);
         menuRun->addAction(actionRun);
         menuRun->addAction(actionCompileRun);
@@ -395,7 +398,7 @@ public:
 #if QT_CONFIG(tooltip)
         actionReplace->setToolTip(QCoreApplication::translate("MainWindow", "\346\233\277\346\215\242", nullptr));
 #endif // QT_CONFIG(tooltip)
-        action_7->setText(QCoreApplication::translate("MainWindow", "...", nullptr));
+        actioncommitFold->setText(QCoreApplication::translate("MainWindow", "...", nullptr));
         actionCompile->setText(QCoreApplication::translate("MainWindow", "\347\274\226\350\257\221          CTRL+B", nullptr));
         actionCompile->setIconText(QCoreApplication::translate("MainWindow", "\347\274\226\350\257\221", nullptr));
 #if QT_CONFIG(tooltip)
@@ -417,6 +420,7 @@ public:
         actioncodeStyle->setText(QCoreApplication::translate("MainWindow", "\346\225\264\344\275\223\350\256\276\347\275\256", nullptr));
         actionquickJump->setText(QCoreApplication::translate("MainWindow", "\345\277\253\351\200\237\350\267\263\350\275\254", nullptr));
         actionquickJump_2->setText(QCoreApplication::translate("MainWindow", "\345\277\253\351\200\237\350\267\263\350\275\254", nullptr));
+        actioncommitUnFold->setText(QCoreApplication::translate("MainWindow", "\345\261\225\345\274\200\346\263\250\351\207\212", nullptr));
         tabWgtEditArea->setTabText(tabWgtEditArea->indexOf(tab_2), QCoreApplication::translate("MainWindow", "File1.txt", nullptr));
         tabWgtResArea->setTabText(tabWgtResArea->indexOf(tab), QCoreApplication::translate("MainWindow", "\346\237\245\346\211\276", nullptr));
         tabWgtResArea->setTabText(tabWgtResArea->indexOf(tab_3), QCoreApplication::translate("MainWindow", " \350\260\203\350\257\225", nullptr));

@@ -1,0 +1,16 @@
+QPushButton{
+    background-color: rgba(232,17,35,0.5);/*未按下时的背景颜色*/
+    background-origin: border;
+    border-width: 10px;
+    font:white 12px;
+}
+QPushButton:pressed{
+    background-origion: content;
+    border-color: gray;
+    background-color: qradialgradient(cx:0.5, cy:0.5, radius: 2.5,
+    fx:0.5, fy:0.5, stop:0 rgba(232,17,35,0.5), stop:1 #93291E);/*按下时的背景颜色*/
+}
+
+Debuger{
+    background-color:rgb(121,172,147);
+}

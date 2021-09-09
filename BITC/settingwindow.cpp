@@ -26,6 +26,8 @@ void SettingWindow::Init()
     //初始化combobox,让它们指向默认选项
     ui->comboBox_5->setCurrentText(setting->value("CodeFont").toString());
     ui->comboBox->setCurrentText(setting->value("editorfontsize").toString());
+    ui->SytleBox->setCurrentIndex(setting->value("styleflag").toUInt()-1);
+    ui->comboBox_4->setCurrentIndex(!(setting->value("autosave").toUInt()));
 
 }
 SettingWindow::~SettingWindow()
@@ -54,6 +56,7 @@ void SettingWindow::on_CommitBtn_clicked()
     inf->ChangeCodeFont(num);
     //自动保存设置 是->自动保存(0位置)
     MainWindow::Instance()->SetAutoSave(ui->comboBox_4->currentIndex()==0);
+    setting->setValue("autosave",ui->comboBox_4->currentIndex()==0);
     this->close();
 }
 

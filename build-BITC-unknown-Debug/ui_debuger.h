@@ -54,21 +54,25 @@ public:
         EnterButton = new QPushButton(Debuger);
         EnterButton->setObjectName(QString::fromUtf8("EnterButton"));
         EnterButton->setGeometry(QRect(680, 270, 112, 34));
+        EnterButton->setStyleSheet(QString::fromUtf8("font: 75 14pt \"Consolas\";"));
         Information = new QTextBrowser(Debuger);
         Information->setObjectName(QString::fromUtf8("Information"));
         Information->setGeometry(QRect(10, 10, 781, 251));
         Continue = new QPushButton(Debuger);
         Continue->setObjectName(QString::fromUtf8("Continue"));
         Continue->setGeometry(QRect(660, 420, 131, 34));
+        Continue->setStyleSheet(QString::fromUtf8("font: 75 14pt \"Consolas\";"));
         DisplayLine = new QLineEdit(Debuger);
         DisplayLine->setObjectName(QString::fromUtf8("DisplayLine"));
         DisplayLine->setGeometry(QRect(10, 560, 221, 31));
         StepOut = new QPushButton(Debuger);
         StepOut->setObjectName(QString::fromUtf8("StepOut"));
         StepOut->setGeometry(QRect(471, 420, 141, 34));
+        StepOut->setStyleSheet(QString::fromUtf8("font: 75 14pt \"Consolas\";"));
         StepInto = new QPushButton(Debuger);
         StepInto->setObjectName(QString::fromUtf8("StepInto"));
         StepInto->setGeometry(QRect(470, 380, 141, 34));
+        StepInto->setStyleSheet(QString::fromUtf8("font: 75 14pt \"Consolas\";"));
         BreakLine = new QLineEdit(Debuger);
         BreakLine->setObjectName(QString::fromUtf8("BreakLine"));
         BreakLine->setGeometry(QRect(600, 560, 111, 31));
@@ -78,15 +82,18 @@ public:
         Stop = new QPushButton(Debuger);
         Stop->setObjectName(QString::fromUtf8("Stop"));
         Stop->setGeometry(QRect(650, 330, 141, 34));
+        Stop->setStyleSheet(QString::fromUtf8("font: 75 14pt \"Consolas\";"));
         label_5 = new QLabel(Debuger);
         label_5->setObjectName(QString::fromUtf8("label_5"));
         label_5->setGeometry(QRect(10, 280, 81, 18));
+        label_5->setStyleSheet(QString::fromUtf8("font: 75 10pt \"Consolas\";"));
         label_3 = new QLabel(Debuger);
         label_3->setObjectName(QString::fromUtf8("label_3"));
         label_3->setGeometry(QRect(10, 540, 141, 20));
         StepOver = new QPushButton(Debuger);
         StepOver->setObjectName(QString::fromUtf8("StepOver"));
         StepOver->setGeometry(QRect(660, 380, 131, 34));
+        StepOver->setStyleSheet(QString::fromUtf8("font: 75 14pt \"Consolas\";"));
         label = new QLabel(Debuger);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(10, 330, 101, 18));
@@ -127,6 +134,7 @@ public:
         Start = new QPushButton(Debuger);
         Start->setObjectName(QString::fromUtf8("Start"));
         Start->setGeometry(QRect(470, 330, 151, 34));
+        Start->setStyleSheet(QString::fromUtf8("font: 75 14pt \"Consolas\";"));
 
         retranslateUi(Debuger);
 

@@ -652,8 +652,11 @@ qrc_qss.cpp: ../BITC/qss.qrc \
 		../BITC/resources/completer/ctype.txt \
 		../BITC/resources/completer/stdlib.txt \
 		../BITC/qss/purplestyle.qss \
+		../BITC/qss/purpleDebuger.qss \
 		../BITC/qss/defaultstyle.qss \
+		../BITC/qss/defaultDebuger.qss \
 		../BITC/qss/bitstyle.qss \
+		../BITC/qss/bitDebuger.qss \
 		../BITC/qss/toolpage.qss
 	C:\Qt\Qt5.14.1\5.14.1\mingw73_64\bin\rcc.exe -name qss ..\BITC\qss.qrc -o qrc_qss.cpp
 
