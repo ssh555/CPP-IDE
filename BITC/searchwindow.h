@@ -21,6 +21,13 @@ public:
     QLineEdit *ReplaceLineEdit=NULL;
     QLabel *replaceLabel=NULL;
     Editor *editor=NULL;
+    QMetaObject::Connection connect1;
+    QMetaObject::Connection connect2;
+    QMetaObject::Connection connect3;
+    QMetaObject::Connection connect4;
+    QMetaObject::Connection connect5;
+    QMetaObject::Connection connect6;
+    QMetaObject::Connection connect7;
     explicit SearchWindow(QWidget *parent = nullptr);
     ~SearchWindow();
     QString searchtext;//查询语句

@@ -173,7 +173,6 @@ QString MainWindow::GetTABFilePath(QWidget *TabPage,QString fileName){
     return  t->FolderName + "/" + fileName;
 }
 
-//-----未实现代码，需要在文件夹下展现文件,参数为文件夹完整路径
 //参数1 标题    参数2 要显示的QWidget
 void MainWindow::AddFolderToGBox(QString foldername){
     //QFileInfo  isfile()  isdir()  判断路径是文件夹还是文件
