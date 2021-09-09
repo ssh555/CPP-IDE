@@ -649,7 +649,7 @@ void MainWindow::Func_MenuBar(){
             //ui->tabWgtEditArea->setTabText(i,ui->tabWgtEditArea->tabText(i).replace("(未保存)",""));
             ui->tabWgtResArea->setCurrentIndex(2);
             ui->CompileLog->append("  <font style='font-size:16px; background-color:white; color:blue;'>" + time + ":文件 </font><font style='font-size:16px; background-color:white; color:red;'>" + name + "</font> <font style='font-size:16px; background-color:white; color:blue;'>已自动保存至  </font>"
-                                                                                                                                  "<font style='font-size:16px; background-color:white; color:red;'>" + filename + "</font>");
+                                                                                                                                                                                                           "<font style='font-size:16px; background-color:white; color:red;'>" + filename + "</font>");
         }
     });
     //快速跳转
@@ -705,7 +705,9 @@ bool MainWindow::CompileC(QString filename){
         if ((QPushButton*)messageBox.clickedButton() == btnYes){
             emit SIGNAL_SaveFile();
         }
-        return false;
+        else {
+            return false;
+        }
     }
 
     //用指针形式
