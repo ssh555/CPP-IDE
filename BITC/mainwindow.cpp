@@ -731,9 +731,12 @@ bool MainWindow::CompileC(QString filename){
         setting->endGroup();
 
     }
-    str = str + " g++ -o " + filename.mid(0,filename.lastIndexOf(".")) + ".exe " + filename + "";
+    str = "g++ -o\"" + filename.mid(0,filename.lastIndexOf(".")) + ".exe\" \"" + filename + "\"";
     //qDebug() << str;
-    p->start("cmd.exe", QStringList()<<"/c"<<str);
+    //p->start("cmd.exe", QStringList()<<"/c"<<str);
+    QString temp1 = "-o" + filename.mid(0,filename.lastIndexOf(".")) + ".exe";
+    QString temp2 = filename;
+    p->start("cmd.exe", QStringList()<<"/c"<<"g++"<<temp1<<temp2);
     QElapsedTimer time;
     time.start();
     p->waitForStarted();
@@ -760,9 +763,6 @@ bool MainWindow::CompileC(QString filename){
                                                    "  - 编译失败\n%3").arg(__TIME__).arg(filename).arg(cmdoutput));
         return false;
     }
-
-
-
     //qDebug() << QString::fromLocal8Bit(p->readAllStandardOutput());
     if(!QFileInfo(str).exists()){
         emit SIGNAL_CompileError();
