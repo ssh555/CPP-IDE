@@ -393,6 +393,8 @@ void MainWindow::Func_MenuBar(){
     });
     connect(this,&MainWindow::SIGNAL_Search,this,[=](){
         ui->tabWgtResArea->setCurrentIndex(0);
+
+        searchWindow->on_btnFind_clicked();
         searchWindow->Focus();
     });
     //新建文件
