@@ -1,178 +1,114 @@
-#include "debuger.h"
-#include "ui_debuger.h"
-#include <QDebug>
-#include "mainwindow.h"
+#include "config.h"
 
-//2021/9/4:
-//总体思路就是用cmd启动gdb调试：
-//    输入：按钮映射到指令，在cmd中输入指令
-//    输出：获取gdb的调试数据，处理后在相应控件中显示。
-//问题：
-//    输出的数据不好处理，目前想出两种办法，但都没有根本解决问题：
-//        1：将gdb的log输出重定向到某个文件，程序再从文件中读取数据
-//        2：直接从控制台中读取数据，之后做进一步处理
-//    至于能不能控制gdb以方便读取的格式输出，我暂时没找到。
-//修改文件名，改26行的a.c
-//先设置break point， 然后start，然后设置display
-
-//2021/9/5：
-//构造函数参数传入：
-//	filename：文件名
-//	filepath：文件夹名，不包含文件
-//	breakPoint：断点数组，int型，具体看参数列表
-//传出：
-//	当前行号，以信号方式
-//有问题找我（史星蔚）
-
-QRegExp Debuger::lineNumber = QRegExp("^#.* at .*:.*");
-QRegExp Debuger::variable = QRegExp("[0-9]{1,4}: .* = .*");
-
-Debuger::Debuger(QWidget *parent, QString filename, QString filepath, QVector<qint32> breakPoints)
-    : QWidget(parent)
-    , ui(new Ui::Debuger)
+Config::Config()
 {
-    ui->setupUi(this);
-    fileName = filename;
-    filePath = filepath;
-
-    lineNumber = QRegExp("^#.* at .*:.*");
-    variable = QRegExp("[0-9]{1,4}: .* = .*");
-
-    logFile = new QFile(filePath+"/gdb.txt");
-    logFile->open(QIODevice::ReadOnly);
-    logStream = new QTextStream(logFile);
-    //风格
-    QSettings *setting =new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
-    QString qssfilename="";
-    switch(setting->value("styleflag").toUInt()){
-    case 1: qssfilename=":/qss/bitDebuger.qss";break;
-    case 2: qssfilename=":/qss/purpleDebuger.qss";break;
-    case 3: qssfilename=":/qss/defaultDebuger.qss";break;
-    default: break;
+    this->init();
+}
+void Config::printChild()
+{
+    QStringList keys = setting->allKeys();
+    for (int i=0;i<keys.length();i++){
+        //qDebug()<<keys.at(i);
     }
-    QFile file(qssfilename);
-    if(file.open(QFile::ReadOnly)){
-        QString styleSheet = tr(file.readAll());
-        this->setStyleSheet(styleSheet);
-        file.close();
-    }
+}
 
-    connect(ui->Start, &QPushButton::clicked, this, [=]{
-        Write("run");
-    });
-
-    connect(ui->Stop, &QPushButton::clicked, this, [=]{
-        Write("q");
-        Write("y");
-        close();
-    });
-
-    connect(ui->StepInto, &QPushButton::clicked, this, [=]{
-        LogWrite("step");
-    });
-
-    connect(ui->StepOut, &QPushButton::clicked, this, [=]{
-        LogWrite("finish");
-    });
-
-    connect(ui->StepOver, &QPushButton::clicked, this, [=]{
-        LogWrite("next");
-    });
-
-    connect(ui->Continue, &QPushButton::clicked, this, [=]{
-        LogWrite("continue");
-    });
-
-    connect(ui->DisplayButton, &QPushButton::clicked, this, [=]{
-        Write("display "+ui->DisplayLine->text());
-        ui->DisplayLine->clear();
-    });
-
-    connect(ui->BreakButton, &QPushButton::clicked, this, [=]{
-        Write("break "+ui->BreakLine->text());
-        ui->BreakLine->clear();
-    });
-
-    connect(ui->EnterButton, &QPushButton::clicked, this, [=]{
-        Write(ui->EnterLine->text());
-        ui->EnterLine->clear();
-    });
-
-
-    debuger = new QProcess();
-    debuger->start("cmd.exe");
-    connect(debuger, &QProcess::readyRead, this, &Debuger::Read);
-
-    Write(filePath.left(2));
-    Write("cd "+filePath);
-    Write("g++ -g "+fileName+" -o main");
-    Write("gdb main");
-    Write("set new-console on");
-
-    //SetBreakPoints
-    QVector<qint32>::iterator iter;
-    for (iter=breakPoints.begin();iter!=breakPoints.end();iter++)
+int Config::init()
+{
+    setting = new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    if (setting->value("HaveRead").toString()=="2")return 1;//这时候已经初始化好了
+    if(!(readSetting=new QSettings(":/resources/config.ini",QSettings::IniFormat)))
     {
-        Write("break "+ QString::number(*iter));
-    }
+        return 0;//读取失败
+    }else {
+        //开始读取设置
+        setting->setValue("HaveRead",2);
+        //支持中文
+        setting->setIniCodec(QTextCodec::codecForName("utf-8"));
+        //初始化行边颜色
+        setting->setValue("LineColor","#EEEEEE");
+        //qDebug()<<"set"<<setting->value("LineColor");
+        //初始化字体
+        setting->setValue("CodeFont","Consolas");
+        //初始化字体大小
+        setting->setValue("editorfontsize",12);
+        //初始化自动保存
+        setting->setValue("autosave",0);
+        //初始化自动保存时间
+        setting->setValue("autosavetime","半分钟");
+        //初始化color组
+        readSetting->beginGroup("colorgroup1");
 
-//    Write("run");
+
+
+        setting->beginGroup("colorgroup1");
+        //qDebug()<<"readsetting"<<readSetting->value("expFunctioncolor");
+        setting->setValue("LineColor",readSetting->value("LineColor"));
+        setting->setValue("expFunctioncolor",readSetting->value("expFunctioncolor"));
+        setting->setValue("keywordColor",readSetting->value("keywordColor"));
+        setting->setValue("classselfColor",readSetting->value("classselfColor"));
+        setting->setValue("classColor",readSetting->value("classColor"));
+        setting->setValue("singleLineCommentColor",readSetting->value("singleLineCommentColor"));
+        setting->setValue("multiLineCommentColor",readSetting->value("multiLineCommentColor"));
+        setting->setValue("quotationColor",readSetting->value("quotationColor"));
+        setting->setValue("functionColor",readSetting->value("functionColor"));
+        setting->setValue("findFormatColor",readSetting->value("findFormatColor"));//查询替换颜色
+        setting->endGroup();
+        setting->sync();
+        readSetting->endGroup();
+        //初始化color组
+        readSetting->beginGroup("colorgroup2");
+        setting->beginGroup("colorgroup2");
+        setting->setValue("LineColor",readSetting->value("LineColor"));
+        setting->setValue("expFunctioncolor",readSetting->value("expFunctioncolor"));
+        setting->setValue("keywordColor",readSetting->value("keywordColor"));
+        setting->setValue("classselfColor",readSetting->value("classselfColor"));
+        setting->setValue("classColor",readSetting->value("classColor"));
+        setting->setValue("singleLineCommentColor",readSetting->value("singleLineCommentColor"));
+        setting->setValue("multiLineCommentColor",readSetting->value("multiLineCommentColor"));
+        setting->setValue("quotationColor",readSetting->value("quotationColor"));
+        setting->setValue("functionColor",readSetting->value("functionColor"));
+        setting->setValue("findFormatColor",readSetting->value("findFormatColor"));//查询替换颜色
+        setting->endGroup();
+        setting->sync();
+        readSetting->endGroup();
+        //初始化color组
+        readSetting->beginGroup("colorgroup3");
+        setting->beginGroup("colorgroup3");
+        setting->setValue("LineColor",readSetting->value("LineColor"));
+        setting->setValue("expFunctioncolor",readSetting->value("expFunctioncolor"));
+        setting->setValue("keywordColor",readSetting->value("keywordColor"));
+        setting->setValue("classselfColor",readSetting->value("classselfColor"));
+        setting->setValue("classColor",readSetting->value("classColor"));
+        setting->setValue("singleLineCommentColor",readSetting->value("singleLineCommentColor"));
+        setting->setValue("multiLineCommentColor",readSetting->value("multiLineCommentColor"));
+        setting->setValue("quotationColor",readSetting->value("quotationColor"));
+        setting->setValue("functionColor",readSetting->value("functionColor"));
+        setting->setValue("findFormatColor",readSetting->value("findFormatColor"));//查询替换颜色
+        setting->sync();
+        setting->endGroup();
+        readSetting->endGroup();
+        ChangeCodeStyle(1);
+        return 1;
+    }//读取成功
+
 }
-
-Debuger::~Debuger()
-{
-    delete ui;
-    delete debuger;
-    QFile::remove(filePath+"/main.exe");
+void Config::ChangeCodeStyle(int flag){//改代码风格
+    setting->setValue("styleflag",flag);//将风格换为flag
+    QString *GroupName=new QString("colorgroup");
+    QString *CodeStylebf=new QString();//就是换一个colorgroup
+    CodeStylebf->setNum(flag);
+    GroupName->append(CodeStylebf);
+    GroupName->append('/');
+    setting->setValue("LineColor",setting->value(*GroupName+"LineColor"));
+    setting->setValue("expFunctioncolor",setting->value(*GroupName+"expFunctioncolor"));
+    setting->setValue("keywordColor",setting->value(*GroupName+"keywordColor"));
+    setting->setValue("classselfColor",setting->value(*GroupName+"classselfColor"));
+    setting->setValue("classColor",setting->value(*GroupName+"classColor"));
+    setting->setValue("singleLineCommentColor",setting->value(*GroupName+"singleLineCommentColor"));
+    setting->setValue("multiLineCommentColor",setting->value(*GroupName+"multiLineCommentColor"));
+    setting->setValue("quotationColor",setting->value(*GroupName+"quotationColor"));
+    setting->setValue("functionColor",setting->value(*GroupName+"functionColor"));
+    setting->setValue("findFormatColor",setting->value(*GroupName+"findFormatColor"));//查询替换颜色
+    setting->sync();
 }
-
-void Debuger::Write(QString command)
-{
-//    qDebug()<<command;
-    command+="\r\n";
-    debuger->write(command.toLatin1().data(), command.length());
-}
-
-void Debuger::LogWrite(QString command)
-{
-    Write(command);
-    Write("frame");
-}
-
-void Debuger::Read()
-{
-    QString log  = QString::fromLocal8Bit(debuger->readAll());
-    ui->Information->append(log);
-    ui->Information->update();
-    log.replace("(gdb) ","");
-    QStringList tempList = log.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
-    foreach(QString string, tempList) {
-        int temp = -1;
-
-        //判断是否含有行号字符串
-        temp = lineNumber.indexIn(string);
-        if(temp>=0) {
-            int number = string.mid(string.lastIndexOf(':')+1).replace("\r\n", "").toInt();
-            ui->NowLineNumber->setText(QString::number(number));
-            emit SIGNAL_NowLine(number);
-        }
-
-        //判断是否含有变量字符串
-        temp = variable.indexIn(string);
-        if(temp>=0) {
-//            qDebug()<<string<<"  "<<temp;
-            QString before = string.mid(temp);
-//            ui->DisplayView->append(string.mid(temp));
-            int id = before.left(before.indexOf(": ")).toInt();
-            QString name = before.mid(before.indexOf(": ")+2).left(before.indexOf(" = ")-3);
-            QString value = before.mid(before.indexOf(" = ")+3);
-//            qDebug()<<id<<"  "<<name<<"  "<<value;
-            if(ui->DisplayView->rowCount()<id) {
-                ui->DisplayView->setRowCount(id);
-                //qDebug()<<ui->DisplayView->rowCount();
-            }
-            ui->DisplayView->setItem(id-1, 0, new QTableWidgetItem(name));
-            ui->DisplayView->setItem(id-1, 1, new QTableWidgetItem(value));
-        }
-    }
-}
+Config * Config::config_Instance = NULL;
