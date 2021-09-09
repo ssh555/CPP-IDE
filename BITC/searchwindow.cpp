@@ -13,7 +13,22 @@ SearchWindow::SearchWindow(QWidget *parent) :
 
 //    this->setStyleSheet("border: 20px lightGray;");
     //让窗口其他部件消失
+    QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+
+    QString fontname=setting->value("CodeFont").toString();
     setWindowFlags(Qt::FramelessWindowHint);
+    ui->lineEdit->setStyleSheet("QLineEdit {"
+                               " border: 1px solid rgb(41, 57, 85);"
+                               " border-radius: 3px; "
+                               " background: white; "
+                               " selection-background-color: green; "
+                               " font-size: 14px ;"
+                            "}"
+
+                           " QLineEdit:hover {"
+                               " border: 1px solid blue;"
+                            "}");
+
     //连接槽函数
     connect(ui->btnFindWhole,&QPushButton::clicked,this,&SearchWindow::on_btnFindWhole_clicked);
     connect(ui->btnFindPrivious,&QPushButton::clicked,this,&SearchWindow::on_btnFindPrivious_clicked);
@@ -25,6 +40,9 @@ SearchWindow::~SearchWindow()
 {
     delete ui;
     this->destroy();
+}
+void SearchWindow::Focus(){
+    this->ui->lineEdit->setFocus();
 }
 void SearchWindow::on_btnFind_clicked()
 {
