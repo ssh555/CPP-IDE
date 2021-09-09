@@ -174,7 +174,6 @@
      <string>选择</string>
     </property>
     <addaction name="actioncommitFold"/>
-    <addaction name="actioncommitUnFold"/>
    </widget>
    <widget class="QMenu" name="menuRun">
     <property name="title">
@@ -457,7 +456,7 @@
   </action>
   <action name="actioncommitFold">
    <property name="text">
-    <string>折叠注释</string>
+    <string>...</string>
    </property>
   </action>
   <action name="actionCompile">

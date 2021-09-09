@@ -45,12 +45,12 @@ void Editor::mouseDoubleClickEvent(QMouseEvent *){
     else if(b.userState()&Debug){
         BlockState t = Debug;
         b.setUserState(b.userState()&!t);//把debug状态去掉
-        qDebug()<<b.userState();
+        //qDebug()<<b.userState();
     }
 
     else {
         b.setUserState(b.userState()|Debug);//把它的状态增加一个debug
-        qDebug()<<b.userState();
+        //qDebug()<<b.userState();
     }
 }
 void Editor::FoldCurrent(){
@@ -708,7 +708,7 @@ void Editor::explainFold()
                     text=block.text().simplified();
                     block.setVisible(false);
                     block.setUserState(block.userState()|Nested);
-                    qDebug()<<block.userState()<<block.blockNumber()<<"fold";
+                    //qDebug()<<block.userState()<<block.blockNumber()<<"fold";
                     if(text.contains("*/")) break;
                     block=block.next();
                 }
