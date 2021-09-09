@@ -248,7 +248,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 674, 29));
+        menubar->setGeometry(QRect(0, 0, 674, 24));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuEdit = new QMenu(menubar);
@@ -433,7 +433,7 @@ public:
         actionquickJump_2->setText(QCoreApplication::translate("MainWindow", "\345\277\253\351\200\237\350\267\263\350\275\254", nullptr));
         actioncommitUnFold->setText(QCoreApplication::translate("MainWindow", "\345\261\225\345\274\200\346\263\250\351\207\212", nullptr));
         tabWgtResArea->setTabText(tabWgtResArea->indexOf(tab), QCoreApplication::translate("MainWindow", "\346\237\245\346\211\276", nullptr));
-        tabWgtResArea->setTabText(tabWgtResArea->indexOf(tab_3), QCoreApplication::translate("MainWindow", " \350\260\203\350\257\225", nullptr));
+        tabWgtResArea->setTabText(tabWgtResArea->indexOf(tab_3), QCoreApplication::translate("MainWindow", "\350\260\203\350\257\225", nullptr));
         tabWgtResArea->setTabText(tabWgtResArea->indexOf(tab_4), QCoreApplication::translate("MainWindow", "\347\274\226\350\257\221\346\227\245\345\277\227", nullptr));
         tabWgtEditArea->setTabText(tabWgtEditArea->indexOf(tab_2), QCoreApplication::translate("MainWindow", "File1.txt", nullptr));
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "\346\226\207\344\273\266", nullptr));

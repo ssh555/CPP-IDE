@@ -19,7 +19,7 @@
 #pushButtonFold {
     font-family: "Microsoft YaHei";
     font-size: 16px;
-    color: white;    
+    color: white;
     text-align: left;
     background-color: rgb(212, 121, 80);
     border-radius: 0px;
@@ -29,7 +29,7 @@
     background-color: rgb(75, 231, 171);
 }
 #pushButtonFold:pressed {
-    background-color: rgb(51, 151, 113);    
+    background-color: rgb(51, 151, 113);
     padding-left: 10px;
     padding-top: 3px;
 }
@@ -93,17 +93,17 @@ QTabBar::tab {
     padding-bottom: 3px;
     padding-left: 8px;
     padding-right: 8px;
-    background-color: rgb(100, 143, 122);  
-    text-align: center; 
+    background-color: rgb(100, 143, 122);
+    text-align: center;
     color: black;
 }
 
 QTabBar::tab:selected {
-    background-color: rgb(156, 192, 174);  
-    font-size: large; 
+    background-color: rgb(156, 192, 174);
+    font-size: large;
 }
 QTabBar::tab:hover {
-    background-color: rgb(156, 192, 174);   
+    background-color: rgb(156, 192, 174);
 }
 /*--------------------QTabWiget式-------------------------*/
 
@@ -153,6 +153,45 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     background-color: whitesmoke;
 }
 
+/*水平滚动条*/
+QScrollBar:horizontal {
+    height: 15px;
+    margin: 0 0 0 0;
+    background-color: whitesmoke;
+    background-image: none;
+}
+
+/*水平滚动条滑块*/
+QScrollBar::handle:horizontal {
+    background-color: rgb(121, 172, 147);
+    min-width: 40px;
+    margin: 0 1px 0 2px;
+    border-radius: 7px;
+    border: seagreen;
+}
+QScrollBar::handle:horizontal:hover {
+    background: rgb(32, 241, 140);
+}
+
+/*水平滚动条包含上下箭头的区域*/
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+    background-color: whitesmoke;
+}
+
+/*水平滚动条上下箭头*/
+QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal {
+    border: 1px solid grey;
+    height: 15px;
+    background-color: whitesmoke;
+}
+
+/*水平滚动条滑块划过和未划过区域*/
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background-color: whitesmoke;
+}
 /*-------------------------以上为QScrollBar样式-------------------------*/
 
 

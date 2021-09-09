@@ -48,43 +48,16 @@ public:
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         btnFindPrivious = new QPushButton(SearchWindow);
         btnFindPrivious->setObjectName(QString::fromUtf8("btnFindPrivious"));
-        btnFindPrivious->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"                        font: bold 13px;\n"
-"                        }\n"
-" QPushButton:focus{ // \350\201\232\347\204\246\346\240\267\345\274\217\n"
-"background-color:rgb(255, 128, 64);\n"
-"\n"
-"font:bold 13px;\n"
-"                        text-align: left;\n"
-"                        }"));
 
         verticalLayout_2->addWidget(btnFindPrivious);
 
         btnFindWhole = new QPushButton(SearchWindow);
         btnFindWhole->setObjectName(QString::fromUtf8("btnFindWhole"));
-        btnFindWhole->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"                        font: bold 13px;\n"
-"                        }\n"
-" QPushButton:focus{ // \350\201\232\347\204\246\346\240\267\345\274\217\n"
-"background-color:rgb(255, 128, 64);\n"
-"\n"
-"font:bold 13px;\n"
-"                        text-align: left;\n"
-"                        }"));
 
         verticalLayout_2->addWidget(btnFindWhole);
 
         btnFindNext = new QPushButton(SearchWindow);
         btnFindNext->setObjectName(QString::fromUtf8("btnFindNext"));
-        btnFindNext->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"                        font: bold 13px;\n"
-"                        }\n"
-" QPushButton:focus{ // \350\201\232\347\204\246\346\240\267\345\274\217\n"
-"background-color:rgb(255, 128, 64);\n"
-"\n"
-"font:bold 13px;\n"
-"                        text-align: left;\n"
-"                        }"));
 
         verticalLayout_2->addWidget(btnFindNext);
 
@@ -95,29 +68,11 @@ public:
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         btnFind = new QPushButton(SearchWindow);
         btnFind->setObjectName(QString::fromUtf8("btnFind"));
-        btnFind->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"                        font: bold 13px;\n"
-"                        }\n"
-" QPushButton:focus{ // \350\201\232\347\204\246\346\240\267\345\274\217\n"
-"background-color:rgb(255, 128, 64);\n"
-"\n"
-"font:bold 13px;\n"
-"                        text-align: left;\n"
-"                        }"));
 
         horizontalLayout_2->addWidget(btnFind);
 
         btnReplace = new QPushButton(SearchWindow);
         btnReplace->setObjectName(QString::fromUtf8("btnReplace"));
-        btnReplace->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"                        font: bold 13px;\n"
-"                        }\n"
-" QPushButton:focus{ // \350\201\232\347\204\246\346\240\267\345\274\217\n"
-"background-color:rgb(255, 128, 64);\n"
-"\n"
-"font:bold 13px;\n"
-"                        text-align: left;\n"
-"                        }"));
 
         horizontalLayout_2->addWidget(btnReplace);
 

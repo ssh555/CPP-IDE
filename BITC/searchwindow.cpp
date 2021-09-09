@@ -85,23 +85,33 @@ void SearchWindow::on_btnReplace_clicked()
 void SearchWindow::setEditor(Editor *editor_far)//设置editor,连接槽函数
 {
     if(this->editor!=NULL){
-        disconnect(this,&SearchWindow::SIGNAL_FindNext,editor_far,&Editor::SLOT_FindKeywords);
-        disconnect(this,&SearchWindow::SIGNAL_FindWhole,editor_far,&Editor::SLOT_FindWhole);
-        disconnect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::findPrivious);
-        disconnect(this,&SearchWindow::SIGNAL_ReplaceNext,editor_far,&Editor::SLOT_ReplaceKeywords);
-        disconnect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
-        disconnect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);
-        disconnect(ui->btnReplace,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
+
+//        disconnect(this,&SearchWindow::SIGNAL_FindNext,editor_far,&Editor::SLOT_FindKeywords);
+//        disconnect(this,&SearchWindow::SIGNAL_FindWhole,editor_far,&Editor::SLOT_FindWhole);
+//        disconnect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::findPrivious);
+//        disconnect(this,&SearchWindow::SIGNAL_ReplaceNext,editor_far,&Editor::SLOT_ReplaceKeywords);
+//        disconnect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
+//        disconnect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);
+//        disconnect(ui->btnReplace,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
+        disconnect(connect1);
+        disconnect(connect2);
+        disconnect(connect3);
+        disconnect(connect4);
+        disconnect(connect5);
+        disconnect(connect6);
+        disconnect(connect7);
+        qDebug()<<"notnull";
     }
     this->editor=editor_far;
     //connect(this,&SearchWindow::on_btnFindNext_clicked,this,&SearchWindow::BtnFindNextClicked);//this->editor,&Editor::SLOT_FindKeywords
-    connect(this,&SearchWindow::SIGNAL_FindNext,editor_far,&Editor::SLOT_FindKeywords);
-    connect(this,&SearchWindow::SIGNAL_FindWhole,editor_far,&Editor::SLOT_FindWhole);
-    connect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::findPrivious);
-    connect(this,&SearchWindow::SIGNAL_ReplaceNext,editor_far,&Editor::SLOT_ReplaceKeywords);
-    connect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
-    connect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);
-    connect(ui->btnReplace,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
+    connect1=connect(this,&SearchWindow::SIGNAL_FindNext,editor_far,&Editor::SLOT_FindKeywords);
+    connect2=connect(this,&SearchWindow::SIGNAL_FindWhole,editor_far,&Editor::SLOT_FindWhole);
+    connect3=connect(this,&SearchWindow::SIGNAL_FindPrivious,editor_far,&Editor::findPrivious);
+    connect4=connect(this,&SearchWindow::SIGNAL_ReplaceNext,editor_far,&Editor::SLOT_ReplaceKeywords);
+    connect5=connect(this,&SearchWindow::SIGNAL_ReplaceWhole,editor_far,&Editor::SLOT_ReplaceWhole);
+    connect6=connect(this,&SearchWindow::SIGNAL_ReplacePrivious,editor_far,&Editor::SLOT_ReplacePrivious);
+    connect7=connect(ui->btnReplace,&QPushButton::clicked,editor_far,&Editor::SLOT_SearchEnd);
+
 }
 void SearchWindow::on_btnFindWhole_clicked()//找所有的
 {

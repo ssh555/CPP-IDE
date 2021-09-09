@@ -18,17 +18,6 @@
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <widget class="QPushButton" name="btnFindPrivious">
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-                        font: bold 13px;
-                        }
- QPushButton:focus{ // 聚焦样式
-background-color:rgb(255, 128, 64);
-
-font:bold 13px;
-                        text-align: left;
-                        }</string>
-       </property>
        <property name="text">
         <string>上一个</string>
        </property>
@@ -36,17 +25,6 @@ font:bold 13px;
      </item>
      <item>
       <widget class="QPushButton" name="btnFindWhole">
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-                        font: bold 13px;
-                        }
- QPushButton:focus{ // 聚焦样式
-background-color:rgb(255, 128, 64);
-
-font:bold 13px;
-                        text-align: left;
-                        }</string>
-       </property>
        <property name="text">
         <string>从头查找</string>
        </property>
@@ -54,17 +32,6 @@ font:bold 13px;
      </item>
      <item>
       <widget class="QPushButton" name="btnFindNext">
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-                        font: bold 13px;
-                        }
- QPushButton:focus{ // 聚焦样式
-background-color:rgb(255, 128, 64);
-
-font:bold 13px;
-                        text-align: left;
-                        }</string>
-       </property>
        <property name="text">
         <string>下一个</string>
        </property>
@@ -76,17 +43,6 @@ font:bold 13px;
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QPushButton" name="btnFind">
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-                        font: bold 13px;
-                        }
- QPushButton:focus{ // 聚焦样式
-background-color:rgb(255, 128, 64);
-
-font:bold 13px;
-                        text-align: left;
-                        }</string>
-       </property>
        <property name="text">
         <string>查找</string>
        </property>
@@ -94,17 +50,6 @@ font:bold 13px;
      </item>
      <item>
       <widget class="QPushButton" name="btnReplace">
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-                        font: bold 13px;
-                        }
- QPushButton:focus{ // 聚焦样式
-background-color:rgb(255, 128, 64);
-
-font:bold 13px;
-                        text-align: left;
-                        }</string>
-       </property>
        <property name="text">
         <string>替换</string>
        </property>

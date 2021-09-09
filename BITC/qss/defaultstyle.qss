@@ -21,7 +21,7 @@
 #pushButtonFold {
     font-family: "Microsoft YaHei";
     font-size: 16px;
-    color: white;    
+    color: white;
     text-align: left;
     background-color:rgb(138, 138, 138);
     border: 1px solid gray;
@@ -32,7 +32,7 @@
     background-color: rgb(180, 180, 180);
 }
 #pushButtonFold:pressed {
-    background-color: rgb(128, 128, 128);  
+    background-color: rgb(128, 128, 128);
     padding-left: 10px;
     padding-top: 3px;
 }
@@ -90,17 +90,17 @@ QTabBar::tab {
     padding-bottom: 3px;
     padding-left: 8px;
     padding-right: 8px;
-    background-color: rgb(121, 124, 123);  
-    text-align: center; 
+    background-color: rgb(121, 124, 123);
+    text-align: center;
     color: white;
 }
 
 QTabBar::tab:selected {
-    background-color: rgb(175, 175, 175);  
-    font-size: large; 
+    background-color: rgb(175, 175, 175);
+    font-size: large;
 }
 QTabBar::tab:hover {
-    background-color: rgb(175, 175, 175);   
+    background-color: rgb(175, 175, 175);
 }
 /*--------------------QTabWiget式-------------------------*/
 
@@ -146,6 +146,45 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     background: none;
 }
 
+
+/*水平滚动条*/
+QScrollBar:horizontal {
+    height: 15px;
+    margin: 0 0 0 0;
+    background-color: whitesmoke;
+    background-image: none;
+}
+
+/*水平滚动条滑块*/
+QScrollBar::handle:horizontal {
+    background-color: rgb(57, 74, 92);
+    min-width: 40px;
+    margin: 0 1px 0 2px;
+    border-radius: 7px;
+}
+QScrollBar::handle:horizontal:hover {
+    background: rgb(115, 148, 184;
+}
+
+/*水平滚动条包含上下箭头的区域*/
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+    background-color: whitesmoke;
+}
+
+/*水平滚动条上下箭头*/
+QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal {
+    border: 1px solid grey;
+    height: 15px;
+    background-color: whitesmoke;
+}
+
+/*水平滚动条滑块划过和未划过区域*/
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background-color: whitesmoke;
+}
 /*-------------------------以上为QScrollBar样式-------------------------*/
 
 
@@ -196,7 +235,7 @@ QMenu::separator {
     font-size: 16px;
     font-weight: bold;
     color: white;
-    background-color:rgba(45, 63, 82, 0.945); 
+    background-color:rgba(45, 63, 82, 0.945);
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 0;

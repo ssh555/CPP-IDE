@@ -33,7 +33,7 @@ void Editor::Init()
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(SLOT_UpdateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(SLOT_UpdateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_HighlightCurrentLine()));
-//    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_BracketMatch()));
+    //    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_BracketMatch()));
 }
 void Editor::mouseDoubleClickEvent(QMouseEvent *){
     QTextBlock b=document()->findBlockByNumber(this->textCursor().blockNumber());
@@ -70,23 +70,23 @@ void Editor::FoldCurrent(){
 
     texttemp=currentBlock.text();
     if(texttemp.contains("{")&&texttemp.contains("}"))
-        {
+    {
 
-            int firsttLeftBrace=texttemp.indexOf("{",0);
-            texttemp.remove(0,firsttLeftBrace);
-            foreach(QChar qc,texttemp)
-            {
-                if(qc=="{") nextNum++;
-                else if(qc=="}") nextNum--;
-            }
-        }
-        else
+        int firsttLeftBrace=texttemp.indexOf("{",0);
+        texttemp.remove(0,firsttLeftBrace);
+        foreach(QChar qc,texttemp)
         {
-            foreach(QChar qc,texttemp)
-            {
-                if(qc=="{") nextNum++;
-            }
+            if(qc=="{") nextNum++;
+            else if(qc=="}") nextNum--;
         }
+    }
+    else
+    {
+        foreach(QChar qc,texttemp)
+        {
+            if(qc=="{") nextNum++;
+        }
+    }
 
     int quote=0;
     for(;currentBlock.next().isValid();)
@@ -271,7 +271,7 @@ bool Editor::SLOT_FindPrivious(QString keyword)//寻找之前的
     if(cursor.isNull()){
         return false;
     }
-        setTextCursor(cursor);
+    setTextCursor(cursor);
     return true;
 
 }
@@ -560,16 +560,21 @@ void Editor::Line_Number_Area_Paint_Event(QPaintEvent *event)
             pen->setColor(Qt::red); // 设置画笔为黄色
             painter.setPen(*pen); // 设置画笔
             painter.drawPoint(0,(top+bottom)/2);
-
-        }else
-            if (block.isVisible() && bottom >= event->rect().top()) {
-                QString number = QString::number(blockNumber + 1);
+        }
+        else  if (block.isVisible() && bottom >= event->rect().top()) {
+            if(block.userState()&Begin and block.isVisible()){
                 painter.setPen(Qt::black);
-                painter.drawText(-2, top, lineNumberArea->width(), fontMetrics().height(),
-                                 Qt::AlignRight, number);
-
+                painter.drawText(-2-fontMetrics().height()/2, top, lineNumberArea->width(), fontMetrics().height(),
+                                 Qt::AlignRight, "+");
 
             }
+            QString number = QString::number(blockNumber + 1);
+            painter.setPen(Qt::black);
+            painter.drawText(-2, top, lineNumberArea->width(), fontMetrics().height(),
+                             Qt::AlignRight, number);
+
+
+        }
 
 
         block = block.next();
@@ -609,13 +614,13 @@ void Editor::Set_Mode(editorMode mode)
     if(mode == BROWSE)
     {
         this->setReadOnly(true);
-        this->setStyleSheet("background:#f2f2f3;");
+
         SLOT_HighlightCurrentLine();
     }
     else if(mode == EDIT)
     {
         this->setReadOnly(false);
-        this->setStyleSheet("background:#ffffff;");
+
         SLOT_HighlightCurrentLine();
     }
 }
@@ -624,37 +629,37 @@ void Editor::Set_Mode(editorMode mode)
 void Editor::autoIndent(bool temp)
 {
     this->moveCursor(QTextCursor::Up);
-        QTextCursor cursor=textCursor();
-        cursor.select(QTextCursor::LineUnderCursor);
-        QString previousRowText=cursor.selectedText();
-        this->moveCursor(QTextCursor::Down);
-        this->moveCursor(QTextCursor::StartOfLine);
-        bool includeBraceLeft=previousRowText.contains("{");
-        int spaceNumber=0;
-        int beforeTabSpace=0;
-        foreach(QChar qc,previousRowText)
+    QTextCursor cursor=textCursor();
+    cursor.select(QTextCursor::LineUnderCursor);
+    QString previousRowText=cursor.selectedText();
+    this->moveCursor(QTextCursor::Down);
+    this->moveCursor(QTextCursor::StartOfLine);
+    bool includeBraceLeft=previousRowText.contains("{");
+    int spaceNumber=0;
+    int beforeTabSpace=0;
+    foreach(QChar qc,previousRowText)
+    {
+        if(qc==" ")
         {
-            if(qc==" ")
-            {
-                spaceNumber++;
-                beforeTabSpace++;
-                if(beforeTabSpace==4) beforeTabSpace=0;
-            }
-            else if(qc=="\x9")
-            {
-                spaceNumber+=4-beforeTabSpace;
-                beforeTabSpace=0;
-            }
-            else break;
+            spaceNumber++;
+            beforeTabSpace++;
+            if(beforeTabSpace==4) beforeTabSpace=0;
         }
-        if(includeBraceLeft)
+        else if(qc=="\x9")
         {
-            if(temp) spaceNumber+=4;
+            spaceNumber+=4-beforeTabSpace;
+            beforeTabSpace=0;
         }
-        for(int i=0;i<spaceNumber;i++)
-        {
-            this->insertPlainText(" ");
-        }
+        else break;
+    }
+    if(includeBraceLeft)
+    {
+        if(temp) spaceNumber+=4;
+    }
+    for(int i=0;i<spaceNumber;i++)
+    {
+        this->insertPlainText(" ");
+    }
 }
 
 //添加右括号
@@ -745,7 +750,7 @@ void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections
     //可以修改 selection.format 以修改显示样式
     QTextEdit::ExtraSelection selection;
     selection.format.setBackground(Qt::green);
-//    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+    //    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
 
 
     QTextCursor cursorBegin;
@@ -799,11 +804,11 @@ void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections
 
                     if (!isReadOnly()) {
                         selection.cursor = cursorEnd;
-//                        qDebug()<<cursorEnd.position();
+                        //                        qDebug()<<cursorEnd.position();
                         extraSelections.append(selection);
 
                         selection.cursor = cursorBegin;
-//                        qDebug()<<cursorBegin.position();
+                        //                        qDebug()<<cursorBegin.position();
                         extraSelections.append(selection);
                     }
                     whetherInQuote=false;
@@ -833,7 +838,7 @@ void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections
         while (!(c = doc->characterAt(position)).isNull()) {
             if(c=="\"")
             {
-                if(doc->characterAt(position)=="\\")
+                if(doc->characterAt(position-1)=="\\")
                 {
                     whetherInQuote=!whetherInQuote;
                 }
@@ -856,11 +861,11 @@ void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections
 
                     if (!isReadOnly()) {
                         selection.cursor = cursorBegin;
-//                        qDebug()<<cursorBegin.position();
+                        //                        qDebug()<<cursorBegin.position();
                         extraSelections.append(selection);
 
                         selection.cursor = cursorEnd;
-//                        qDebug()<<cursorEnd.position();
+                        //                        qDebug()<<cursorEnd.position();
                         extraSelections.append(selection);
                     }
                     whetherInQuote=false;
