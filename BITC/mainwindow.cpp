@@ -106,7 +106,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     /*测试代码*/
-
     /*测试代码*/
 }
 

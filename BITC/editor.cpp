@@ -78,10 +78,19 @@ void Editor::FoldCurrent(){
         nextNum++;
     }
     //qDebug()<<"当前行"<<texttemp<<nextNum;
-
+    int quote=0;
     while(currentBlock.next().isValid())
     {
         texttemp=currentBlock.next().text(); //qDebug()<<texttemp;
+        quote = texttemp.count("\"");
+          texttemp.replace("\\\"","");
+          while(quote>0&&(quote%2==0))
+          {
+              int quoteLeft=texttemp.indexOf("\"",0);
+              int quoteRight=texttemp.indexOf("\"",quoteLeft+1);
+              texttemp.remove(quoteLeft,quoteRight-quoteLeft+1);
+              quote-=2;
+          }
         if(texttemp.contains("{")||texttemp.contains("}"))
         {//判断该行是否匹配成功
             foreach(QChar qc,texttemp)
@@ -186,8 +195,6 @@ bool Editor::SLOT_ReplaceKeywords(QString findword,QString replaceword)//替换�
     cursor.beginEditBlock();
     cursor.insertText(replaceword);
     cursor.endEditBlock();
-
-
     return true;
 }
 bool Editor::SLOT_ReplacePrivious(QString findword,QString replaceword)//替换前一个
@@ -243,14 +250,11 @@ bool Editor::SLOT_FindPrivious(QString keyword)//寻找之前的
 
     //    qDebug()<<"Finding :"<<keyword<<" "<<this->find(keyword,QTextDocument::FindBackward);
     QTextCursor cursor = textCursor();
-
     cursor = document()->find(keyword, cursor,QTextDocument::FindBackward);
     if(cursor.isNull()){
         return false;
     }
-    //    if (!cursor.block().isVisible())
-    //        FoldUnfoldAll(false);
-    setTextCursor(cursor);
+//    setTextCursor(cursor);
     return true;
 
 }
