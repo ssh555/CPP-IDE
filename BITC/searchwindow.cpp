@@ -10,6 +10,8 @@ SearchWindow::SearchWindow(QWidget *parent) :
     ui->setupUi(this);
     //移动到该去的地方
     this->move(200,0);
+    ui->horizontalLayout_2->addStretch();
+    ui->horizontalLayout_2->setSpacing(0);
 
 //    this->setStyleSheet("border: 20px lightGray;");
     //让窗口其他部件消失

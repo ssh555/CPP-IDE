@@ -18,11 +18,6 @@ ToolPage::ToolPage(QWidget *parent) :
 
     ui->widgetContent->setAttribute(Qt::WA_StyledBackground);
 
-    QFile file(":/qss/toolpage.qss");
-    if (file.open(QIODevice::ReadOnly)) {
-        setStyleSheet(file.readAll());
-    }
-    file.close();
 
     connect(ui->pushButtonFold, &QPushButton::clicked, this, &ToolPage::onPushButtonFoldClicked);
 }
