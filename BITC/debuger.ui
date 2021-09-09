@@ -22,6 +22,9 @@
      <height>34</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
+   </property>
    <property name="text">
     <string>Enter</string>
    </property>
@@ -47,6 +50,9 @@
      <width>131</width>
      <height>34</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
    </property>
    <property name="text">
     <string>Continue</string>
@@ -74,6 +80,9 @@
      <height>34</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
+   </property>
    <property name="text">
     <string>StepOut</string>
    </property>
@@ -86,6 +95,9 @@
      <width>141</width>
      <height>34</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
    </property>
    <property name="text">
     <string>StepInto</string>
@@ -126,6 +138,9 @@
      <height>34</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
+   </property>
    <property name="text">
     <string>停止调试</string>
    </property>
@@ -138,6 +153,9 @@
      <width>81</width>
      <height>18</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 75 10pt &quot;Consolas&quot;;</string>
    </property>
    <property name="text">
     <string>Commands</string>
@@ -164,6 +182,9 @@
      <width>131</width>
      <height>34</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
    </property>
    <property name="text">
     <string>StepOver</string>
@@ -306,6 +327,9 @@
      <width>151</width>
      <height>34</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 75 14pt &quot;Consolas&quot;;</string>
    </property>
    <property name="text">
     <string>开始调试</string>

@@ -136,7 +136,7 @@
      <x>0</x>
      <y>0</y>
      <width>674</width>
-     <height>26</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -173,7 +173,8 @@
     <property name="title">
      <string>选择</string>
     </property>
-    <addaction name="action_7"/>
+    <addaction name="actioncommitFold"/>
+    <addaction name="actioncommitUnFold"/>
    </widget>
    <widget class="QMenu" name="menuRun">
     <property name="title">
@@ -454,9 +455,9 @@
     <string>替换</string>
    </property>
   </action>
-  <action name="action_7">
+  <action name="actioncommitFold">
    <property name="text">
-    <string>...</string>
+    <string>折叠注释</string>
    </property>
   </action>
   <action name="actionCompile">
@@ -536,6 +537,11 @@
   <action name="actionquickJump_2">
    <property name="text">
     <string>快速跳转</string>
+   </property>
+  </action>
+  <action name="actioncommitUnFold">
+   <property name="text">
+    <string>展开注释</string>
    </property>
   </action>
  </widget>

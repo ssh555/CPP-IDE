@@ -634,6 +634,7 @@ void MainWindow::Func_MenuBar(){
         j->Init(workingEditor);
         j->show();
     });
+
 }
 
 //-----编译C文件  参数为文件的完整绝对路径
