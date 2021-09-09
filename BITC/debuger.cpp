@@ -35,7 +35,6 @@ Debuger::Debuger(QWidget *parent, QString filename, QString filepath, QVector<qi
     fileName = filename;
     filePath = filepath;
 
-
     connect(ui->Start, &QPushButton::clicked, this, [=]{
         Write("run");
     });
