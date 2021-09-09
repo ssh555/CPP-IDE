@@ -22,7 +22,7 @@ void Editor::Init()
     this->setFont(QFont(fontname,fontsize));
     SLOT_UpdateLineNumberAreaWidth(0);
     int fontWidth = QFontMetrics(this->currentCharFormat().font()).averageCharWidth();
-    this->setTabStopDistance( 3 * fontWidth );
+    this->setTabStopDistance( 4 * fontWidth );
     Set_Mode(BROWSE);
     //设置高亮
     highlighter = new Highlighter(this->document());
@@ -610,46 +610,37 @@ void Editor::Set_Mode(editorMode mode)
 void Editor::autoIndent(bool temp)
 {
     this->moveCursor(QTextCursor::Up);
-    QTextCursor cursor=textCursor();
-    cursor.select(QTextCursor::LineUnderCursor);
-    QString previousRowText=cursor.selectedText();
-    this->moveCursor(QTextCursor::Down);
-    this->moveCursor(QTextCursor::StartOfLine);
-    bool includeBraceLeft=previousRowText.contains("{");
-    int spaceNumber=0;
-    bool tabisFirst=true;
-    foreach(QChar qc,previousRowText)
-    {
-        if(qc=="\x9"&&tabisFirst)
+        QTextCursor cursor=textCursor();
+        cursor.select(QTextCursor::LineUnderCursor);
+        QString previousRowText=cursor.selectedText();
+        this->moveCursor(QTextCursor::Down);
+        this->moveCursor(QTextCursor::StartOfLine);
+        bool includeBraceLeft=previousRowText.contains("{");
+        int spaceNumber=0;
+        int beforeTabSpace=0;
+        foreach(QChar qc,previousRowText)
         {
-            spaceNumber+=3;
-        }
-        else tabisFirst=false;
-        if(qc==" ")
-        {
-            spaceNumber++;
-        }
-        else if(qc=="\x9")
-        {
-            if(tabisFirst)
+            if(qc==" ")
             {
-                continue;
+                spaceNumber++;
+                beforeTabSpace++;
+                if(beforeTabSpace==4) beforeTabSpace==0;
             }
-            else
+            else if(qc=="\x9")
             {
-                spaceNumber+=2;
+                spaceNumber+=4-beforeTabSpace;
+                beforeTabSpace=0;
             }
+            else break;
         }
-        else break;
-    }
-    if(includeBraceLeft)
-    {
-        if(temp) spaceNumber+=4;
-    }
-    for(int i=0;i<spaceNumber;i++)
-    {
-        this->insertPlainText(" ");
-    }
+        if(includeBraceLeft)
+        {
+            if(temp) spaceNumber+=4;
+        }
+        for(int i=0;i<spaceNumber;i++)
+        {
+            this->insertPlainText(" ");
+        }
 }
 
 //添加右括号
