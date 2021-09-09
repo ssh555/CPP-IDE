@@ -640,6 +640,24 @@ void MainWindow::Func_MenuBar(){
         j->show();
     });
 }
+connect(this,&MainWindow::SIGNAL_AddMingw,this,[=](){
+        QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+        setting->beginGroup("gcccheck");
+        QString local=QFileDialog::getExistingDirectory(this,"mingw安装地址");
+        //三连
+        setting->setValue("mingw",local);
+        QProcess p(0);
+        //certutil -urlcache -split -f http://files.1f0.de/mingw/mingw-w64-gcc-11.2-stable-r35a-posix-threads.7z 国内镜像，需要用7zip
+        //杀毒软件可能会报毒
+        p.start("cmd",QStringList()<<"/c"<<"cd /d "<<local<<"&& certutil -urlcache -split -f https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe");
+        p.waitForStarted();
+        p.waitForFinished();
+        QDesktopServices::openUrl(QUrl::fromLocalFile(local+"/mingw-w64-install.exe"));
+        //qDebug() << setting->value("mingw").toString();
+        setting->endGroup();
+        emit SIGNAL_Compile();
+    });
+}
 
 //-----编译C文件  参数为文件的完整绝对路径
 void MainWindow::CompileC(QString filename){
@@ -664,12 +682,24 @@ void MainWindow::CompileC(QString filename){
     p->waitForStarted();
     p->waitForFinished();
     QString cmdoutput = QString::fromLocal8Bit(p->readAllStandardOutput());
+    QString str = "";
     if(!cmdoutput.startsWith("gcc")){
-        emit SIGNAL_CompileError();
-        return;
+        QSettings *setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
+        setting->beginGroup("gcccheck");
+        QStringList settingList=setting->childKeys();
+        if(settingList.isEmpty()){
+            emit SIGNAL_AddMingw();
+            return;
+        }
+        str = str + "set path=" + setting->value(settingList.at(0)).toString() + "/mingw-w64/bin && ";
+        //测试代码
+        //setting->clear();
+        //
+        setting->endGroup();
+
     }
-    QString str = "g++ -o " + filename.mid(0,filename.lastIndexOf(".")) + ".exe " + filename;
-    //qDebug() << str;
+    str = str + " g++ -o " + filename.mid(0,filename.lastIndexOf(".")) + ".exe " + filename;
+    qDebug() << str;
     p->start("cmd.exe", QStringList()<<"/c"<<str);
     QElapsedTimer time;
     time.start();
@@ -703,7 +733,6 @@ void MainWindow::CompileC(QString filename){
         emit SIGNAL_CompileError();
         return;
     }
-
 
 }
 

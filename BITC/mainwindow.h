@@ -175,5 +175,7 @@ signals:
     void SIGNAL_AutoSave();
     //快速跳转信号
     void SIGNAL_Jump();
+    //安装mingw
+    void SIGNAL_AddMingw();
 };
 #endif // MAINWINDOW_H
