@@ -51,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent)
         {
             searchWindow->setEditor((Editor *)ui->tabWgtEditArea->widget(index));
         }
+        workingEditor=(Editor *)ui->tabWgtEditArea->widget(index);
     });
     //编辑页的关闭事件
     connect(ui->tabWgtEditArea,&QTabWidget::tabCloseRequested,[=](int i){
@@ -393,6 +394,8 @@ void MainWindow::Func_MenuBar(){
     });
     connect(this,&MainWindow::SIGNAL_Search,this,[=](){
         ui->tabWgtResArea->setCurrentIndex(0);
+
+        searchWindow->on_btnFind_clicked();
         searchWindow->Focus();
     });
     //新建文件

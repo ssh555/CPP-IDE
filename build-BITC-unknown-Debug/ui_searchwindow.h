@@ -154,7 +154,7 @@ public:
     {
         SearchWindow->setWindowTitle(QCoreApplication::translate("SearchWindow", "Form", nullptr));
         btnFindPrivious->setText(QCoreApplication::translate("SearchWindow", "\344\270\212\344\270\200\344\270\252", nullptr));
-        btnFindWhole->setText(QCoreApplication::translate("SearchWindow", "\346\237\245\346\211\276\345\205\250\346\226\207", nullptr));
+        btnFindWhole->setText(QCoreApplication::translate("SearchWindow", "\344\273\216\345\244\264\346\237\245\346\211\276", nullptr));
         btnFindNext->setText(QCoreApplication::translate("SearchWindow", "\344\270\213\344\270\200\344\270\252", nullptr));
         btnFind->setText(QCoreApplication::translate("SearchWindow", "\346\237\245\346\211\276", nullptr));
         btnReplace->setText(QCoreApplication::translate("SearchWindow", "\346\233\277\346\215\242", nullptr));

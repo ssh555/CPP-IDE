@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_SearchWindow_t {
-    QByteArrayData data[14];
-    char stringdata0[243];
+    QByteArrayData data[13];
+    char stringdata0[224];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -44,8 +44,7 @@ QT_MOC_LITERAL(8, 107, 22), // "SIGNAL_ReplacePrivious"
 QT_MOC_LITERAL(9, 130, 19), // "SIGNAL_ReplaceWhole"
 QT_MOC_LITERAL(10, 150, 22), // "on_btnFindNext_clicked"
 QT_MOC_LITERAL(11, 173, 23), // "on_btnFindWhole_clicked"
-QT_MOC_LITERAL(12, 197, 26), // "on_btnFindPrivious_clicked"
-QT_MOC_LITERAL(13, 224, 18) // "on_btnFind_clicked"
+QT_MOC_LITERAL(12, 197, 26) // "on_btnFindPrivious_clicked"
 
     },
     "SearchWindow\0SIGNAL_FindNext\0\0findtext\0"
@@ -53,8 +52,7 @@ QT_MOC_LITERAL(13, 224, 18) // "on_btnFind_clicked"
     "SIGNAL_ReplaceNext\0replacetext\0"
     "SIGNAL_ReplacePrivious\0SIGNAL_ReplaceWhole\0"
     "on_btnFindNext_clicked\0on_btnFindWhole_clicked\0"
-    "on_btnFindPrivious_clicked\0"
-    "on_btnFind_clicked"
+    "on_btnFindPrivious_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -64,7 +62,7 @@ static const uint qt_meta_data_SearchWindow[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      10,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -72,18 +70,17 @@ static const uint qt_meta_data_SearchWindow[] = {
        6,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   64,    2, 0x06 /* Public */,
-       4,    1,   67,    2, 0x06 /* Public */,
-       5,    1,   70,    2, 0x06 /* Public */,
-       6,    2,   73,    2, 0x06 /* Public */,
-       8,    2,   78,    2, 0x06 /* Public */,
-       9,    2,   83,    2, 0x06 /* Public */,
+       1,    1,   59,    2, 0x06 /* Public */,
+       4,    1,   62,    2, 0x06 /* Public */,
+       5,    1,   65,    2, 0x06 /* Public */,
+       6,    2,   68,    2, 0x06 /* Public */,
+       8,    2,   73,    2, 0x06 /* Public */,
+       9,    2,   78,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      10,    0,   88,    2, 0x08 /* Private */,
-      11,    0,   89,    2, 0x08 /* Private */,
-      12,    0,   90,    2, 0x08 /* Private */,
-      13,    0,   91,    2, 0x08 /* Private */,
+      10,    0,   83,    2, 0x08 /* Private */,
+      11,    0,   84,    2, 0x08 /* Private */,
+      12,    0,   85,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -94,7 +91,6 @@ static const uint qt_meta_data_SearchWindow[] = {
     QMetaType::Void, QMetaType::QString, QMetaType::QString,    3,    7,
 
  // slots: parameters
-    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -117,7 +113,6 @@ void SearchWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 6: _t->on_btnFindNext_clicked(); break;
         case 7: _t->on_btnFindWhole_clicked(); break;
         case 8: _t->on_btnFindPrivious_clicked(); break;
-        case 9: _t->on_btnFind_clicked(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -196,13 +191,13 @@ int SearchWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 9;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 10)
+        if (_id < 9)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 10;
+        _id -= 9;
     }
     return _id;
 }

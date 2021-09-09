@@ -13,8 +13,6 @@ Editor::Editor(QWidget *parent) : QPlainTextEdit(parent)
 }
 void Editor::Init()
 {
-
-
     //改了个可爱的字体
     setting=new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName());
     int fontsize=setting->value("editorfontsize").toUInt();
@@ -71,14 +69,27 @@ void Editor::FoldCurrent(){
     int nextNum=0;
 
     texttemp=currentBlock.text();
-    foreach(QChar qc,texttemp)
-    {
-        if(qc=="{")
-            nextNum++;
-    }
-    //qDebug()<<"当前行"<<texttemp<<nextNum;
+    if(texttemp.contains("{")&&texttemp.contains("}"))
+        {
+
+            int firsttLeftBrace=texttemp.indexOf("{",0);
+            texttemp.remove(0,firsttLeftBrace);
+            foreach(QChar qc,texttemp)
+            {
+                if(qc=="{") nextNum++;
+                else if(qc=="}") nextNum--;
+            }
+        }
+        else
+        {
+            foreach(QChar qc,texttemp)
+            {
+                if(qc=="{") nextNum++;
+            }
+        }
+
     int quote=0;
-    while(currentBlock.next().isValid())
+    for(;currentBlock.next().isValid();)
     {
         texttemp=currentBlock.next().text(); //qDebug()<<texttemp;
         quote = texttemp.count("\"");
@@ -156,6 +167,12 @@ void Editor::wheelEvent(QWheelEvent *e)
         }
         //this->setTextCursor(cursor);
     }
+}
+void Editor::findPrivious(QString findword)
+{
+    this->isChanged=true;
+    SLOT_ReplacePrivious(findword,findword);
+    this->isChanged=false;
 }
 //全部替换函数
 void Editor::SLOT_ReplaceWhole(QString findword,QString replaceword)
@@ -260,7 +277,7 @@ bool Editor::SLOT_FindPrivious(QString keyword)//寻找之前的
     if(cursor.isNull()){
         return false;
     }
-    //    setTextCursor(cursor);
+        setTextCursor(cursor);
     return true;
 
 }
@@ -367,11 +384,13 @@ void Editor::keyPressEvent(QKeyEvent *e)
         }
         else if(e->text().right(1)=="(")
         {
-            insertCompletion(")");
+            insertPlainText(")");
+            this->moveCursor(QTextCursor::Left);
         }
         else if(e->text().right(1)=="[")
         {
-            insertCompletion("]");
+            insertPlainText("]");
+            this->moveCursor(QTextCursor::Left);
         }
         else if(e->text().right(1)=="\r")
         {
@@ -513,7 +532,7 @@ void Editor::SLOT_HighlightCurrentLine()
         selection.cursor.clearSelection();
         extraSelections.append(selection);
     }
-
+    SLOT_BracketMatch(extraSelections);
     setExtraSelections(extraSelections);
 }
 //更改光标位置(响应debuger)
@@ -701,28 +720,45 @@ void Editor::explainUnfold()
     resizeEvent(new QResizeEvent(QSize(0, 0), size()));
 }
 
-void Editor::SLOT_BracketMatch()
+void Editor::SLOT_BracketMatch(QList<QTextEdit::ExtraSelection> &extraSelections)
 {
+    QTextCursor cursorQuote=textCursor();
+    int currentPosition=cursorQuote.positionInBlock();
+    cursorQuote.select(QTextCursor::LineUnderCursor);
+    QString texttemp=cursorQuote.selectedText();
+    int quote=0;
+    int quotePosition=0;
+    quote = texttemp.count("\"");
+    while(quote>0&&(quote%2==0))
+    {
+        int quoteLeft=texttemp.indexOf("\"",quotePosition);
+        int quoteRight=texttemp.indexOf("\"",quoteLeft+1);
+        if(currentPosition>quoteLeft&&currentPosition<quoteRight) return;
+        quote-=2;
+        quotePosition=quoteRight+1;
+    }
+
     //增减数组需要修改for循环的条件
     QChar brace[6]={'(','[','{',')',']','}'};
 
     QTextDocument *doc = this->document();
     QTextCursor cursor = textCursor();
+    cursor.clearSelection();
     int position = cursor.position();
 
-    //用于临时修改 匹配到的字符 的样式
-    QList<QTextEdit::ExtraSelection> extraSelections;
 
     //可以修改 selection.format 以修改显示样式
     QTextEdit::ExtraSelection selection;
     selection.format.setBackground(Qt::green);
-    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+//    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
 
 
     QTextCursor cursorBegin;
     QTextCursor cursorEnd;
 
     QChar c, charBegin=' ', charEnd=' ';
+
+    bool whetherInQuote=false;
 
     //向后找
     //判断是否是需要匹配的字符
@@ -743,6 +779,19 @@ void Editor::SLOT_BracketMatch()
         int counter = 1;        //用于数左右括号的数量，为左括号则+1，为右括号则-1，counter为0则匹配成功
 
         while (!(c = doc->characterAt(position)).isNull()) {
+            if(c=="\"")
+            {
+                if(doc->characterAt(position-1)=="\\")
+                {
+                    whetherInQuote=!whetherInQuote;
+                }
+                whetherInQuote=!whetherInQuote;
+            }
+            if(whetherInQuote)
+            {
+                position++;
+                continue;
+            }
             if (c == charBegin) {
                 counter++;
             }
@@ -760,6 +809,7 @@ void Editor::SLOT_BracketMatch()
                         selection.cursor = cursorBegin;
                         extraSelections.append(selection);
                     }
+                    whetherInQuote=false;
                     break;
                 }
             }
@@ -784,6 +834,19 @@ void Editor::SLOT_BracketMatch()
         int counter = 0;
 
         while (!(c = doc->characterAt(position)).isNull()) {
+            if(c=="\"")
+            {
+                if(doc->characterAt(position-1)=="\\")
+                {
+                    whetherInQuote=!whetherInQuote;
+                }
+                whetherInQuote=!whetherInQuote;
+            }
+            if(whetherInQuote)
+            {
+                position--;
+                continue;
+            }
             if (c == charEnd) {
                 counter++;
             }
@@ -801,11 +864,12 @@ void Editor::SLOT_BracketMatch()
                         selection.cursor = cursorEnd;
                         extraSelections.append(selection);
                     }
+                    whetherInQuote=false;
                     break;
                 }
             }
             position--;
         }
     }
-    setExtraSelections(extraSelections);
 }
+

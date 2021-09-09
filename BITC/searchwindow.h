@@ -34,6 +34,7 @@ public:
     QHBoxLayout *replacelayoutH=NULL;
     QVBoxLayout *replacelayoutV=NULL;
     void on_btnReplace_clicked();
+    void on_btnFind_clicked();
     void Focus();
 signals:
     void SIGNAL_FindNext(QString findtext);
@@ -54,7 +55,7 @@ private slots:
 
 
 
-    void on_btnFind_clicked();
+
 private:
     int mode=0;//0--find,1--replace
     Ui::SearchWindow *ui;
