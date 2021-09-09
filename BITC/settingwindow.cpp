@@ -39,6 +39,8 @@ void SettingWindow::on_CommitBtn_clicked()
 {
     //num现在是记录选择的代码风格()
     int num=ui->SytleBox->currentIndex()+1;
+//    QFuture<void> ftr1 = QtConcurrent::run(Config::GetInstance(),&Config::ChangeCodeStyle,num);
+//    ftr1.waitForFinished();
     Config::GetInstance()->ChangeCodeStyle(num);
     MainWindow::isReadingOrWriting = true;
     QFuture<void> ftr = QtConcurrent::run(inf,&UIInterface::ChangeCodeStyle);
@@ -73,6 +75,7 @@ void SettingWindow::on_CommitBtn_clicked()
     setting->setValue("autosave",ui->comboBox_4->currentIndex()==0);
     setting->setValue("autosavetime",autosavetime);
     this->close();
+    MainWindow::Instance()->update();
 }
 
 void SettingWindow::on_pushButton_clicked()

@@ -30,6 +30,7 @@
 #include "uiinterface.h"
 #include "settingwindow.h"
 #include "jumpwindow.h"
+#include <QDateTime>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -626,13 +627,28 @@ void MainWindow::Func_MenuBar(){
         int len = ui->tabWgtEditArea->count();
         for(int i = 0;i < len; ++i){
             Editor *t = (Editor*)ui->tabWgtEditArea->widget(i);
+            if(!ui->tabWgtEditArea->tabText(i).contains("(未保存)"))
+                continue;
             QString filename = t->FolderName + "/" + ui->tabWgtEditArea->tabText(i).replace("(未保存)","");
+            QString dirName = filename.mid(0,filename.lastIndexOf("."));
+            QDir dir(dirName);
+            if(!dir.exists()){
+                dir.mkdir(dirName);
+            }
+            QString name = QFileInfo(filename).fileName();
+            QString time = QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm_");
+            filename = dirName + "/" + time + name;
+            //filename += QDateTime::currentDateTime().toString("_yyyy-MM-dd_hh:mm");
+            qDebug() << filename;
             QFile file(filename);
             file.open(QIODevice::WriteOnly | QIODevice::Text);
             file.write(t->toPlainText().toUtf8().data());
             file.close();
             t->isChanged = false;
-            ui->tabWgtEditArea->setTabText(i,ui->tabWgtEditArea->tabText(i).replace("(未保存)",""));
+            //ui->tabWgtEditArea->setTabText(i,ui->tabWgtEditArea->tabText(i).replace("(未保存)",""));
+            ui->tabWgtResArea->setCurrentIndex(2);
+            ui->CompileLog->append("  <font style='font-size:16px; background-color:white; color:blue;'>" + time + ":文件 </font><font style='font-size:16px; background-color:white; color:red;'>" + name + "</font> <font style='font-size:16px; background-color:white; color:blue;'>已自动保存至  </font>"
+                                                                                                                                  "<font style='font-size:16px; background-color:white; color:red;'>" + filename + "</font>");
         }
     });
     //快速跳转
