@@ -35,6 +35,7 @@ void Editor::Init()
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(SLOT_UpdateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(SLOT_UpdateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_HighlightCurrentLine()));
+    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(SLOT_BracketMatch()));
 }
 void Editor::mouseDoubleClickEvent(QMouseEvent *){
     QTextBlock b=document()->findBlockByNumber(this->textCursor().blockNumber());
@@ -168,6 +169,13 @@ QVector<qint32> Editor::GetBreakPoints()
         }
         b=b.next();
     }
+
+//    QVector<qint32>::iterator iter;
+//    qDebug();
+//    for (iter=breakpoints->begin();iter!=breakpoints->end();iter++)
+//    {
+//        qDebug()<<*iter;
+//    }
     return *breakpoints;
 }
 bool Editor::SLOT_ReplaceKeywords(QString findword,QString replaceword)//替换下一个
@@ -377,68 +385,6 @@ void Editor::focusInEvent(QFocusEvent *e)
 void Editor::keyPressEvent(QKeyEvent *e)
 {
     //
-    if(e->key() == Qt::Key_F1){
-        QTextDocument *doc = this->document();
-        QTextCursor cursor = textCursor();
-        int position = cursor.position();
-
-        if ((!cursor.atBlockEnd()   && doc->characterAt(position) == '(') ||
-            (!cursor.atBlockStart() && doc->characterAt(position - 1) == ')')) {
-
-            QTextCursor cursorBegin;
-            QTextCursor cursorEnd;
-
-            bool forward = doc->characterAt(position) == '(';
-
-            QTextCursor::MoveOperation moveMode;
-
-            QChar c, charBegin, charEnd;
-
-            if (forward) { //bool forward =
-                position++;
-                moveMode = QTextCursor::NextCharacter;
-                charBegin = '(';
-                charEnd   = ')';
-
-            } else {
-                position -= 2;
-                moveMode = QTextCursor::PreviousCharacter;
-                charBegin = ')';
-                charEnd   = '(';
-            }
-
-            cursorBegin = QTextCursor(cursor);
-            cursorBegin.movePosition(moveMode, QTextCursor::KeepAnchor);
-
-            QTextCharFormat fmtMismatch;
-            fmtMismatch.setFontUnderline(true);
-
-            QTextCharFormat fmtMatch;
-            fmtMatch.setFontItalic(true);
-            QTextCharFormat format = fmtMismatch;
-
-            int counter = 1;
-
-            while (!(c = doc->characterAt(position)).isNull()) {
-                if (c == charBegin) {
-                    counter++;
-                }
-                else if (c == charEnd) {
-                    counter--;
-                    if (0 == counter) {
-                        cursorEnd = QTextCursor(doc);
-                        cursorEnd.setPosition(position);
-                        cursorEnd.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-                        cursorEnd.setCharFormat(fmtMatch);
-                        format = fmtMatch;
-                        break;
-                    }
-                }
-                forward ? position++ : position--;
-            }
-            cursorBegin.setCharFormat(format);
-        }
-    }
     if(e->key()==Qt::Key_F2)
     {
         explainFold();
@@ -713,29 +659,46 @@ void Editor::Set_Mode(editorMode mode)
 void Editor::autoIndent(bool temp)
 {
     this->moveCursor(QTextCursor::Up);
-    QTextCursor cursor=textCursor();
-    cursor.select(QTextCursor::LineUnderCursor);
-    QString previousRowText=cursor.selectedText();
-    this->moveCursor(QTextCursor::Down);
-    this->moveCursor(QTextCursor::StartOfLine);
-    bool includeBraceLeft=previousRowText.contains("{");
-    int spaceNumber=0;
-    foreach(QChar qc,previousRowText)
-    {
-        if(qc==" ")
+        QTextCursor cursor=textCursor();
+        cursor.select(QTextCursor::LineUnderCursor);
+        QString previousRowText=cursor.selectedText();
+        this->moveCursor(QTextCursor::Down);
+        this->moveCursor(QTextCursor::StartOfLine);
+        bool includeBraceLeft=previousRowText.contains("{");
+        int spaceNumber=0;
+        bool tabisFirst=true;
+        foreach(QChar qc,previousRowText)
         {
-            spaceNumber++;
+            if(qc=="\x9"&&tabisFirst)
+            {
+                spaceNumber+=3;
+            }
+            else tabisFirst=false;
+            if(qc==" ")
+            {
+                spaceNumber++;
+            }
+            else if(qc=="\x9")
+            {
+                if(tabisFirst)
+                {
+                    continue;
+                }
+                else
+                {
+                    spaceNumber+=2;
+                }
+            }
+            else break;
         }
-        else break;
-    }
-    if(includeBraceLeft)
-    {
-        if(temp) spaceNumber+=4;
-    }
-    for(int i=0;i<spaceNumber;i++)
-    {
-        this->insertPlainText(" ");
-    }
+        if(includeBraceLeft)
+        {
+            if(temp) spaceNumber+=4;
+        }
+        for(int i=0;i<spaceNumber;i++)
+        {
+            this->insertPlainText(" ");
+        }
 }
 
 void Editor::addBraceRight()
@@ -795,4 +758,113 @@ void Editor::explainUnfold()
         block=block.next();
     }
     resizeEvent(new QResizeEvent(QSize(0, 0), size()));
+}
+
+void Editor::SLOT_BracketMatch()
+{
+    //增减数组需要修改for循环的条件
+    QChar brace[6]={'(','[','{',')',']','}'};
+
+    QTextDocument *doc = this->document();
+    QTextCursor cursor = textCursor();
+    int position = cursor.position();
+
+    //用于临时修改 匹配到的字符 的样式
+    QList<QTextEdit::ExtraSelection> extraSelections;
+
+    //可以修改 selection.format 以修改显示样式
+    QTextEdit::ExtraSelection selection;
+    selection.format.setBackground(Qt::green);
+    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+
+
+    QTextCursor cursorBegin;
+    QTextCursor cursorEnd;
+
+    QChar c, charBegin=' ', charEnd=' ';
+
+    //向后找
+    //判断是否是需要匹配的字符
+    for(int i=0;i<3;i++) {
+        if(i<3 && doc->characterAt(position) == brace[i]) {
+            charBegin = brace[i];
+            charEnd = brace[i+3];
+            break;
+        }
+    }
+    //查找主体
+    if (!cursor.atBlockEnd() && charBegin!=' ') {
+        position++;     //记录下标
+
+        cursorBegin = QTextCursor(cursor);
+        cursorBegin.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+
+        int counter = 1;        //用于数左右括号的数量，为左括号则+1，为右括号则-1，counter为0则匹配成功
+
+        while (!(c = doc->characterAt(position)).isNull()) {
+            if (c == charBegin) {
+                counter++;
+            }
+            else if (c == charEnd) {
+                counter--;
+                if (0 == counter) {     //counter为0，匹配成功，修改样式
+                    cursorEnd = QTextCursor(doc);
+                    cursorEnd.setPosition(position);
+                    cursorEnd.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+
+                    if (!isReadOnly()) {
+                        selection.cursor = cursorEnd;
+                        extraSelections.append(selection);
+
+                        selection.cursor = cursorBegin;
+                        extraSelections.append(selection);
+                    }
+                    break;
+                }
+            }
+            position++;
+        }
+    }
+
+    //向前找，原理与 向后找 一样
+    charBegin=' ', charEnd=' ';
+    position = cursor.position();
+    for(int i=3;i<6;i++) {
+        if(doc->characterAt(position-1) == brace[i]) {
+            charBegin = brace[i-3];
+            charEnd = brace[i];
+            break;
+        }
+    }
+    if (!cursor.atBlockStart() && charEnd!=' ') {
+        cursorEnd = QTextCursor(cursor);
+        cursorEnd.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+
+        int counter = 0;
+
+        while (!(c = doc->characterAt(position)).isNull()) {
+            if (c == charEnd) {
+                counter++;
+            }
+            else if (c == charBegin) {
+                counter--;
+                if (0 == counter) {
+                    cursorBegin = QTextCursor(doc);
+                    cursorBegin.setPosition(position);
+                    cursorBegin.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+
+                    if (!isReadOnly()) {
+                        selection.cursor = cursorBegin;
+                        extraSelections.append(selection);
+
+                        selection.cursor = cursorEnd;
+                        extraSelections.append(selection);
+                    }
+                    break;
+                }
+            }
+            position--;
+        }
+    }
+    setExtraSelections(extraSelections);
 }
