@@ -573,6 +573,7 @@ void Editor::Line_Number_Area_Paint_Event(QPaintEvent *event)
             painter.setPen(Qt::black);
             painter.drawText(-2, top, lineNumberArea->width(), fontMetrics().height(),
                              Qt::AlignRight, number);
+            painter.drawText(-2-lineNumberAreaWidth()+fontMetrics().height()/2, top, lineNumberArea->width(), fontMetrics().height(),Qt::AlignRight, "+");
 
 
         }
