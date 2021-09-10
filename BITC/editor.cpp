@@ -338,6 +338,9 @@ void Editor::focusInEvent(QFocusEvent *e)
 //按键响应事件,F2折叠注释,F3展开注释
 void Editor::keyPressEvent(QKeyEvent *e)
 {
+    if(e->modifiers() == (Qt::ShiftModifier) && (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)){
+        return;
+    }
     //
     if(e->key()==Qt::Key_F2)
     {
@@ -573,7 +576,6 @@ void Editor::Line_Number_Area_Paint_Event(QPaintEvent *event)
             painter.setPen(Qt::black);
             painter.drawText(-2, top, lineNumberArea->width(), fontMetrics().height(),
                              Qt::AlignRight, number);
-            painter.drawText(-2-lineNumberAreaWidth()+fontMetrics().height()/2, top, lineNumberArea->width(), fontMetrics().height(),Qt::AlignRight, "+");
 
 
         }
